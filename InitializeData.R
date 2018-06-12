@@ -3,12 +3,12 @@
 # IMPORT DATA
 
 orgdir = getwd()
-setwd('~/../Dropbox/HumanPopDynModel/Model/R/DataInput')
+setwd('./DataInput/')
 
-InitialData = read.csv(  file = 'InitialValueInput.csv',sep ='|',row.names = 1,
+InitialData = read.csv(  file = 'InitialValueInput.csv',sep =',',row.names = 1,
 						header = T, fileEncoding="UTF-8-BOM")
 
-ParameterData = read.csv(  file = 'ParameterInput.csv',sep ='|',row.names = 1,
+ParameterData = read.csv(  file = 'ParameterInput.csv',sep =',',row.names = 1,
 						header = T, fileEncoding="UTF-8-BOM",)
 
 LowPop_RM1 = InitialData['LowPop_RM1','value']
@@ -299,9 +299,9 @@ InitLabor_High = sum(
 InitRenewableResources = InitialData['RenewableResources','value']
 InitNonrenewableResources = InitialData['NonrenewableResources','value']
 
-TechMult_Low = InitialData['TechMult_Low','value']
-TechMult_Mid = InitialData['TechMult_Mid','value']
-TechMult_High = InitialData['TechMult_High','value']
+TechMult_Low = ParameterData['TechMult_Low','value']
+TechMult_Mid = ParameterData['TechMult_Mid','value']
+TechMult_High = ParameterData['TechMult_High','value']
 
 RenewableAccess_Low = ParameterData['RenewableAccess_Low','value']
 RenewableAccess_Mid = ParameterData['RenewableAccess_Mid','value']
@@ -318,6 +318,7 @@ InitRenewableResources_High = RenewableAccess_High * InitRenewableResources
 InitNonrenewableResources_Low = NonrenewableAccess_Low * InitNonrenewableResources
 InitNonrenewableResources_Mid = NonrenewableAccess_Mid * InitNonrenewableResources
 InitNonrenewableResources_High = NonrenewableAccess_High * InitNonrenewableResources
+
 
 InitEconOutput_Low = TechMult_Low*InitLabor_Low^LaborInputElast_Low * 
 				InitCapital_Low^CapitalInputElast_Low *
@@ -526,8 +527,9 @@ ParameterValue = list(
     # Climate Coefficients
 		Lambda = ParameterData['Lambda','value'],
 		RefTemp = InitTemp,
-		PsiE = ParameterData['PsiE','value'],
-		PsiL = ParameterData['PsiL','value'],
+		PsiE_Low = ParameterData['PsiE_Low','value'],
+		PsiE_Mid = ParameterData['PsiE_Mid','value'],		
+		PsiE_High = ParameterData['PsiE_High','value'],
 		Gamma = ParameterData['Gamma','value'],
 		RefCO2Conc = InitCO2Concentration,
 		OtherRadForce = ParameterData['OtherRadForce','value'],
@@ -609,7 +611,7 @@ ParameterValue = list(
 		DeprecRate_Mid = ParameterData['DeprecRate_Mid','value'],
 		DeprecRate_High = ParameterData['DeprecRate_High','value'],
 		IneqMult_Low = ParameterData['IneqMult_Low','value'],
-		IneqMult_Mid = ParameterData['IneqMult_ Mid','value'],
+		IneqMult_Mid = ParameterData['IneqMult_Mid','value'],
 		IneqMult_High = ParameterData['IneqMult_High','value'],
 
 	# Resource Coefficients	
@@ -624,8 +626,12 @@ ParameterValue = list(
     # Water Coefficients
 		DeltaW = ParameterData['DeltaW','value'],
 		WaterReplRate = ParameterData['WaterReplRate','value'],
-		ZetaI = ParameterData['ZetaI','value'],
-		WaterDemandPC = ParameterData['WaterDemandPC','value'],
+		ZetaI_Low = ParameterData['ZetaI_Low','value'],
+		ZetaI_Mid = ParameterData['ZetaI_Mid','value'],
+		ZetaI_High = ParameterData['ZetaI_High','value'],
+		WaterDemandPC_Low = ParameterData['WaterDemandPC_Low','value'],
+		WaterDemandPC_Mid = ParameterData['WaterDemandPC_Mid','value'],
+		WaterDemandPC_High = ParameterData['WaterDemandPC_High','value'],
 
     # Health and Education Coefficients
 		EducationInvestFrac_Low = ParameterData['EducationInvestFrac_Low','value'],

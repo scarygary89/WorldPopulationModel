@@ -2,17 +2,12 @@
 ######################## HEALTH AND EDUCATION  ########################
 ########################    SUBSYSTEM          ########################
 
-print('-------------LOAD HEALTH & EDUCATION  -------------------')
-print('-------------      SUBSYSTEM          -------------------')
 
-HealthEducation = function(HealthServices,EducationServices,
-	EconOutput,Pop_ijk,Inequality,parms) 
+HealthEducation = function(HealthServices,EducationServices,EconOutput,
+	EducationInvestFrac, HealthInvestFrac,ZetaE,ZetaH,LambdaE,LambdaH,
+	ChiEF_k,ChiHF_k,ChiHA_k,Pop_ijk,Inequality,parms) 
 {
 	with(parms, {
-		# Convert Inputs
-		ChiEF_k = c(Rich = ChiEF_Rich, Poor = ChiEF_Poor)
-		ChiHF_k = c(Rich = ChiHF_Rich, Poor = ChiHF_Poor)
-		ChiHA_k = c(Rich = ChiHA_Rich, Poor = ChiHA_Poor)
 
 		# Auxiliary Variables
 		EducationInvest = EconOutput * EducationInvestFrac

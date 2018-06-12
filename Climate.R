@@ -2,14 +2,20 @@
 ########################  CLIMATE SUBSYSTEM    ########################
 ########################                       ########################
 
-print('------------- LOAD CLIMATE SUBSYSTEM  -------------------')
 
 
-Climate = function(GlobalTemp,CO2Conc,EconOutput,Livestock,parms) 
+Climate = function(GlobalTemp,CO2Conc,RegEconOutputPC,RegPop,parms) 
 {
-    with (parms,{
+    with(parms, {
+        # Assemble Inputs
+        PsiE_r = c(     
+            Low = PsiE_Low, 
+            Mid = PsiE_Mid, 
+            High = PsiE_High)
+
     # Auxiliary Variables
-        CO2Emission = EconOutput^PsiE + Livestock^PsiL
+        CO2EmissionPC = RegEconOutputPC ^ PsiE_r
+        CO2Emission = sum(RegPop * CO2EmissionPC)
         CO2Storage = Gamma * CO2Conc
         CO2Radiative = 5.35 * CO2Conc / RefCO2Conc
         RadiativeForce = CO2Radiative + OtherRadForce
@@ -20,7 +26,7 @@ Climate = function(GlobalTemp,CO2Conc,EconOutput,Livestock,parms)
         dGlobalTemp = TempChange
 
     # Output
-        list( dCO2Conc = dCO2Conc,
-          dGlobalTemp = dGlobalTemp)
+        list(   dCO2Conc = dCO2Conc,
+                dGlobalTemp = dGlobalTemp)
     })
 }

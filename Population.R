@@ -2,54 +2,54 @@
 ######################## POUPULATION SUBSYSTEM ########################
 ########################                       ########################
 
-print('-------------LOAD POPULATION SUBSYSTEM-------------------')
-
-
 Population = function(Pop_ijk,TotalPop,
-	FemaleEduAttain_k,FemaleHealthAccess_k,GeneralHealthAccess_k,NutritionConsPC_k,
+	FemaleEduAttain_k,FemaleHealthAccess_k,GeneralHealthAccess_k,
+	NutritionConsPC_k,
 	parms) 
 {
 	with(parms, {
 		# Input Conversion
-		OmegaH_ijk = matrix(c(		
-			OmegaH_RM1,
-			OmegaH_RM2,
-			OmegaH_RM3,
-			OmegaH_RM4,
-			OmegaH_RF1,
-			OmegaH_RF2,
-			OmegaH_RF3,
-			OmegaH_RF4,	
-			OmegaH_PM1,
-			OmegaH_PM2,
-			OmegaH_PM3,
-			OmegaH_PM4,
-			OmegaH_PF1,
-			OmegaH_PF2,
-			OmegaH_PF3,
-			OmegaH_PF4), 
-			nrow = 8, ncol = 2)
-		OmegaF_ijk = matrix(c(
-			OmegaF_RM1,
-			OmegaF_RM2,
-			OmegaF_RM3,
-			OmegaF_RM4,
-			OmegaF_RF1,
-			OmegaF_RF2,
-			OmegaF_RF3,
-			OmegaF_RF4,
-			OmegaF_PM1,
-			OmegaF_PM2,
-			OmegaF_PM3,
-			OmegaF_PM4,
-			OmegaF_PF1,
-			OmegaF_PF2,
-			OmegaF_PF3,
-			OmegaF_PF4), 
-		nrow = 8, ncol = 2)
+		OmegaH_ijk = cbind(
+			Rich = c(		
+				RM1 = OmegaH_RM1,
+				RM2 = OmegaH_RM2,
+				RM3 = OmegaH_RM3,
+				RM4 = OmegaH_RM4,
+				RF1 = OmegaH_RF1,
+				RF2 = OmegaH_RF2,
+				RF3 = OmegaH_RF3,
+				RF4 = OmegaH_RF4),	
+			Poor = c(	
+				PM1 = OmegaH_PM1,
+				PM2 = OmegaH_PM2,
+				PM3 = OmegaH_PM3,
+				PM4 = OmegaH_PM4,
+				PF1 = OmegaH_PF1,
+				PF2 = OmegaH_PF2,
+				PF3 = OmegaH_PF3,
+				PF4 = OmegaH_PF4))
+		OmegaF_ijk = cbind(
+			Rich = c(
+				RM1 = OmegaF_RM1,
+				RM2 = OmegaF_RM2,
+				RM3 = OmegaF_RM3,
+				RM4 = OmegaF_RM4,
+				RF1 = OmegaF_RF1,
+				RF2 = OmegaF_RF2,
+				RF3 = OmegaF_RF3,
+				RF4 = OmegaF_RF4),
+			Poor = c(
+				PM1 = OmegaF_PM1,
+				PM2 = OmegaF_PM2,
+				PM3 = OmegaF_PM3,
+				PM4 = OmegaF_PM4,
+				PF1 = OmegaF_PF1,
+				PF2 = OmegaF_PF2,
+				PF3 = OmegaF_PF3,
+				PF4 = OmegaF_PF4))
 		GeneralHealthAccess_ijk = matrix(GeneralHealthAccess_k, 
 			nrow = 8, ncol = 2, byrow = T)
-		NutritionConsPC_ijk = matrix(GeneralHealthAccess_k, 
+		NutritionConsPC_ijk = matrix(NutritionConsPC_k,
 			nrow = 8, ncol = 2, byrow = T)
 
 		# Auxiliary Variables
@@ -64,10 +64,10 @@ Population = function(Pop_ijk,TotalPop,
 		DeathFood_ijk   = OmegaF_ijk * NutritionConsPC_ijk / NutritionReq
 		DeathHealth_ijk = OmegaH_ijk * GeneralHealthAccess_ijk  
 		MortRate_ijk    = MinDeath + DeathFood_ijk + DeathHealth_ijk
-		DeathMatrix_ijk  = diag(c(MortRate_ijk/1000),16)
+		DeathMatrix_ijk = diag(c(MortRate_ijk/1000),16)
 		Mat_i           = c(1/15, 1/35, 1/15)
 		AgeMatrix_ij   = matrix(c(
-		 -Mat_i[1], 0,        0,        0, 0,        0,        0,        0, 
+		 -Mat_i[1],0,        0,        0, 0,        0,        0,        0, 
 		 Mat_i[1],-Mat_i[2], 0,        0, 0,        0,        0,        0, 
 		 0,        Mat_i[2],-Mat_i[3], 0, 0,        0,        0,        0, 
 		 0,        0,        Mat_i[3], 0, 0,        0,        0,        0,

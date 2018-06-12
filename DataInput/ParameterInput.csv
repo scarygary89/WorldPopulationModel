@@ -77,8 +77,9 @@ LivestockWasteFrac,0.1,,,food
 CropsWasteFrac,0.1,,,food
 Lambda,22,,,climate
 RefTemp,13,,,climate
-PsiE,0.1,,,climate
-PsiL,0.1,,,climate
+PsiE_Low,0.1,,,climate
+PsiE_Mid,0.1,,,climate
+PsiE_High,0.1,,,climate
 Gamma,0.1,,,climate
 RefCO2Conc,15,,,climate
 OtherRadForce,0,,,climate
@@ -169,8 +170,12 @@ NonrenewableConsIntensity_Mid,0.000000001,,,resource
 NonrenewableConsIntensity_High,0.000000001,,,resource
 DeltaW,0.01,,,water
 WaterReplRate,0.3,,,water
-ZetaI,1,,,water
-WaterDemandPC,1,,,water
+ZetaI_Low,1,,,water
+ZetaI_Mid,1,,,water
+ZetaI_High,1,,,water
+WaterDemandPC_Low,1,,,water
+WaterDemandPC_Mid,1,,,water
+WaterDemandPC_High,1,,,water
 EducationInvestFrac_Low,0.1,,,educationhealth
 EducationInvestFrac_Mid,0.1,,,educationhealth
 EducationInvestFrac_High,0.1,,,educationhealth
