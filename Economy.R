@@ -5,7 +5,7 @@
 Economy = function(RenewableResources,NonrenewableResources,
 	EconOutput,PrevEconOutput,TotalPop,Capital,
 	RRAccess,NRAccess,TechMult,LaborInputElast,CapitalInputElast,
-	RenewableInputElast,NonrenewableInputElast,IneqMult,SavingsRate,
+	RenewableCapitalReturn,NonrenewableCapitalReturn,IneqMult,SavingsRate,
 	DeprecRate,EmployedWorkRatio_ijk,Pop_ijk,
 	parms) 
 {
@@ -16,14 +16,13 @@ Economy = function(RenewableResources,NonrenewableResources,
         RR = RRAccess * RenewableResources
 		EmployedLabor = sum(Pop_ijk * EmployedWorkRatio_ijk)
 		Output 	= TechMult * (EmployedLabor ^ LaborInputElast) * 
-					(Capital ^ CapitalInputElast) *
-					(NR ^ NonrenewableInputElast) * 
-					(RR ^ RenewableInputElast)
+					(Capital ^ CapitalInputElast) 
 		ChangeEconOutput = Output - PrevEconOutput 
 		EconOutputPC = Output / (TotalPop * 1000)
-		CapitalInvest = EconOutput * SavingsRate * NR * RR
+		CapitalInvest = EconOutput * SavingsRate 
+			+ NonrenewableCapitalReturn * NR +  RenewableCapitalReturn * RR
 		CapitalDeprec = Capital * DeprecRate 
-		Inequality =  IneqMult * exp( Capital / EconOutputPC )
+		Inequality =  IneqMult * CapitalInvest / EconOutputPC 
 
         # Stock and Flow Variables
 		dCapital = CapitalInvest - CapitalDeprec

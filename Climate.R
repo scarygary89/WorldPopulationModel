@@ -14,7 +14,7 @@ Climate = function(GlobalTemp,CO2Conc,RegEconOutputPC,RegPop,parms)
             High = PsiE_High)
 
     # Auxiliary Variables
-        CO2EmissionPC = RegEconOutputPC ^ PsiE_r
+        CO2EmissionPC = RegEconOutputPC ^ PsiE_r / 1000
         CO2Emission = sum(RegPop * CO2EmissionPC)
         CO2Storage = Gamma * CO2Conc
         CO2Radiative = 5.35 * CO2Conc / RefCO2Conc

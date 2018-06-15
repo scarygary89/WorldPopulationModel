@@ -21,7 +21,7 @@ HealthEducation = function(HealthServices,EducationServices,EconOutput,
 		TotalPop_k = c(Rich = sum(Pop_ijk[c('RM1','RM2','RM3','RM4','RF1','RF2','RF3','RF4')]),
 			Poor = sum(Pop_ijk[c('PM1','PM2','PM3','PM4','PF1','PF2','PF3','PF4')]))
 		FemaleEduAttain_k = 1/(1 + exp(-ChiEF_k * Inequality * EducationServices / TotalFemale_k))
-		FemaleHealthAccess_k = 1/(1 + exp(-ChiHF_k * Inequality * HealthServices / TotalFemale_k))
+		FemaleHealthAccess_k = 1/(1 + exp(-ChiHF_k * Inequality * HealthServices / TotalFemale_k)) 
 		GeneralHealthAccess_k = 1/(1 + exp(-ChiHA_k * Inequality * HealthServices / TotalPop_k))
 
 		# Stock and Flow Variables

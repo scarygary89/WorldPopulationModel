@@ -1,4 +1,5 @@
 rm(list = ls())
+graphics.off()
 
 library(deSolve)
 library(ggplot2)
@@ -18,40 +19,42 @@ print('COMPLETED.')
 source('InitializeData.R')
 
 # LOAD SUBSYSTEMS
-print('------------- LOAD ECONOMY SUBSYSTEM')
+print('------------- LOAD ECONOMY SUBMODEL')
 source('Economy.R')
-print('COMPLETED.')
 
-print('------------- LOAD RESOURCE SUBSYSTEM')
+print('------------- LOAD RESOURCE SUBMODEL')
 source('Resource.R')
-print('COMPLETED.')
 
-print('------------- LOAD FOOD SUBSYSTEM')
+print('------------- LOAD FOOD SUBMODEL')
 source('Food.R')
-print('COMPLETED.')
 
-print('------------- LOAD CLIMATE SUBSYSTEM')
+print('------------- LOAD CLIMATE SUBMODEL')
 source('Climate.R')
-print('COMPLETED.')
 
-print('------------- LOAD POPULATION SUBSYSTEM')
+print('------------- LOAD POPULATION SUBMODEL')
 source('Population.R')
-print('COMPLETED.')
 
-print('------------- LOAD HEALTH & EDUCATION SUBSYSTEM')
+print('------------- LOAD HEALTH & EDUCATION SUBMODEL')
 source('HealthEducation.R')
-print('COMPLETED.')
 
-print('------------- LOAD WATER SUBSYSTEM')
+print('------------- LOAD WATER SUBMODEL')
 source('Water.R')
-print('COMPLETED.')
+print('ALL COMPONENTS LOADED.')
+
+# PRINT FUNCTION
+printvar = function(x){
+	if(!is.na(x)){
+		print(paste(deparse(substitute(x))," = ",x))
+	}
+}
+		
 
 # DEFINE MODEL
 print('************* DEFINE MAIN MODEL *************')
 
 t0 = 1980
 tf = 2080
-tstep = 1
+tstep = .5
 delaylength = 1
 
 WorldMod = new("odeModel",
@@ -191,18 +194,18 @@ WorldMod = new("odeModel",
 				High = HighPop) 
 
     # Extract Delayed Values
-			if (time <= (t0 + delaylength )){
-				PrevFoodDemandPC_Low = InitValue['FoodDemandPC_Low']
+			if (time < (t0 + delaylength)){
+				PrevFoodDemandPC_Low = InitValue['FoodDemandPC_Low'] 
 				PrevFoodDemandPC_Mid = InitValue['FoodDemandPC_Mid']
 				PrevFoodDemandPC_High = InitValue['FoodDemandPC_High']
-				PrevEconOutput_Low = InitValue['EconOutput_Low']
-				PrevEconOutput_Mid = InitValue['EconOutput_Mid']
-				PrevEconOutput_High = InitValue['EconOutput_High']
-				PrevEconOutputPC_Low = InitValue['EconOutput_Low'] / InitValue['LowPop']
-				PrevEconOutputPC_Mid = InitValue['EconOutput_Mid'] / InitValue['MidPop']
-				PrevEconOutputPC_High = InitValue['EconOutput_High'] / InitValue['HighPop']
+				PrevEconOutput_Low = InitValue['EconOutput_Low'] * (1-InitEconGrowthRate_Low)
+				PrevEconOutput_Mid = InitValue['EconOutput_Mid'] * (1-InitEconGrowthRate_Mid)
+				PrevEconOutput_High = InitValue['EconOutput_High'] * (1-InitEconGrowthRate_High)
+				PrevEconOutputPC_Low = PrevEconOutput_Low / InitValue['LowPop']
+				PrevEconOutputPC_Mid = PrevEconOutput_Mid / InitValue['MidPop']
+				PrevEconOutputPC_High = PrevEconOutput_High / InitValue['HighPop']
 			}
-			if (time > (t0 + delaylength)) { 
+			if (time >= (t0 + delaylength)) { 
 				LagStock = lagvalue(time - delaylength)
 				PrevFoodDemandPC_Low = LagStock[which(names(InitValue) == "FoodDemandPC_Low")]
 				PrevFoodDemandPC_Mid = LagStock[which(names(InitValue) == "FoodDemandPC_Mid")]
@@ -237,24 +240,26 @@ WorldMod = new("odeModel",
 								EconOutput_Low,PrevEconOutput_Low,LowPop,Capital_Low,
 								RenewableAccess_Low,NonrenewableAccess_Low,TechMult_Low,
 								LaborInputElast_Low,CapitalInputElast_Low,
-								RenewableInputElast_Low,NonrenewableInputElast_Low,IneqMult_Low,SavingsRate_Low,
+								RenewableCapitalReturn_Low,NonrenewableCapitalReturn_Low,IneqMult_Low,SavingsRate_Low,
 								DeprecRate_Low,EmployedWorkRatio_ijkr[['Low']],RegPop_ijkr[['Low']],
 								parms)  
+
 			EconOut_Mid    	= Economy(RenewableResources,NonrenewableResources,
 								EconOutput_Mid,PrevEconOutput_Mid,MidPop,Capital_Mid,
 								RenewableAccess_Mid,NonrenewableAccess_Mid,TechMult_Mid,
 								LaborInputElast_Mid,CapitalInputElast_Mid,
-								RenewableInputElast_Mid,NonrenewableInputElast_Mid,IneqMult_Mid,SavingsRate_Mid,
+								RenewableCapitalReturn_Mid,NonrenewableCapitalReturn_Mid,IneqMult_Mid,SavingsRate_Mid,
 								DeprecRate_Mid,EmployedWorkRatio_ijkr[['Mid']],RegPop_ijkr[['Mid']],
 								parms)
+			
 			EconOut_High   	= Economy(RenewableResources,NonrenewableResources,
 								EconOutput_High,PrevEconOutput_High,HighPop,Capital_High,
 								RenewableAccess_High,NonrenewableAccess_High,TechMult_High,
 								LaborInputElast_High,CapitalInputElast_High,
-								RenewableInputElast_High,NonrenewableInputElast_High,IneqMult_High,SavingsRate_High,
+								RenewableCapitalReturn_High,NonrenewableCapitalReturn_High,IneqMult_High,SavingsRate_High,
 								DeprecRate_High,EmployedWorkRatio_ijkr[['High']],RegPop_ijkr[['High']],
 								parms)  
-			
+
 			EconOutput_r = 	 c( Low = EconOutput_Low,
 								Mid = EconOutput_Mid,
 								High = EconOutput_High)
@@ -314,7 +319,7 @@ WorldMod = new("odeModel",
 			WaterOut      	= Water(Freshwater,GlobalTemp,EconOutput_r,FoodOut[['AgriWaterDemand']],
 								RegPop_r,parms)
 
-			stocks = list(c(
+			dstocks = list(c(
 				# Economic Stocks (Regional)
 				EconOut_Low[["dCapital"]],
 				EconOut_Mid[["dCapital"]],
@@ -357,7 +362,7 @@ WorldMod = new("odeModel",
 				# Water Stocks (Global)
 				WaterOut[["dFreshwater"]]
 			))
-			stocks
+			dstocks
 		})
 	},
 
@@ -373,19 +378,22 @@ WorldMod = new("odeModel",
 
 ########################## Specify Solver
 
-nlag = ceiling(delaylength/tstep)
 solver(WorldMod) = function(y,times,func,parms,...) {
-	lsode(y,times,func,parms,lags = nlag,verbose = T,...)
+	dede(y,times,func,parms,
+		method = 'lsoda',
+		verbose = T,...)
 }
 print('COMPLETED.')
 
 ########################### Simulate
 
 print('*************  SIMULATE MODEL   *************')
+ptm = proc.time()
 SimResults = sim(WorldMod)
+ptm = proc.time() - ptm
 OutputData = data.frame(out(SimResults))
 print('COMPLETED.')
-
+print(ptm)
 ########################### Plot results
 
 source('plotter.R')

@@ -2,13 +2,11 @@
 
 # IMPORT DATA
 
-orgdir = getwd()
-setwd('./DataInput/')
-
-InitialData = read.csv(  file = 'InitialValueInput.csv',sep =',',row.names = 1,
+InitialData = read.csv(  file = './DataInput/InitialValueInput.csv',sep =',',row.names = 1,
 						header = T, fileEncoding="UTF-8-BOM")
 
-ParameterData = read.csv(  file = 'ParameterInput.csv',sep =',',row.names = 1,
+
+ParameterData = read.csv(  file = './DataInput/ParameterInput.csv',sep =',',row.names = 1,
 						header = T, fileEncoding="UTF-8-BOM",)
 
 LowPop_RM1 = InitialData['LowPop_RM1','value']
@@ -116,13 +114,6 @@ InitHighTotPop = sum(
 		HighPop_PF3,
 		HighPop_PF4)
 
-RenewableInputElast_Low = ParameterData['RenewableInputElast_Low','value']
-RenewableInputElast_Mid = ParameterData['RenewableInputElast_Mid','value']
-RenewableInputElast_High = ParameterData['RenewableInputElast_High','value']
-
-NonrenewableInputElast_Low = ParameterData['NonrenewableInputElast_Low','value']
-NonrenewableInputElast_Mid = ParameterData['NonrenewableInputElast_Mid','value']
-NonrenewableInputElast_High = ParameterData['NonrenewableInputElast_High','value']
 
 CapitalInputElast_Low = ParameterData['CapitalInputElast_Low','value']
 CapitalInputElast_Mid = ParameterData['CapitalInputElast_Mid','value']
@@ -296,44 +287,18 @@ InitLabor_High = sum(
 		HighPop_PF3,
 		HighPop_PF4) * HighEmployedWorkRatio_ijk)
 
-InitRenewableResources = InitialData['RenewableResources','value']
-InitNonrenewableResources = InitialData['NonrenewableResources','value']
-
 TechMult_Low = ParameterData['TechMult_Low','value']
 TechMult_Mid = ParameterData['TechMult_Mid','value']
 TechMult_High = ParameterData['TechMult_High','value']
 
-RenewableAccess_Low = ParameterData['RenewableAccess_Low','value']
-RenewableAccess_Mid = ParameterData['RenewableAccess_Mid','value']
-RenewableAccess_High = ParameterData['RenewableAccess_High','value']
-
-NonrenewableAccess_Low = ParameterData['NonrenewableAccess_Low','value']
-NonrenewableAccess_Mid = ParameterData['NonrenewableAccess_Mid','value']
-NonrenewableAccess_High = ParameterData['NonrenewableAccess_High','value']
-
-InitRenewableResources_Low = RenewableAccess_Low * InitRenewableResources
-InitRenewableResources_Mid = RenewableAccess_Mid * InitRenewableResources
-InitRenewableResources_High = RenewableAccess_High * InitRenewableResources
-
-InitNonrenewableResources_Low = NonrenewableAccess_Low * InitNonrenewableResources
-InitNonrenewableResources_Mid = NonrenewableAccess_Mid * InitNonrenewableResources
-InitNonrenewableResources_High = NonrenewableAccess_High * InitNonrenewableResources
-
-
 InitEconOutput_Low = TechMult_Low*InitLabor_Low^LaborInputElast_Low * 
-				InitCapital_Low^CapitalInputElast_Low *
-			 	InitNonrenewableResources_Low^NonrenewableInputElast_Low * 
-			 	InitRenewableResources_Low^RenewableInputElast_Low 
+				InitCapital_Low^CapitalInputElast_Low 
 
 InitEconOutput_Mid = TechMult_Mid*InitLabor_Mid^LaborInputElast_Mid * 
-				InitCapital_Mid^CapitalInputElast_Mid *
-			 	InitNonrenewableResources_Mid^NonrenewableInputElast_Mid * 
-			 	InitRenewableResources_Mid^RenewableInputElast_Mid 
+				InitCapital_Mid^CapitalInputElast_Mid 
 
 InitEconOutput_High = TechMult_High*InitLabor_High^LaborInputElast_High * 
-				InitCapital_High^CapitalInputElast_High *
-			 	InitNonrenewableResources_High^NonrenewableInputElast_High * 
-			 	InitRenewableResources_High^RenewableInputElast_High 
+				InitCapital_High^CapitalInputElast_High 
 
 InitCO2Concentration = InitialData['CO2Conc','value']
 InitTemp = InitialData['GlobalTemp','value']
@@ -350,8 +315,8 @@ InitValue = c(
 		EconOutput_High = InitEconOutput_High,
 
   # Resource Stocks (Global)		
-		RenewableResources = InitRenewableResources,
-		NonrenewableResources = InitNonrenewableResources,
+		RenewableResources = InitialData['RenewableResources','value'],
+		NonrenewableResources = InitialData['NonrenewableResources','value'],
 
   # Climate Stocks (Global)
 		CO2Conc = InitCO2Concentration,
@@ -451,39 +416,23 @@ ParameterValue = list(
 		Beta1 = ParameterData['Beta1','value'],
 		FemaleBirthRatio = ParameterData['FemaleBirthRatio','value'],
 
-		OmegaF_RM1 = ParameterData['OmegaF_RM1','value'],
-		OmegaF_RM2 = ParameterData['OmegaF_RM2','value'],
-		OmegaF_RM3 = ParameterData['OmegaF_RM3','value'],
-		OmegaF_RM4 = ParameterData['OmegaF_RM4','value'],
-		OmegaF_RF1 = ParameterData['OmegaF_RF1','value'],
-		OmegaF_RF2 = ParameterData['OmegaF_RF2','value'],
-		OmegaF_RF3 = ParameterData['OmegaF_RF3','value'],
-		OmegaF_RF4 = ParameterData['OmegaF_RF4','value'],
-		OmegaF_PM1 = ParameterData['OmegaF_PM1','value'],
-		OmegaF_PM2 = ParameterData['OmegaF_PM2','value'],
-		OmegaF_PM3 = ParameterData['OmegaF_PM3','value'],
-		OmegaF_PM4 = ParameterData['OmegaF_PM4','value'],
-		OmegaF_PF1 = ParameterData['OmegaF_PF1','value'],
-		OmegaF_PF2 = ParameterData['OmegaF_PF2','value'],
-		OmegaF_PF3 = ParameterData['OmegaF_PF3','value'],
-		OmegaF_PF4 = ParameterData['OmegaF_PF4','value'],
+		OmegaF_M1 = ParameterData['OmegaF_M1','value'],
+		OmegaF_M2 = ParameterData['OmegaF_M2','value'],
+		OmegaF_M3 = ParameterData['OmegaF_M3','value'],
+		OmegaF_M4 = ParameterData['OmegaF_M4','value'],
+		OmegaF_F1 = ParameterData['OmegaF_F1','value'],
+		OmegaF_F2 = ParameterData['OmegaF_F2','value'],
+		OmegaF_F3 = ParameterData['OmegaF_F3','value'],
+		OmegaF_F4 = ParameterData['OmegaF_F4','value'],
 
-		OmegaH_RM1 = ParameterData['OmegaH_RM1','value'],
-		OmegaH_RM2 = ParameterData['OmegaH_RM2','value'],
-		OmegaH_RM3 = ParameterData['OmegaH_RM3','value'],
-		OmegaH_RM4 = ParameterData['OmegaH_RM4','value'],
-		OmegaH_RF1 = ParameterData['OmegaH_RF1','value'],
-		OmegaH_RF2 = ParameterData['OmegaH_RF2','value'],
-		OmegaH_RF3 = ParameterData['OmegaH_RF3','value'],
-		OmegaH_RF4 = ParameterData['OmegaH_RF4','value'],	
-		OmegaH_PM1 = ParameterData['OmegaH_PM1','value'],
-		OmegaH_PM2 = ParameterData['OmegaH_PM2','value'],
-		OmegaH_PM3 = ParameterData['OmegaH_PM3','value'],
-		OmegaH_PM4 = ParameterData['OmegaH_PM4','value'],
-		OmegaH_PF1 = ParameterData['OmegaH_PF1','value'],
-		OmegaH_PF2 = ParameterData['OmegaH_PF2','value'],
-		OmegaH_PF3 = ParameterData['OmegaH_PF3','value'],
-		OmegaH_PF4 = ParameterData['OmegaH_PF4','value'],
+		OmegaH_M1 = ParameterData['OmegaH_M1','value'],
+		OmegaH_M2 = ParameterData['OmegaH_M2','value'],
+		OmegaH_M3 = ParameterData['OmegaH_M3','value'],
+		OmegaH_M4 = ParameterData['OmegaH_M4','value'],
+		OmegaH_F1 = ParameterData['OmegaH_F1','value'],
+		OmegaH_F2 = ParameterData['OmegaH_F2','value'],
+		OmegaH_F3 = ParameterData['OmegaH_F3','value'],
+		OmegaH_F4 = ParameterData['OmegaH_F4','value'],	
 		NutritionReq = ParameterData['NutritionReq','value'],
 
   # Food Coefficients
@@ -535,12 +484,12 @@ ParameterValue = list(
 		OtherRadForce = ParameterData['OtherRadForce','value'],
 
     # Economy Coefficients
-		RenewableInputElast_Low = RenewableInputElast_Low,
-		RenewableInputElast_Mid = RenewableInputElast_Mid,
-		RenewableInputElast_High = RenewableInputElast_High,
-		NonrenewableInputElast_Low = NonrenewableInputElast_Low,
-		NonrenewableInputElast_Mid = NonrenewableInputElast_Mid,
-		NonrenewableInputElast_High = NonrenewableInputElast_High,
+		RenewableCapitalReturn_Low = ParameterData['RenewableCapitalReturn_Low','value'],
+		RenewableCapitalReturn_Mid = ParameterData['RenewableCapitalReturn_Mid','value'],
+		RenewableCapitalReturn_High = ParameterData['RenewableCapitalReturn_High','value'],
+		NonrenewableCapitalReturn_Low = ParameterData['NonrenewableCapitalReturn_Low','value'],
+		NonrenewableCapitalReturn_Mid = ParameterData['NonrenewableCapitalReturn_Mid','value'],
+		NonrenewableCapitalReturn_High = ParameterData['NonrenewableCapitalReturn_High','value'],
 		CapitalInputElast_Low = CapitalInputElast_Low,
 		CapitalInputElast_Mid = CapitalInputElast_Mid,
 		CapitalInputElast_High = CapitalInputElast_High,
@@ -550,12 +499,12 @@ ParameterValue = list(
 		TechMult_Low = TechMult_Low,
 		TechMult_Mid = TechMult_Mid,
 		TechMult_High = TechMult_High,
-		RenewableAccess_Low = RenewableAccess_Low,
-		RenewableAccess_Mid = RenewableAccess_Mid,
-		RenewableAccess_High = RenewableAccess_High,
-		NonrenewableAccess_Low = NonrenewableAccess_Low,
-		NonrenewableAccess_Mid = NonrenewableAccess_Mid,
-		NonrenewableAccess_High = NonrenewableAccess_High,
+		RenewableAccess_Low = ParameterData['RenewableAccess_Low','value'],
+		RenewableAccess_Mid = ParameterData['RenewableAccess_Mid','value'],
+		RenewableAccess_High = ParameterData['RenewableAccess_High','value'],
+		NonrenewableAccess_Low = ParameterData['NonrenewableAccess_Low','value'],
+		NonrenewableAccess_Mid = ParameterData['NonrenewableAccess_Mid','value'],
+		NonrenewableAccess_High = ParameterData['NonrenewableAccess_High','value'],
 		LowEmployedWorkRatio_RM1 = LowEmployedWorkRatio_RM1, 
 		LowEmployedWorkRatio_RM2 = LowEmployedWorkRatio_RM2, 
 		LowEmployedWorkRatio_RM3 = LowEmployedWorkRatio_RM3, 
@@ -613,6 +562,9 @@ ParameterValue = list(
 		IneqMult_Low = ParameterData['IneqMult_Low','value'],
 		IneqMult_Mid = ParameterData['IneqMult_Mid','value'],
 		IneqMult_High = ParameterData['IneqMult_High','value'],
+		InitEconGrowthRate_Low = ParameterData['InitEconGrowthRate_Low','value'],
+		InitEconGrowthRate_Mid = ParameterData['InitEconGrowthRate_Mid','value'],
+		InitEconGrowthRate_High = ParameterData['InitEconGrowthRate_High','value'],
 
 	# Resource Coefficients	
 		ReplRateRenewable = ParameterData['ReplRateRenewable','value'],
@@ -670,5 +622,3 @@ ParameterValue = list(
 		ChiHA_PoorLow = ParameterData['ChiHA_PoorLow','value'],
 		ChiHA_PoorMid = ParameterData['ChiHA_PoorMid','value'],
 		ChiHA_PoorHigh = ParameterData['ChiHA_PoorHigh','value'])
-
-setwd(orgdir)

@@ -28,7 +28,7 @@ Water = function(Freshwater,GlobalTemp,EconOutput_r,AgriWaterDemand,
     WaterCons = min(WaterDemand,Freshwater * (1 - ClimateChangeWaterLossRate))
 
     # Stock and Flow Variables
-    dFreshwater = WaterRepl - ClimateChangeWaterLoss - WaterCons
+    dFreshwater = WaterRepl - ClimateChangeWaterLoss - WaterCons 
 
     # Output
     list( dFreshwater = dFreshwater)

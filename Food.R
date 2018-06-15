@@ -92,7 +92,7 @@ Food = function(FoodStock_l,Fisheries,FoodDemandPC_r,GrazeLand,CropLand,
                                 PrevFoodDemandPC_r 
         dGrazeLand      = GrazeLandGain - GrazeLandLoss
         dCropLand       = CropLandGain - CropLandLoss
-        
+
         # Output
         list( dFisheries = dFisheries,
               dFoodStock_l = dFoodStock_l,
