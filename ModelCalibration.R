@@ -103,6 +103,8 @@ CalibParms = c(
 	OmegaH_F4 = ParameterData['OmegaH_F4','value']
 )
 
-
+ptm = proc.time() 
 Fit = modFit(p = CalibParms, f = ObjCost, simObj=WorldMod,
-		obstime=obstime, yobs=yobs, method="CG", control=list(trace=T))
+		obstime=obstime, yobs=yobs, method="SANN", control=list(trace=T))
+ptm = proc.time() - ptm
+print(ptm)
