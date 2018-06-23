@@ -2,8 +2,11 @@
 ######################## POUPULATION SUBSYSTEM ########################
 ########################                       ########################
 
-Population = function(Pop_ijk,TotalPop,
-	FemaleEduAttain_k,FemaleHealthAccess_k,GeneralHealthAccess_k,
+Population = function(
+	Pop_ijk,
+	FemaleEduAttain_k,
+	FemaleHealthAccess_k,
+	GeneralHealthAccess_k,
 	NutritionConsPC_k,
 	parms) 
 {
@@ -60,7 +63,7 @@ Population = function(Pop_ijk,TotalPop,
 							Poor = min( AlphaC + BetaEC  * (1 - FemaleEduAttain_k["Poor"]) + 
 							BetaHC * (1 - FemaleHealthAccess_k["Poor"]), 1))
 		TFR_k           = TNMFR * MarriageIndex_k * ContraIndex_k * TotalFecundity
-		GFR_k           = Beta1 * TFR_k 	
+		GFR_k           = Beta1 * TFR_k 
 		DeathFood_ijk   = OmegaF_ijk * NutritionConsPC_ijk / NutritionReq 
 		DeathHealth_ijk = OmegaH_ijk * GeneralHealthAccess_ijk 
 		MortRate_ijk    = MinDeath + DeathFood_ijk + DeathHealth_ijk 
@@ -83,14 +86,13 @@ Population = function(Pop_ijk,TotalPop,
 		TranMatrix_ijk[5,6] = (1 - FemaleBirthRatio) * GFR_k[1]/1000
 		TranMatrix_ijk[9,10] = FemaleBirthRatio * GFR_k[2]/1000
 		TranMatrix_ijk[13,14] = (1 - FemaleBirthRatio) * GFR_k[2]/1000
+		TranMatrix_ijk = TranMatrix_ijk 
 		Pop_ijk         = matrix(Pop_ijk,nrow = length(Pop_ijk),ncol = 1)
 
 		# Stock and Flow Variables
 		dPop_ijk        = TranMatrix_ijk %*% Pop_ijk
-		dTotPop         = sum(dPop_ijk)		
 
 		# Output
-		list( 	dPop_ijk = dPop_ijk,
-				dTotPop = dTotPop)
+		list( 	dPop_ijk = dPop_ijk)
 	})
 }

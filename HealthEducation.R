@@ -3,32 +3,39 @@
 ########################    SUBSYSTEM          ########################
 
 
-HealthEducation = function(HealthServices,EducationServices,EconOutput,
-	EducationInvestFrac, HealthInvestFrac,ZetaE,ZetaH,LambdaE,LambdaH,
-	ChiEF_k,ChiHF_k,ChiHA_k,Pop_ijk,Inequality,parms) 
+HealthEducation = function(
+	HealthServices,
+	EducationServices,
+	dEconOutput,
+	TotalFemale_k,
+	TotalPop_k,
+	EducationInvestFrac,
+	HealthInvestFrac,
+	ZetaE,
+	ZetaH,
+	LambdaE,
+	LambdaH,
+	ChiEF_k,
+	ChiHF_k,
+	ChiHA_k,
+	Inequality,
+	parms) 
 {
 	with(parms, {
-
 		# Auxiliary Variables
-		EducationInvest = EconOutput * EducationInvestFrac
-		HealthInvest = EconOutput * HealthInvestFrac
-		EducationServiceCost = EducationServices * ZetaE
-		HealthServiceCost = HealthServices * ZetaH
-		ChangeEducationServices = (EducationInvest - EducationServiceCost) / LambdaE
-		ChangeHealthServices = (HealthInvest - HealthServiceCost) / LambdaH
-		TotalFemale_k = c(Rich = sum(Pop_ijk[c('RF1','RF2','RF3','RF4')]),
-			Poor = sum(Pop_ijk[c('PF1','PF2','PF3','PF4')]))
-		TotalPop_k = c(Rich = sum(Pop_ijk[c('RM1','RM2','RM3','RM4','RF1','RF2','RF3','RF4')]),
-			Poor = sum(Pop_ijk[c('PM1','PM2','PM3','PM4','PF1','PF2','PF3','PF4')]))
+		DeprecEducationServices = EducationServices * ZetaE
+		DeprecHealthServices = HealthServices * ZetaH
+		GrowthEducationServices = dEconOutput * EducationInvestFrac / LambdaE
+		GrowthHealthServices = dEconOutput * HealthInvestFrac / LambdaH
 		FemaleEduAttain_k = 1/(1 + exp(-ChiEF_k * Inequality * EducationServices / TotalFemale_k))
 		FemaleHealthAccess_k = 1/(1 + exp(-ChiHF_k * Inequality * HealthServices / TotalFemale_k)) 
 		GeneralHealthAccess_k = 1/(1 + exp(-ChiHA_k * Inequality * HealthServices / TotalPop_k))
 
 		# Stock and Flow Variables
-		dEducationServices = ChangeEducationServices
-		dHealthServices = ChangeHealthServices
+		dEducationServices = GrowthEducationServices - DeprecEducationServices
+		dHealthServices = GrowthHealthServices - DeprecHealthServices
 
-		# Output
+ 		# Output
 		list( 	dEducationServices = dEducationServices,
 				dHealthServices = dHealthServices,
 				FemaleHealthAccess_k = FemaleHealthAccess_k,

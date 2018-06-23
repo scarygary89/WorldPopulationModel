@@ -2,7 +2,10 @@
 ########################  RESOURCE SUBSYSTEM   ########################
 ########################                       ########################
 
-Resource = function(RenewableResources,NonrenewableResources,EconOutput_r,
+Resource = function(
+	RenewableResources,
+	NonrenewableResources,
+	EconOutput_r,
 	parms)
 {	
 	with(parms,{

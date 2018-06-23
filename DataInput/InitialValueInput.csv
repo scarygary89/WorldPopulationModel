@@ -2,9 +2,6 @@
 Capital_Low,1000,NA,NA,economy
 Capital_Mid,1000,NA,NA,economy
 Capital_High,1000,NA,NA,economy
-EconOutput_Low,NA,NA,NA,economy
-EconOutput_Mid,NA,NA,NA,economy
-EconOutput_High,NA,NA,NA,economy
 RenewableResources,1.00E+03,NA,NA,resource
 NonrenewableResources,1.00E+03,NA,NA,resource
 CO2Conc,15,NA,NA,climate
@@ -18,12 +15,12 @@ FoodDemandPC_Mid,1,NA,NA,food
 FoodDemandPC_High,1,NA,NA,food
 GrazeLand,10000,NA,NA,food
 CropLand,10000,NA,NA,food
-EducationServices_Low,10,NA,NA,educationhealth
-EducationServices_Mid,10,NA,NA,educationhealth
-EducationServices_High,10,NA,NA,educationhealth
-HealthServices_Low,10,NA,NA,educationhealth
-HealthServices_Mid,10,NA,NA,educationhealth
-HealthServices_High,10,NA,NA,educationhealth
+EducationServices_Low,100,NA,NA,educationhealth
+EducationServices_Mid,100,NA,NA,educationhealth
+EducationServices_High,100,NA,NA,educationhealth
+HealthServices_Low,100,NA,NA,educationhealth
+HealthServices_Mid,100,NA,NA,educationhealth
+HealthServices_High,100,NA,NA,educationhealth
 LowPop_RM1,22467,NA,NA,population
 LowPop_RM2,22425,NA,NA,population
 LowPop_RM3,3457,NA,NA,population
@@ -72,7 +69,4 @@ HighPop_PF1,77584,NA,NA,population
 HighPop_PF2,167792,NA,NA,population
 HighPop_PF3,52007,NA,NA,population
 HighPop_PF4,44852,NA,NA,population
-LowTotalPop,NA,NA,NA,population
-MidTotalPop,NA,NA,NA,population
-HighTotalPop,NA,NA,NA,population
 Freshwater,100000,NA,NA,water

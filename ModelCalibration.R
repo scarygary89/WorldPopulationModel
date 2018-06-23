@@ -69,7 +69,6 @@ colnames(OtherData) = c('time','EconOutput_Low','LowPop','EconOutput_Mid',
 
 ObsData = merge(PopData,OtherData)
 
-parRanges = ParameterData[,c('min','max')]
 yobs = na.omit(melt(ObsData,id='time'))
 yobs$variable = as.character(yobs$variable)
 yobs = yobs[,c('variable','time','value')]
@@ -85,26 +84,32 @@ ObjCost = function(p, simObj, obstime, yobs){
 }
 
 CalibParms = c( 
-	OmegaF_M1 = ParameterData['OmegaF_M1','value'],
-	OmegaF_M2 = ParameterData['OmegaF_M2','value'],
-	OmegaF_M3 = ParameterData['OmegaF_M3','value'],
-	OmegaF_M4 = ParameterData['OmegaF_M4','value'],
-	OmegaF_F1 = ParameterData['OmegaF_F1','value'],
-	OmegaF_F2 = ParameterData['OmegaF_F2','value'],
-	OmegaF_F3 = ParameterData['OmegaF_F3','value'],
-	OmegaF_F4 = ParameterData['OmegaF_F4','value'],
-	OmegaH_M1 = ParameterData['OmegaH_M1','value'],
-	OmegaH_M2 = ParameterData['OmegaH_M2','value'],
-	OmegaH_M3 = ParameterData['OmegaH_M3','value'],
-	OmegaH_M4 = ParameterData['OmegaH_M4','value'],
-	OmegaH_F1 = ParameterData['OmegaH_F1','value'],
-	OmegaH_F2 = ParameterData['OmegaH_F2','value'],
-	OmegaH_F3 = ParameterData['OmegaH_F3','value'],
-	OmegaH_F4 = ParameterData['OmegaH_F4','value']
+	'OmegaF_M1',
+	'OmegaF_M2',
+	'OmegaF_M3',
+	'OmegaF_M4',
+	'OmegaF_F1',
+	'OmegaF_F2',
+	'OmegaF_F3',
+	'OmegaF_F4',
+	'OmegaH_M1',
+	'OmegaH_M2',
+	'OmegaH_M3',
+	'OmegaH_M4',
+	'OmegaH_F1',
+	'OmegaH_F2',
+	'OmegaH_F3',
+	'OmegaH_F4'
 )
 
+ParValue = setNames(ParameterData[CalibParms,'value'],CalibParms)
+ParMin = setNames(ParameterData[CalibParms,'min'],CalibParms)
+ParMax = setNames(ParameterData[CalibParms,'max'],CalibParms)
+
+
 ptm = proc.time() 
-Fit = modFit(p = CalibParms, f = ObjCost, simObj=WorldMod,
-		obstime=obstime, yobs=yobs, method="SANN", control=list(trace=T))
+Fit = modFit(p = ParValue, lower = ParMin, upper = ParMax, f = ObjCost, 
+		simObj=WorldMod, obstime=obstime, yobs=yobs, method="Pseudo") 
+		# control=list(trace=T))
 ptm = proc.time() - ptm
 print(ptm)

@@ -4,7 +4,12 @@
 
 
 
-Climate = function(GlobalTemp,CO2Conc,RegEconOutputPC,RegPop,parms) 
+Climate = function(
+    GlobalTemp,
+    CO2Conc,
+    RegEconOutputPC,
+    RegPop,
+    parms) 
 {
     with(parms, {
         # Assemble Inputs

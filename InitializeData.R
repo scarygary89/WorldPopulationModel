@@ -9,296 +9,6 @@ InitialData = read.csv(  file = './DataInput/InitialValueInput.csv',sep =',',row
 ParameterData = read.csv(  file = './DataInput/ParameterInput.csv',sep =',',row.names = 1,
 						header = T, fileEncoding="UTF-8-BOM",)
 
-LowPop_RM1 = InitialData['LowPop_RM1','value']
-LowPop_RM2 = InitialData['LowPop_RM2','value']
-LowPop_RM3 = InitialData['LowPop_RM3','value']
-LowPop_RM4 = InitialData['LowPop_RM4','value']
-LowPop_RF1 = InitialData['LowPop_RF1','value']
-LowPop_RF2 = InitialData['LowPop_RF2','value']
-LowPop_RF3 = InitialData['LowPop_RF3','value']
-LowPop_RF4 = InitialData['LowPop_RF4','value']         
-LowPop_PM1 = InitialData['LowPop_PM1','value']
-LowPop_PM2 = InitialData['LowPop_PM2','value']
-LowPop_PM3 = InitialData['LowPop_PM3','value']
-LowPop_PM4 = InitialData['LowPop_PM4','value']
-LowPop_PF1 = InitialData['LowPop_PF1','value']
-LowPop_PF2 = InitialData['LowPop_PF2','value']
-LowPop_PF3 = InitialData['LowPop_PF3','value']
-LowPop_PF4 = InitialData['LowPop_PF4','value']
-
-MidPop_RM1 = InitialData['MidPop_RM1','value']
-MidPop_RM2 = InitialData['MidPop_RM2','value']
-MidPop_RM3 = InitialData['MidPop_RM3','value']
-MidPop_RM4 = InitialData['MidPop_RM4','value']
-MidPop_RF1 = InitialData['MidPop_RF1','value']
-MidPop_RF2 = InitialData['MidPop_RF2','value']
-MidPop_RF3 = InitialData['MidPop_RF3','value']
-MidPop_RF4 = InitialData['MidPop_RF4','value']         
-MidPop_PM1 = InitialData['MidPop_PM1','value']
-MidPop_PM2 = InitialData['MidPop_PM2','value']
-MidPop_PM3 = InitialData['MidPop_PM3','value']
-MidPop_PM4 = InitialData['MidPop_PM4','value']
-MidPop_PF1 = InitialData['MidPop_PF1','value']
-MidPop_PF2 = InitialData['MidPop_PF2','value']
-MidPop_PF3 = InitialData['MidPop_PF3','value']
-MidPop_PF4 = InitialData['MidPop_PF4','value']
-
-HighPop_RM1 = InitialData['HighPop_RM1','value']
-HighPop_RM2 = InitialData['HighPop_RM2','value']
-HighPop_RM3 = InitialData['HighPop_RM3','value']
-HighPop_RM4 = InitialData['HighPop_RM4','value']
-HighPop_RF1 = InitialData['HighPop_RF1','value']
-HighPop_RF2 = InitialData['HighPop_RF2','value']
-HighPop_RF3 = InitialData['HighPop_RF3','value']
-HighPop_RF4 = InitialData['HighPop_RF4','value']         
-HighPop_PM1 = InitialData['HighPop_PM1','value']
-HighPop_PM2 = InitialData['HighPop_PM2','value']
-HighPop_PM3 = InitialData['HighPop_PM3','value']
-HighPop_PM4 = InitialData['HighPop_PM4','value']
-HighPop_PF1 = InitialData['HighPop_PF1','value']
-HighPop_PF2 = InitialData['HighPop_PF2','value']
-HighPop_PF3 = InitialData['HighPop_PF3','value']
-HighPop_PF4 = InitialData['HighPop_PF4','value']
-
-InitLowTotPop = sum(
-		LowPop_RM1,
-		LowPop_RM2,
-		LowPop_RM3,
-		LowPop_RM4,
-		LowPop_RF1,
-		LowPop_RF2,
-		LowPop_RF3,
-		LowPop_RF4, 
-		LowPop_PM1,
-		LowPop_PM2,
-		LowPop_PM3,
-		LowPop_PM4,
-		LowPop_PF1,
-		LowPop_PF2,
-		LowPop_PF3,
-		LowPop_PF4)
-
-InitMidTotPop = sum(
-		MidPop_RM1,
-		MidPop_RM2,
-		MidPop_RM3,
-		MidPop_RM4,
-		MidPop_RF1,
-		MidPop_RF2,
-		MidPop_RF3,
-		MidPop_RF4, 
-		MidPop_PM1,
-		MidPop_PM2,
-		MidPop_PM3,
-		MidPop_PM4,
-		MidPop_PF1,
-		MidPop_PF2,
-		MidPop_PF3,
-		MidPop_PF4)
-
-InitHighTotPop = sum(
-		HighPop_RM1,
-		HighPop_RM2,
-		HighPop_RM3,
-		HighPop_RM4,
-		HighPop_RF1,
-		HighPop_RF2,
-		HighPop_RF3,
-		HighPop_RF4, 
-		HighPop_PM1,
-		HighPop_PM2,
-		HighPop_PM3,
-		HighPop_PM4,
-		HighPop_PF1,
-		HighPop_PF2,
-		HighPop_PF3,
-		HighPop_PF4)
-
-
-CapitalInputElast_Low = ParameterData['CapitalInputElast_Low','value']
-CapitalInputElast_Mid = ParameterData['CapitalInputElast_Mid','value']
-CapitalInputElast_High = ParameterData['CapitalInputElast_High','value']
-
-LaborInputElast_Low = ParameterData['LaborInputElast_Low','value']
-LaborInputElast_Mid = ParameterData['LaborInputElast_Mid','value']
-LaborInputElast_High = ParameterData['LaborInputElast_High','value']
-
-LowEmployedWorkRatio_RM1 = ParameterData['LowEmployedWorkRatio_RM1','value']
-LowEmployedWorkRatio_RM2 = ParameterData['LowEmployedWorkRatio_RM2','value']
-LowEmployedWorkRatio_RM3 = ParameterData['LowEmployedWorkRatio_RM3','value']
-LowEmployedWorkRatio_RM4 = ParameterData['LowEmployedWorkRatio_RM4','value']
-LowEmployedWorkRatio_RF1 = ParameterData['LowEmployedWorkRatio_RF1','value']
-LowEmployedWorkRatio_RF2 = ParameterData['LowEmployedWorkRatio_RF2','value']
-LowEmployedWorkRatio_RF3 = ParameterData['LowEmployedWorkRatio_RF3','value']
-LowEmployedWorkRatio_RF4 = ParameterData['LowEmployedWorkRatio_RF4','value']             
-LowEmployedWorkRatio_PM1 = ParameterData['LowEmployedWorkRatio_PM1','value']
-LowEmployedWorkRatio_PM2 = ParameterData['LowEmployedWorkRatio_PM2','value']
-LowEmployedWorkRatio_PM3 = ParameterData['LowEmployedWorkRatio_PM3','value']
-LowEmployedWorkRatio_PM4 = ParameterData['LowEmployedWorkRatio_PM4','value']
-LowEmployedWorkRatio_PF1 = ParameterData['LowEmployedWorkRatio_PF1','value']
-LowEmployedWorkRatio_PF2 = ParameterData['LowEmployedWorkRatio_PF2','value']
-LowEmployedWorkRatio_PF3 = ParameterData['LowEmployedWorkRatio_PF3','value']
-LowEmployedWorkRatio_PF4 = ParameterData['LowEmployedWorkRatio_PF4','value']
-
-MidEmployedWorkRatio_RM1 = ParameterData['MidEmployedWorkRatio_RM1','value']
-MidEmployedWorkRatio_RM2 = ParameterData['MidEmployedWorkRatio_RM2','value']
-MidEmployedWorkRatio_RM3 = ParameterData['MidEmployedWorkRatio_RM3','value']
-MidEmployedWorkRatio_RM4 = ParameterData['MidEmployedWorkRatio_RM4','value']
-MidEmployedWorkRatio_RF1 = ParameterData['MidEmployedWorkRatio_RF1','value']
-MidEmployedWorkRatio_RF2 = ParameterData['MidEmployedWorkRatio_RF2','value']
-MidEmployedWorkRatio_RF3 = ParameterData['MidEmployedWorkRatio_RF3','value']
-MidEmployedWorkRatio_RF4 = ParameterData['MidEmployedWorkRatio_RF4','value']             
-MidEmployedWorkRatio_PM1 = ParameterData['MidEmployedWorkRatio_PM1','value']
-MidEmployedWorkRatio_PM2 = ParameterData['MidEmployedWorkRatio_PM2','value']
-MidEmployedWorkRatio_PM3 = ParameterData['MidEmployedWorkRatio_PM3','value']
-MidEmployedWorkRatio_PM4 = ParameterData['MidEmployedWorkRatio_PM4','value']
-MidEmployedWorkRatio_PF1 = ParameterData['MidEmployedWorkRatio_PF1','value']
-MidEmployedWorkRatio_PF2 = ParameterData['MidEmployedWorkRatio_PF2','value']
-MidEmployedWorkRatio_PF3 = ParameterData['MidEmployedWorkRatio_PF3','value']
-MidEmployedWorkRatio_PF4 = ParameterData['MidEmployedWorkRatio_PF4','value']
-
-HighEmployedWorkRatio_RM1 = ParameterData['HighEmployedWorkRatio_RM1','value']
-HighEmployedWorkRatio_RM2 = ParameterData['HighEmployedWorkRatio_RM2','value']
-HighEmployedWorkRatio_RM3 = ParameterData['HighEmployedWorkRatio_RM3','value']
-HighEmployedWorkRatio_RM4 = ParameterData['HighEmployedWorkRatio_RM4','value']
-HighEmployedWorkRatio_RF1 = ParameterData['HighEmployedWorkRatio_RF1','value']
-HighEmployedWorkRatio_RF2 = ParameterData['HighEmployedWorkRatio_RF2','value']
-HighEmployedWorkRatio_RF3 = ParameterData['HighEmployedWorkRatio_RF3','value']
-HighEmployedWorkRatio_RF4 = ParameterData['HighEmployedWorkRatio_RF4','value']             
-HighEmployedWorkRatio_PM1 = ParameterData['HighEmployedWorkRatio_PM1','value']
-HighEmployedWorkRatio_PM2 = ParameterData['HighEmployedWorkRatio_PM2','value']
-HighEmployedWorkRatio_PM3 = ParameterData['HighEmployedWorkRatio_PM3','value']
-HighEmployedWorkRatio_PM4 = ParameterData['HighEmployedWorkRatio_PM4','value']
-HighEmployedWorkRatio_PF1 = ParameterData['HighEmployedWorkRatio_PF1','value']
-HighEmployedWorkRatio_PF2 = ParameterData['HighEmployedWorkRatio_PF2','value']
-HighEmployedWorkRatio_PF3 = ParameterData['HighEmployedWorkRatio_PF3','value']
-HighEmployedWorkRatio_PF4 = ParameterData['HighEmployedWorkRatio_PF4','value']
-
-LowEmployedWorkRatio_ijk = c(
-	LowEmployedWorkRatio_RM1,
-	LowEmployedWorkRatio_RM2,
-	LowEmployedWorkRatio_RM3,
-	LowEmployedWorkRatio_RM4,
-	LowEmployedWorkRatio_RF1,
-	LowEmployedWorkRatio_RF2,
-	LowEmployedWorkRatio_RF3,
-	LowEmployedWorkRatio_RF4,
-	LowEmployedWorkRatio_PM1,
-	LowEmployedWorkRatio_PM2,
-	LowEmployedWorkRatio_PM3,
-	LowEmployedWorkRatio_PM4,
-	LowEmployedWorkRatio_PF1,
-	LowEmployedWorkRatio_PF2,
-	LowEmployedWorkRatio_PF3,
-	LowEmployedWorkRatio_PF4)
-
-MidEmployedWorkRatio_ijk = c(
-	MidEmployedWorkRatio_RM1,
-	MidEmployedWorkRatio_RM2,
-	MidEmployedWorkRatio_RM3,
-	MidEmployedWorkRatio_RM4,
-	MidEmployedWorkRatio_RF1,
-	MidEmployedWorkRatio_RF2,
-	MidEmployedWorkRatio_RF3,
-	MidEmployedWorkRatio_RF4,
-	MidEmployedWorkRatio_PM1,
-	MidEmployedWorkRatio_PM2,
-	MidEmployedWorkRatio_PM3,
-	MidEmployedWorkRatio_PM4,
-	MidEmployedWorkRatio_PF1,
-	MidEmployedWorkRatio_PF2,
-	MidEmployedWorkRatio_PF3,
-	MidEmployedWorkRatio_PF4)
-
-HighEmployedWorkRatio_ijk = c(
-	HighEmployedWorkRatio_RM1,
-	HighEmployedWorkRatio_RM2,
-	HighEmployedWorkRatio_RM3,
-	HighEmployedWorkRatio_RM4,
-	HighEmployedWorkRatio_RF1,
-	HighEmployedWorkRatio_RF2,
-	HighEmployedWorkRatio_RF3,
-	HighEmployedWorkRatio_RF4,
-	HighEmployedWorkRatio_PM1,
-	HighEmployedWorkRatio_PM2,
-	HighEmployedWorkRatio_PM3,
-	HighEmployedWorkRatio_PM4,
-	HighEmployedWorkRatio_PF1,
-	HighEmployedWorkRatio_PF2,
-	HighEmployedWorkRatio_PF3,
-	HighEmployedWorkRatio_PF4)
-
-
-InitCapital_Low = InitialData['Capital_Low','value']
-InitCapital_Mid = InitialData['Capital_Mid','value']
-InitCapital_High = InitialData['Capital_High','value']
-
-InitLabor_Low = sum(
-	c(	LowPop_RM1,
-		LowPop_RM2,
-		LowPop_RM3,
-		LowPop_RM4,
-		LowPop_RF1,
-		LowPop_RF2,
-		LowPop_RF3,
-		LowPop_RF4, 
-		LowPop_PM1,
-		LowPop_PM2,
-		LowPop_PM3,
-		LowPop_PM4,
-		LowPop_PF1,
-		LowPop_PF2,
-		LowPop_PF3,
-		LowPop_PF4) * LowEmployedWorkRatio_ijk)
-
-InitLabor_Mid = sum(
-	c(	MidPop_RM1,
-		MidPop_RM2,
-		MidPop_RM3,
-		MidPop_RM4,
-		MidPop_RF1,
-		MidPop_RF2,
-		MidPop_RF3,
-		MidPop_RF4, 
-		MidPop_PM1,
-		MidPop_PM2,
-		MidPop_PM3,
-		MidPop_PM4,
-		MidPop_PF1,
-		MidPop_PF2,
-		MidPop_PF3,
-		MidPop_PF4) * MidEmployedWorkRatio_ijk)
-
-InitLabor_High = sum(
-	c(	HighPop_RM1,
-		HighPop_RM2,
-		HighPop_RM3,
-		HighPop_RM4,
-		HighPop_RF1,
-		HighPop_RF2,
-		HighPop_RF3,
-		HighPop_RF4, 
-		HighPop_PM1,
-		HighPop_PM2,
-		HighPop_PM3,
-		HighPop_PM4,
-		HighPop_PF1,
-		HighPop_PF2,
-		HighPop_PF3,
-		HighPop_PF4) * HighEmployedWorkRatio_ijk)
-
-TechMult_Low = ParameterData['TechMult_Low','value']
-TechMult_Mid = ParameterData['TechMult_Mid','value']
-TechMult_High = ParameterData['TechMult_High','value']
-
-InitEconOutput_Low = TechMult_Low*InitLabor_Low^LaborInputElast_Low * 
-				InitCapital_Low^CapitalInputElast_Low 
-
-InitEconOutput_Mid = TechMult_Mid*InitLabor_Mid^LaborInputElast_Mid * 
-				InitCapital_Mid^CapitalInputElast_Mid 
-
-InitEconOutput_High = TechMult_High*InitLabor_High^LaborInputElast_High * 
-				InitCapital_High^CapitalInputElast_High 
 
 InitCO2Concentration = InitialData['CO2Conc','value']
 InitTemp = InitialData['GlobalTemp','value']
@@ -307,12 +17,9 @@ InitTemp = InitialData['GlobalTemp','value']
 
 InitValue = c( 
   # Economic Stocks (Regional)
-		Capital_Low = InitCapital_Low,
-		Capital_Mid = InitCapital_Mid,
-		Capital_High = InitCapital_High,
-		EconOutput_Low = InitEconOutput_Low,
-		EconOutput_Mid = InitEconOutput_Mid,
-		EconOutput_High = InitEconOutput_High,
+		Capital_Low = InitialData['Capital_Low','value'],
+		Capital_Mid = InitialData['Capital_Mid','value'],
+		Capital_High = InitialData['Capital_High','value'],
 
   # Resource Stocks (Global)		
 		RenewableResources = InitialData['RenewableResources','value'],
@@ -342,60 +49,56 @@ InitValue = c(
         HealthServices_High = InitialData['HealthServices_High','value'],
 
   # Population Stocks (Regions)        
-		Low_RM1 = LowPop_RM1,
-		Low_RM2 = LowPop_RM2,
-		Low_RM3 = LowPop_RM3,
-		Low_RM4 = LowPop_RM4,
-		Low_RF1 = LowPop_RF1,
-		Low_RF2 = LowPop_RF2,
-		Low_RF3 = LowPop_RF3,
-		Low_RF4 = LowPop_RF4,
-		Low_PM1 = LowPop_PM1,
-		Low_PM2 = LowPop_PM2,
-		Low_PM3 = LowPop_PM3,
-		Low_PM4 = LowPop_PM4,
-		Low_PF1 = LowPop_PF1,
-		Low_PF2 = LowPop_PF2,
-		Low_PF3 = LowPop_PF3,
-		Low_PF4 = LowPop_PF4,
+		Low_RM1 = InitialData['LowPop_RM1','value'],
+		Low_RM2 = InitialData['LowPop_RM2','value'],
+		Low_RM3 = InitialData['LowPop_RM3','value'],
+		Low_RM4 = InitialData['LowPop_RM4','value'],
+		Low_RF1 = InitialData['LowPop_RF1','value'],
+		Low_RF2 = InitialData['LowPop_RF2','value'],
+		Low_RF3 = InitialData['LowPop_RF3','value'],
+		Low_RF4 = InitialData['LowPop_RF4','value'],         
+		Low_PM1 = InitialData['LowPop_PM1','value'],
+		Low_PM2 = InitialData['LowPop_PM2','value'],
+		Low_PM3 = InitialData['LowPop_PM3','value'],
+		Low_PM4 = InitialData['LowPop_PM4','value'],
+		Low_PF1 = InitialData['LowPop_PF1','value'],
+		Low_PF2 = InitialData['LowPop_PF2','value'],
+		Low_PF3 = InitialData['LowPop_PF3','value'],
+		Low_PF4 = InitialData['LowPop_PF4','value'],
 
-		Mid_RM1 = MidPop_RM1,
-		Mid_RM2 = MidPop_RM2,
-		Mid_RM3 = MidPop_RM3,
-		Mid_RM4 = MidPop_RM4,
-		Mid_RF1 = MidPop_RF1,
-		Mid_RF2 = MidPop_RF2,
-		Mid_RF3 = MidPop_RF3,
-		Mid_RF4 = MidPop_RF4,
-		Mid_PM1 = MidPop_PM1,
-		Mid_PM2 = MidPop_PM2,
-		Mid_PM3 = MidPop_PM3,
-		Mid_PM4 = MidPop_PM4,
-		Mid_PF1 = MidPop_PF1,
-		Mid_PF2 = MidPop_PF2,
-		Mid_PF3 = MidPop_PF3,
-		Mid_PF4 = MidPop_PF4,
+		Mid_RM1 = InitialData['MidPop_RM1','value'],
+		Mid_RM2 = InitialData['MidPop_RM2','value'],
+		Mid_RM3 = InitialData['MidPop_RM3','value'],
+		Mid_RM4 = InitialData['MidPop_RM4','value'],
+		Mid_RF1 = InitialData['MidPop_RF1','value'],
+		Mid_RF2 = InitialData['MidPop_RF2','value'],
+		Mid_RF3 = InitialData['MidPop_RF3','value'],
+		Mid_RF4 = InitialData['MidPop_RF4','value'],         
+		Mid_PM1 = InitialData['MidPop_PM1','value'],
+		Mid_PM2 = InitialData['MidPop_PM2','value'],
+		Mid_PM3 = InitialData['MidPop_PM3','value'],
+		Mid_PM4 = InitialData['MidPop_PM4','value'],
+		Mid_PF1 = InitialData['MidPop_PF1','value'],
+		Mid_PF2 = InitialData['MidPop_PF2','value'],
+		Mid_PF3 = InitialData['MidPop_PF3','value'],
+		Mid_PF4 = InitialData['MidPop_PF4','value'],
 
-		High_RM1 = HighPop_RM1,
-		High_RM2 = HighPop_RM2,
-		High_RM3 = HighPop_RM3,
-		High_RM4 = HighPop_RM4,
-		High_RF1 = HighPop_RF1,
-		High_RF2 = HighPop_RF2,
-		High_RF3 = HighPop_RF3,
-		High_RF4 = HighPop_RF4,
-		High_PM1 = HighPop_PM1,
-		High_PM2 = HighPop_PM2,
-		High_PM3 = HighPop_PM3,
-		High_PM4 = HighPop_PM4,
-		High_PF1 = HighPop_PF1,
-		High_PF2 = HighPop_PF2,
-		High_PF3 = HighPop_PF3,
-		High_PF4 = HighPop_PF4,
-
-		LowPop = InitLowTotPop,
-		MidPop = InitMidTotPop,
-		HighPop = InitHighTotPop,
+		High_RM1 = InitialData['HighPop_RM1','value'],
+		High_RM2 = InitialData['HighPop_RM2','value'],
+		High_RM3 = InitialData['HighPop_RM3','value'],
+		High_RM4 = InitialData['HighPop_RM4','value'],
+		High_RF1 = InitialData['HighPop_RF1','value'],
+		High_RF2 = InitialData['HighPop_RF2','value'],
+		High_RF3 = InitialData['HighPop_RF3','value'],
+		High_RF4 = InitialData['HighPop_RF4','value'],         
+		High_PM1 = InitialData['HighPop_PM1','value'],
+		High_PM2 = InitialData['HighPop_PM2','value'],
+		High_PM3 = InitialData['HighPop_PM3','value'],
+		High_PM4 = InitialData['HighPop_PM4','value'],
+		High_PF1 = InitialData['HighPop_PF1','value'],
+		High_PF2 = InitialData['HighPop_PF2','value'],
+		High_PF3 = InitialData['HighPop_PF3','value'],
+		High_PF4 = InitialData['HighPop_PF4','value'],
 
   # Water Stocks (Global)
 		Freshwater = InitialData['Freshwater','value'])
@@ -490,69 +193,71 @@ ParameterValue = list(
 		NonrenewableCapitalReturn_Low = ParameterData['NonrenewableCapitalReturn_Low','value'],
 		NonrenewableCapitalReturn_Mid = ParameterData['NonrenewableCapitalReturn_Mid','value'],
 		NonrenewableCapitalReturn_High = ParameterData['NonrenewableCapitalReturn_High','value'],
-		CapitalInputElast_Low = CapitalInputElast_Low,
-		CapitalInputElast_Mid = CapitalInputElast_Mid,
-		CapitalInputElast_High = CapitalInputElast_High,
-		LaborInputElast_Low = LaborInputElast_Low,
-		LaborInputElast_Mid = LaborInputElast_Mid,
-		LaborInputElast_High = LaborInputElast_High,
-		TechMult_Low = TechMult_Low,
-		TechMult_Mid = TechMult_Mid,
-		TechMult_High = TechMult_High,
+		CapitalInputElast_Low = ParameterData['CapitalInputElast_Low','value'],
+		CapitalInputElast_Mid = ParameterData['CapitalInputElast_Mid','value'],
+		CapitalInputElast_High = ParameterData['CapitalInputElast_High','value'],
+		LaborInputElast_Low = ParameterData['LaborInputElast_Low','value'],
+		LaborInputElast_Mid = ParameterData['LaborInputElast_Mid','value'],
+		LaborInputElast_High = ParameterData['LaborInputElast_High','value'],
+		TechMult_Low = ParameterData['TechMult_Low','value'],
+		TechMult_Mid = ParameterData['TechMult_Mid','value'],
+		TechMult_High = ParameterData['TechMult_High','value'],
 		RenewableAccess_Low = ParameterData['RenewableAccess_Low','value'],
 		RenewableAccess_Mid = ParameterData['RenewableAccess_Mid','value'],
 		RenewableAccess_High = ParameterData['RenewableAccess_High','value'],
 		NonrenewableAccess_Low = ParameterData['NonrenewableAccess_Low','value'],
 		NonrenewableAccess_Mid = ParameterData['NonrenewableAccess_Mid','value'],
 		NonrenewableAccess_High = ParameterData['NonrenewableAccess_High','value'],
-		LowEmployedWorkRatio_RM1 = LowEmployedWorkRatio_RM1, 
-		LowEmployedWorkRatio_RM2 = LowEmployedWorkRatio_RM2, 
-		LowEmployedWorkRatio_RM3 = LowEmployedWorkRatio_RM3, 
-		LowEmployedWorkRatio_RM4 = LowEmployedWorkRatio_RM4, 
-		LowEmployedWorkRatio_RF1 = LowEmployedWorkRatio_RF1, 
-		LowEmployedWorkRatio_RF2 = LowEmployedWorkRatio_RF2, 
-		LowEmployedWorkRatio_RF3 = LowEmployedWorkRatio_RF3, 
-		LowEmployedWorkRatio_RF4 = LowEmployedWorkRatio_RF4,            
-		LowEmployedWorkRatio_PM1 = LowEmployedWorkRatio_PM1, 
-		LowEmployedWorkRatio_PM2 = LowEmployedWorkRatio_PM2, 
-		LowEmployedWorkRatio_PM3 = LowEmployedWorkRatio_PM3, 
-		LowEmployedWorkRatio_PM4 = LowEmployedWorkRatio_PM4, 
-		LowEmployedWorkRatio_PF1 = LowEmployedWorkRatio_PF1, 
-		LowEmployedWorkRatio_PF2 = LowEmployedWorkRatio_PF2, 
-		LowEmployedWorkRatio_PF3 = LowEmployedWorkRatio_PF3, 
-		LowEmployedWorkRatio_PF4 = LowEmployedWorkRatio_PF4, 	
-		MidEmployedWorkRatio_RM1 = MidEmployedWorkRatio_RM1, 
-		MidEmployedWorkRatio_RM2 = MidEmployedWorkRatio_RM2, 
-		MidEmployedWorkRatio_RM3 = MidEmployedWorkRatio_RM3, 
-		MidEmployedWorkRatio_RM4 = MidEmployedWorkRatio_RM4, 
-		MidEmployedWorkRatio_RF1 = MidEmployedWorkRatio_RF1, 
-		MidEmployedWorkRatio_RF2 = MidEmployedWorkRatio_RF2, 
-		MidEmployedWorkRatio_RF3 = MidEmployedWorkRatio_RF3, 
-		MidEmployedWorkRatio_RF4 = MidEmployedWorkRatio_RF4,            
-		MidEmployedWorkRatio_PM1 = MidEmployedWorkRatio_PM1, 
-		MidEmployedWorkRatio_PM2 = MidEmployedWorkRatio_PM2, 
-		MidEmployedWorkRatio_PM3 = MidEmployedWorkRatio_PM3, 
-		MidEmployedWorkRatio_PM4 = MidEmployedWorkRatio_PM4, 
-		MidEmployedWorkRatio_PF1 = MidEmployedWorkRatio_PF1, 
-		MidEmployedWorkRatio_PF2 = MidEmployedWorkRatio_PF2, 
-		MidEmployedWorkRatio_PF3 = MidEmployedWorkRatio_PF3, 
-		MidEmployedWorkRatio_PF4 = MidEmployedWorkRatio_PF4,
-		HighEmployedWorkRatio_RM1 = HighEmployedWorkRatio_RM1, 
-		HighEmployedWorkRatio_RM2 = HighEmployedWorkRatio_RM2, 
-		HighEmployedWorkRatio_RM3 = HighEmployedWorkRatio_RM3, 
-		HighEmployedWorkRatio_RM4 = HighEmployedWorkRatio_RM4, 
-		HighEmployedWorkRatio_RF1 = HighEmployedWorkRatio_RF1, 
-		HighEmployedWorkRatio_RF2 = HighEmployedWorkRatio_RF2, 
-		HighEmployedWorkRatio_RF3 = HighEmployedWorkRatio_RF3, 
-		HighEmployedWorkRatio_RF4 = HighEmployedWorkRatio_RF4,            
-		HighEmployedWorkRatio_PM1 = HighEmployedWorkRatio_PM1, 
-		HighEmployedWorkRatio_PM2 = HighEmployedWorkRatio_PM2, 
-		HighEmployedWorkRatio_PM3 = HighEmployedWorkRatio_PM3, 
-		HighEmployedWorkRatio_PM4 = HighEmployedWorkRatio_PM4, 
-		HighEmployedWorkRatio_PF1 = HighEmployedWorkRatio_PF1, 
-		HighEmployedWorkRatio_PF2 = HighEmployedWorkRatio_PF2, 
-		HighEmployedWorkRatio_PF3 = HighEmployedWorkRatio_PF3, 
-		HighEmployedWorkRatio_PF4 = HighEmployedWorkRatio_PF4,
+		LowEmployedWorkRatio_RM1 = ParameterData['LowEmployedWorkRatio_RM1','value'], 
+		LowEmployedWorkRatio_RM2 = ParameterData['LowEmployedWorkRatio_RM2','value'], 
+		LowEmployedWorkRatio_RM3 = ParameterData['LowEmployedWorkRatio_RM3','value'], 
+		LowEmployedWorkRatio_RM4 = ParameterData['LowEmployedWorkRatio_RM4','value'], 
+		LowEmployedWorkRatio_RF1 = ParameterData['LowEmployedWorkRatio_RF1','value'], 
+		LowEmployedWorkRatio_RF2 = ParameterData['LowEmployedWorkRatio_RF2','value'], 
+		LowEmployedWorkRatio_RF3 = ParameterData['LowEmployedWorkRatio_RF3','value'], 
+		LowEmployedWorkRatio_RF4 = ParameterData['LowEmployedWorkRatio_RF4','value'],            
+		LowEmployedWorkRatio_PM1 = ParameterData['LowEmployedWorkRatio_PM1','value'], 
+		LowEmployedWorkRatio_PM2 = ParameterData['LowEmployedWorkRatio_PM2','value'], 
+		LowEmployedWorkRatio_PM3 = ParameterData['LowEmployedWorkRatio_PM3','value'], 
+		LowEmployedWorkRatio_PM4 = ParameterData['LowEmployedWorkRatio_PM4','value'], 
+		LowEmployedWorkRatio_PF1 = ParameterData['LowEmployedWorkRatio_PF1','value'], 
+		LowEmployedWorkRatio_PF2 = ParameterData['LowEmployedWorkRatio_PF2','value'], 
+		LowEmployedWorkRatio_PF3 = ParameterData['LowEmployedWorkRatio_PF3','value'], 
+		LowEmployedWorkRatio_PF4 = ParameterData['LowEmployedWorkRatio_PF4','value'],
+
+		MidEmployedWorkRatio_RM1 = ParameterData['MidEmployedWorkRatio_RM1','value'], 
+		MidEmployedWorkRatio_RM2 = ParameterData['MidEmployedWorkRatio_RM2','value'], 
+		MidEmployedWorkRatio_RM3 = ParameterData['MidEmployedWorkRatio_RM3','value'], 
+		MidEmployedWorkRatio_RM4 = ParameterData['MidEmployedWorkRatio_RM4','value'], 
+		MidEmployedWorkRatio_RF1 = ParameterData['MidEmployedWorkRatio_RF1','value'], 
+		MidEmployedWorkRatio_RF2 = ParameterData['MidEmployedWorkRatio_RF2','value'], 
+		MidEmployedWorkRatio_RF3 = ParameterData['MidEmployedWorkRatio_RF3','value'], 
+		MidEmployedWorkRatio_RF4 = ParameterData['MidEmployedWorkRatio_RF4','value'],            
+		MidEmployedWorkRatio_PM1 = ParameterData['MidEmployedWorkRatio_PM1','value'], 
+		MidEmployedWorkRatio_PM2 = ParameterData['MidEmployedWorkRatio_PM2','value'], 
+		MidEmployedWorkRatio_PM3 = ParameterData['MidEmployedWorkRatio_PM3','value'], 
+		MidEmployedWorkRatio_PM4 = ParameterData['MidEmployedWorkRatio_PM4','value'], 
+		MidEmployedWorkRatio_PF1 = ParameterData['MidEmployedWorkRatio_PF1','value'], 
+		MidEmployedWorkRatio_PF2 = ParameterData['MidEmployedWorkRatio_PF2','value'], 
+		MidEmployedWorkRatio_PF3 = ParameterData['MidEmployedWorkRatio_PF3','value'], 
+		MidEmployedWorkRatio_PF4 = ParameterData['MidEmployedWorkRatio_PF4','value'],
+
+		HighEmployedWorkRatio_RM1 = ParameterData['HighEmployedWorkRatio_RM1','value'], 
+		HighEmployedWorkRatio_RM2 = ParameterData['HighEmployedWorkRatio_RM2','value'], 
+		HighEmployedWorkRatio_RM3 = ParameterData['HighEmployedWorkRatio_RM3','value'], 
+		HighEmployedWorkRatio_RM4 = ParameterData['HighEmployedWorkRatio_RM4','value'], 
+		HighEmployedWorkRatio_RF1 = ParameterData['HighEmployedWorkRatio_RF1','value'], 
+		HighEmployedWorkRatio_RF2 = ParameterData['HighEmployedWorkRatio_RF2','value'], 
+		HighEmployedWorkRatio_RF3 = ParameterData['HighEmployedWorkRatio_RF3','value'], 
+		HighEmployedWorkRatio_RF4 = ParameterData['HighEmployedWorkRatio_RF4','value'],            
+		HighEmployedWorkRatio_PM1 = ParameterData['HighEmployedWorkRatio_PM1','value'], 
+		HighEmployedWorkRatio_PM2 = ParameterData['HighEmployedWorkRatio_PM2','value'], 
+		HighEmployedWorkRatio_PM3 = ParameterData['HighEmployedWorkRatio_PM3','value'], 
+		HighEmployedWorkRatio_PM4 = ParameterData['HighEmployedWorkRatio_PM4','value'], 
+		HighEmployedWorkRatio_PF1 = ParameterData['HighEmployedWorkRatio_PF1','value'], 
+		HighEmployedWorkRatio_PF2 = ParameterData['HighEmployedWorkRatio_PF2','value'], 
+		HighEmployedWorkRatio_PF3 = ParameterData['HighEmployedWorkRatio_PF3','value'], 
+		HighEmployedWorkRatio_PF4 = ParameterData['HighEmployedWorkRatio_PF4','value'],
 		SavingsRate_Low = ParameterData['SavingsRate_Low','value'],
 		SavingsRate_Mid = ParameterData['SavingsRate_Mid','value'],
 		SavingsRate_High = ParameterData['SavingsRate_High','value'],
@@ -562,9 +267,9 @@ ParameterValue = list(
 		IneqMult_Low = ParameterData['IneqMult_Low','value'],
 		IneqMult_Mid = ParameterData['IneqMult_Mid','value'],
 		IneqMult_High = ParameterData['IneqMult_High','value'],
-		InitEconGrowthRate_Low = ParameterData['InitEconGrowthRate_Low','value'],
-		InitEconGrowthRate_Mid = ParameterData['InitEconGrowthRate_Mid','value'],
-		InitEconGrowthRate_High = ParameterData['InitEconGrowthRate_High','value'],
+		InitEconOutputGrowth_Low = ParameterData['InitEconOutputGrowth_Low','value'],
+		InitEconOutputGrowth_Mid = ParameterData['InitEconOutputGrowth_Mid','value'],
+		InitEconOutputGrowth_High = ParameterData['InitEconOutputGrowth_High','value'],
 
 	# Resource Coefficients	
 		ReplRateRenewable = ParameterData['ReplRateRenewable','value'],
