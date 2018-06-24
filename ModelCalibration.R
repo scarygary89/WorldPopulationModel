@@ -74,15 +74,6 @@ yobs$variable = as.character(yobs$variable)
 yobs = yobs[,c('variable','time','value')]
 obstime = sort(unique(yobs[,'time']))
 
-
-ObjCost = function(p, simObj, obstime, yobs){
-	whichpar = names(p)
-	parms(simObj)[whichpar] = p
-	times(simObj) = obstime
-	ysim = out(sim(simObj))
-	modCost(ysim,yobs,x = 'time',y = 'value')
-}
-
 CalibParms = c( 
 	'OmegaF_M1',
 	'OmegaF_M2',
@@ -102,14 +93,36 @@ CalibParms = c(
 	'OmegaH_F4'
 )
 
+ObjCost = function(p, obstime, delta_t, delayyearlength, init, parms, yobs){
+	whichpar = names(p)
+	parms[whichpar] = p
+	t0 = min(obstime)
+	tf = max(obstime)
+	ysim = WorldMod(t0,tf,delta_t,delayyearlength,init,parms)
+	modCost(ysim,yobs,x = 'time',y='value')
+}
+
 ParValue = setNames(ParameterData[CalibParms,'value'],CalibParms)
 ParMin = setNames(ParameterData[CalibParms,'min'],CalibParms)
 ParMax = setNames(ParameterData[CalibParms,'max'],CalibParms)
 
 
 ptm = proc.time() 
-Fit = modFit(p = ParValue, lower = ParMin, upper = ParMax, f = ObjCost, 
-		simObj=WorldMod, obstime=obstime, yobs=yobs, method="Pseudo") 
-		# control=list(trace=T))
+Fit = modFit(
+		p = ParValue, 
+		lower = ParMin, 
+		upper = ParMax, 
+		f = ObjCost, 
+		obstime=obstime,
+		delta_t=delta_t,
+		delayyearlength = delayyearlength,
+		init =InitValue,
+		parms = ParameterValue, 
+		yobs=yobs, 
+		method="BFGS")
+		
 ptm = proc.time() - ptm
 print(ptm)
+print(summary(Fit))
+FittedParameters = ParameterData
+FittedParameters[names(coef(Fit)),'value'] = coef(Fit)

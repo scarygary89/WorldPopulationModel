@@ -40,19 +40,20 @@ print('------------- LOAD WATER SUBMODEL')
 source('Water.R')
 print('ALL COMPONENTS LOADED.')
 
-# PRINT FUNCTION
+# PRINT AND PLOT FUNCTION
 printvar = function(x){
 	if(!is.na(x)){
 		print(paste(deparse(substitute(x))," = ",x))
 	}
 }
 		
+source('plotter.R')
 
 # DEFINE MODEL
 print('************* DEFINE MAIN MODEL *************')
 
 t0 = 1980
-tf = 2080
+tf = 2180
 delta_t = 1
 delayyearlength = 1
 
@@ -67,18 +68,18 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 			'MidPop',
 			'HighPop')
 		AuxData = matrix(NA,
-			nrow = (length(tspan) - 1),
-			ncol = (length(aux_names) + 1)
+			nrow = (length(tspan)),
+			ncol = length(aux_names)
 			)		
-		colnames(AuxData) = c('time',aux_names)
+		colnames(AuxData) = aux_names
 		StockData = matrix(NA,
-			nrow = length(tspan),
-			ncol = (length(init) + 1)
+			nrow = (length(tspan) + 1),
+			ncol = length(init)
 			)
-		colnames(StockData) = c('time',names(init))	
-		stocks = c(init)
-		StockData[1,] = c(tspan[1],stocks)
-		for(i in 1:(length(tspan) - 1)) {
+		colnames(StockData) = names(init)	
+		stocks = init
+		StockData[1,] = stocks
+		for(i in 1:length(tspan)) {
   		# Assemble Lists and Vectors
 			RegPop_ijkr = list( 
 				Low = c(
@@ -466,7 +467,7 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 				RegPop_r['Mid'],
 				RegPop_r['High']
 			)
-			AuxData[i,] = c(tspan[i],aux)
+			AuxData[i,] = aux
 
 			dstocks = c(
 				# Economic Stocks (Regional)
@@ -506,31 +507,41 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 				WaterOut[["dFreshwater"]]
 			) 
 			stocks = stocks + dstocks * delta_t
-			StockData[i+1,] = c(tspan[i+1],stocks)
+			StockData[i+1,] = stocks
 		}
-	Output = list(Stocks = StockData, Auxiliary = AuxData)
+	Output = cbind(tspan, StockData[-length(tspan),],AuxData)
+	colnames(Output)[1] = 'time'
 	return(Output)
 	})
 }
 
 print('COMPLETED.')
 
-########################### Simulate
+########################### Initial Simulate
 
 print('*************  SIMULATE MODEL   *************')
 ptm = proc.time()
-SimResults = WorldMod(t0,tf,delta_t,delayyearlength,InitValue,ParameterValue)
+OutputData = WorldMod(t0,tf,delta_t,delayyearlength,InitValue,ParameterValue)
 ptm = proc.time() - ptm
-StockData = data.frame(SimResults[['Stocks']])
-AuxData = data.frame(SimResults[['Auxiliary']])
+OutputData = data.frame(OutputData)
 print('COMPLETED.')
 print(ptm)
 ########################### Plot results
 
-source('plotter.R')
+PlotFunc(OutputData)
 
 ########################### Run Calibration
 
 print('*************  RUN CALIBRATION  *************')
-# source('ModelCalibration.R')
+source('ModelCalibration.R')
 print('COMPLETED.')
+
+########################### Simulated Fitted Parameters
+print('************* SIMULATE FITTED MODEL**********')
+ptm = proc.time()
+FitOutput = WorldMod(t0,tf,delta_t,delayyearlength,InitValue,FittedParameters)
+ptm = proc.time() - ptm
+print('COMPLETED.')
+FitOutput = data.frame(FitOutput)
+PlotFunc(FitOutput)
+print(ptm)
