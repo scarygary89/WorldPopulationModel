@@ -66,7 +66,53 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 			'EconOutput_High',
 			'LowPop',
 			'MidPop',
-			'HighPop')
+			'HighPop',
+			'EconOutputPC_Low',
+			'EconOutputPC_Mid',
+			'EconOutputPC_High',
+			'FemaleHealthAccess_RichLow',
+			'FemaleHealthAccess_RichMid',
+			'FemaleHealthAccess_RichHigh',
+			'FemaleHealthAccess_PoorLow',
+			'FemaleHealthAccess_PoorMid',
+			'FemaleHealthAccess_PoorHigh',
+			'GeneralHealthAccess_RichLow',
+			'GeneralHealthAccess_RichMid',
+			'GeneralHealthAccess_RichHigh',
+			'GeneralHealthAccess_PoorLow',
+			'GeneralHealthAccess_PoorMid',
+			'GeneralHealthAccess_PoorHigh',
+			'DeathRateM1_Low',
+			'DeathRateM2_Low',
+			'DeathRateM3_Low',
+			'DeathRateM4_Low',
+			'DeathRateF1_Low',
+			'DeathRateF2_Low',
+			'DeathRateF3_Low',
+			'DeathRateF4_Low',
+			'DeathRateM1_Mid',
+			'DeathRateM2_Mid',
+			'DeathRateM3_Mid',
+			'DeathRateM4_Mid',
+			'DeathRateF1_Mid',
+			'DeathRateF2_Mid',
+			'DeathRateF3_Mid',
+			'DeathRateF4_Mid',
+			'DeathRateM1_High',
+			'DeathRateM2_High',
+			'DeathRateM3_High',
+			'DeathRateM4_High',
+			'DeathRateF1_High',
+			'DeathRateF2_High',
+			'DeathRateF3_High',
+			'DeathRateF4_High',
+			'TFR_Low',
+			'TFR_Mid',
+			'TFR_High',
+			'GFR_Low',
+			'GFR_Mid',
+			'GFR_High'
+			)
 		AuxData = matrix(NA,
 			nrow = (length(tspan)),
 			ncol = length(aux_names)
@@ -188,18 +234,42 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 					PF3 = HighEmployedWorkRatio_PF3,
 					PF4 = HighEmployedWorkRatio_PF4)
 			)
-			ChiEF_kr = list(
-				Low = c(Rich = ChiEF_RichLow, Poor = ChiEF_PoorLow),
-				Mid = c(Rich = ChiEF_RichMid, Poor = ChiEF_PoorMid),
-				High = c(Rich = ChiEF_RichHigh, Poor = ChiEF_PoorHigh))
-			ChiHF_kr = list(
-				Low = c(Rich = ChiHF_RichLow, Poor = ChiHF_PoorLow),
-				Mid = c(Rich = ChiHF_RichMid, Poor = ChiHF_PoorMid),
-				High = c(Rich = ChiHF_RichHigh, Poor = ChiHF_PoorHigh))
-			ChiHA_kr = list(
-				Low = c(Rich = ChiHA_RichLow, Poor = ChiHA_PoorLow),
-				Mid = c(Rich = ChiHA_RichMid, Poor = ChiHA_PoorMid),
-				High = c(Rich = ChiHA_RichHigh, Poor = ChiHA_PoorHigh))
+			ChiEF1_kr = list(
+				Low = c(Rich = ChiEF1_RichLow, Poor = ChiEF1_PoorLow),
+				Mid = c(Rich = ChiEF1_RichMid, Poor = ChiEF1_PoorMid),
+				High = c(Rich = ChiEF1_RichHigh, Poor = ChiEF1_PoorHigh))
+			ChiEF2_kr = list(
+				Low = c(Rich = ChiEF2_RichLow, Poor = ChiEF2_PoorLow),
+				Mid = c(Rich = ChiEF2_RichMid, Poor = ChiEF2_PoorMid),
+				High = c(Rich = ChiEF2_RichHigh, Poor = ChiEF2_PoorHigh))
+			ChiEF3_kr = list(
+				Low = c(Rich = ChiEF3_RichLow, Poor = ChiEF3_PoorLow),
+				Mid = c(Rich = ChiEF3_RichMid, Poor = ChiEF3_PoorMid),
+				High = c(Rich = ChiEF3_RichHigh, Poor = ChiEF3_PoorHigh))
+			ChiHF1_kr = list(
+				Low = c(Rich = ChiHF1_RichLow, Poor = ChiHF1_PoorLow),
+				Mid = c(Rich = ChiHF1_RichMid, Poor = ChiHF1_PoorMid),
+				High = c(Rich = ChiHF1_RichHigh, Poor = ChiHF1_PoorHigh))
+			ChiHF2_kr = list(
+				Low = c(Rich = ChiHF2_RichLow, Poor = ChiHF2_PoorLow),
+				Mid = c(Rich = ChiHF2_RichMid, Poor = ChiHF2_PoorMid),
+				High = c(Rich = ChiHF2_RichHigh, Poor = ChiHF2_PoorHigh))
+			ChiHF3_kr = list(
+				Low = c(Rich = ChiHF3_RichLow, Poor = ChiHF3_PoorLow),
+				Mid = c(Rich = ChiHF3_RichMid, Poor = ChiHF3_PoorMid),
+				High = c(Rich = ChiHF3_RichHigh, Poor = ChiHF3_PoorHigh))
+			ChiHA1_kr = list(
+				Low = c(Rich = ChiHA1_RichLow, Poor = ChiHA1_PoorLow),
+				Mid = c(Rich = ChiHA1_RichMid, Poor = ChiHA1_PoorMid),
+				High = c(Rich = ChiHA1_RichHigh, Poor = ChiHA1_PoorHigh))
+			ChiHA2_kr = list(
+				Low = c(Rich = ChiHA2_RichLow, Poor = ChiHA2_PoorLow),
+				Mid = c(Rich = ChiHA2_RichMid, Poor = ChiHA2_PoorMid),
+				High = c(Rich = ChiHA2_RichHigh, Poor = ChiHA2_PoorHigh))
+			ChiHA3_kr = list(
+				Low = c(Rich = ChiHA3_RichLow, Poor = ChiHA3_PoorLow),
+				Mid = c(Rich = ChiHA3_RichMid, Poor = ChiHA3_PoorMid),
+				High = c(Rich = ChiHA3_RichHigh, Poor = ChiHA3_PoorHigh))
 			FoodStock_l = c(
 				Fishstock = as.numeric(stocks['Fishstock']),
 				Livestock = as.numeric(stocks['Livestock']),
@@ -389,9 +459,15 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								ZetaH_Low,
 								LambdaE_Low,
 								LambdaH_Low,
-								ChiEF_kr[['Low']],
-								ChiHF_kr[['Low']],
-								ChiHA_kr[['Low']],
+								ChiEF1_kr[['Low']],
+								ChiHF1_kr[['Low']],
+								ChiHA1_kr[['Low']],
+								ChiEF2_kr[['Low']],
+								ChiHF2_kr[['Low']],
+								ChiHA2_kr[['Low']],
+								ChiEF3_kr[['Low']],
+								ChiHF3_kr[['Low']],
+								ChiHA3_kr[['Low']],
 								EconOut_Low[['Inequality']],
 								parms)
 			HealthEduOut_Mid = HealthEducation(
@@ -406,9 +482,15 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								ZetaH_Mid,
 								LambdaE_Mid,
 								LambdaH_Mid,
-								ChiEF_kr[['Mid']],
-								ChiHF_kr[['Mid']],
-								ChiHA_kr[['Mid']],
+								ChiEF1_kr[['Mid']],
+								ChiHF1_kr[['Mid']],
+								ChiHA1_kr[['Mid']],
+								ChiEF2_kr[['Mid']],
+								ChiHF2_kr[['Mid']],
+								ChiHA2_kr[['Mid']],
+								ChiEF3_kr[['Mid']],
+								ChiHF3_kr[['Mid']],
+								ChiHA3_kr[['Mid']],
 								EconOut_Mid[['Inequality']],
 								parms)
 			HealthEduOut_High = HealthEducation(
@@ -423,9 +505,15 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								ZetaH_High,
 								LambdaE_High,
 								LambdaH_High,
-								ChiEF_kr[['High']],
-								ChiHF_kr[['High']],
-								ChiHA_kr[['High']],
+								ChiEF1_kr[['High']],
+								ChiHF1_kr[['High']],
+								ChiHA1_kr[['High']],
+								ChiEF2_kr[['High']],
+								ChiHF2_kr[['High']],
+								ChiHA2_kr[['High']],
+								ChiEF3_kr[['High']],
+								ChiHF3_kr[['High']],
+								ChiHA3_kr[['High']],
 								EconOut_High[['Inequality']],
 								parms)
 
@@ -459,16 +547,45 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 			WaterOut      	= Water(stocks['Freshwater'],stocks['GlobalTemp'],EconOutput_r,
 								FoodOut[['AgriWaterDemand']],RegPop_r,parms)
 
+			################ STORE OUTPUT
+
+			# AUXILIARY VARIABLES
 			aux = c(
 				EconOut_Low[['EconOutput']],
 				EconOut_Mid[['EconOutput']],
 				EconOut_High[['EconOutput']],
 				RegPop_r['Low'],
 				RegPop_r['Mid'],
-				RegPop_r['High']
+				RegPop_r['High'],
+				EconOut_Low[['EconOutputPC']],
+				EconOut_Mid[['EconOutputPC']],
+				EconOut_High[['EconOutputPC']],
+				HealthEduOut_Low[['FemaleHealthAccess_k']]['Rich'],
+				HealthEduOut_Mid[['FemaleHealthAccess_k']]['Rich'],
+				HealthEduOut_High[['FemaleHealthAccess_k']]['Rich'],
+				HealthEduOut_Low[['FemaleHealthAccess_k']]['Poor'],
+				HealthEduOut_Mid[['FemaleHealthAccess_k']]['Poor'],
+				HealthEduOut_High[['FemaleHealthAccess_k']]['Poor'],
+				HealthEduOut_Low[['GeneralHealthAccess_k']]['Rich'],
+				HealthEduOut_Mid[['GeneralHealthAccess_k']]['Rich'],
+				HealthEduOut_High[['GeneralHealthAccess_k']]['Rich'],
+				HealthEduOut_Low[['GeneralHealthAccess_k']]['Poor'],
+				HealthEduOut_Mid[['GeneralHealthAccess_k']]['Poor'],
+				HealthEduOut_High[['GeneralHealthAccess_k']]['Poor'],
+				PopOut_Low[['MortRate_ijk']][,'Rich'],
+				PopOut_Mid[['MortRate_ijk']][,'Rich'],
+				PopOut_High[['MortRate_ijk']][,'Rich'],
+				PopOut_Low[['TFR_k']]['Rich'],
+				PopOut_Mid[['TFR_k']]['Rich'],
+				PopOut_High[['TFR_k']]['Rich'],
+				PopOut_Low[['GFR_k']]['Rich'],
+				PopOut_Mid[['GFR_k']]['Rich'],
+				PopOut_High[['GFR_k']]['Rich']
 			)
+
 			AuxData[i,] = aux
 
+			# STOCK VARIABLES
 			dstocks = c(
 				# Economic Stocks (Regional)
 				EconOut_Low[["dCapital"]],
@@ -543,5 +660,5 @@ FitOutput = WorldMod(t0,tf,delta_t,delayyearlength,InitValue,FittedParameters)
 ptm = proc.time() - ptm
 print('COMPLETED.')
 FitOutput = data.frame(FitOutput)
-PlotFunc(FitOutput)
+PlotFuncWithObs(FitOutput)
 print(ptm)

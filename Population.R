@@ -93,6 +93,9 @@ Population = function(
 		dPop_ijk        = TranMatrix_ijk %*% Pop_ijk
 
 		# Output
-		list( 	dPop_ijk = dPop_ijk)
+		list( 	dPop_ijk = dPop_ijk,
+				TFR_k = TFR_k,
+				GFR_k = GFR_k,
+				MortRate_ijk = MortRate_ijk)
 	})
 }
