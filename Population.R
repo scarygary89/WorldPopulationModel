@@ -10,7 +10,7 @@ Population = function(
 	NutritionConsPC_k,
 	parms) 
 {
-	with(parms, {
+	with(as.list(c(parms)), {
 		# Input Conversion
 		OmegaH_ijk = cbind(
 			Rich = c(		
@@ -88,7 +88,8 @@ Population = function(
 		TranMatrix_ijk[13,14] = (1 - FemaleBirthRatio) * GFR_k[2]/1000
 		TranMatrix_ijk = TranMatrix_ijk 
 		Pop_ijk         = matrix(Pop_ijk,nrow = length(Pop_ijk),ncol = 1)
-
+		# print(eigen(TranMatrix_ijk)$values)
+		
 		# Stock and Flow Variables
 		dPop_ijk        = TranMatrix_ijk %*% Pop_ijk
 

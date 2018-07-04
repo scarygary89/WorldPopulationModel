@@ -10,7 +10,7 @@ Water = function(
     RegPop_r,
     parms) 
 {
-  with(parms, {
+  with(as.list(c(parms)), {
     # Assemble Input
     WaterDemandPC_r = c(
         Low = WaterDemandPC_Low,

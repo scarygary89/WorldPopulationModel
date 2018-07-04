@@ -53,11 +53,12 @@ source('plotter.R')
 print('************* DEFINE MAIN MODEL *************')
 
 t0 = 1980
-tf = 2180
+tf = 2080
 delta_t = 1
 delayyearlength = 1
 
-WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {	
+WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
+	# write.csv(unlist(parms),file='CurrentParms.csv')	
 	with(as.list(c(parms)), {	
 		tspan = seq(from=t0, to=tf, by=delta_t)
 		aux_names = c(
@@ -624,7 +625,9 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 				WaterOut[["dFreshwater"]]
 			) 
 			stocks = stocks + dstocks * delta_t
+			stocks = pmax(stocks,1e-16)
 			StockData[i+1,] = stocks
+
 		}
 	Output = cbind(tspan, StockData[-length(tspan),],AuxData)
 	colnames(Output)[1] = 'time'
@@ -645,15 +648,20 @@ print('COMPLETED.')
 print(ptm)
 ########################### Plot results
 
-PlotFunc(OutputData)
+# PlotFuncWithObs(OutputData)
 
 ########################### Run Calibration
 
 print('*************  RUN CALIBRATION  *************')
+# OptSolver = 'Newton'
+# OptSolver = 'BFGS'
+# OptSolver = 'CG'
+OptSolver = 'Pseudo'
 source('ModelCalibration.R')
 print('COMPLETED.')
 
 ########################### Simulated Fitted Parameters
+
 print('************* SIMULATE FITTED MODEL**********')
 ptm = proc.time()
 FitOutput = WorldMod(t0,tf,delta_t,delayyearlength,InitValue,FittedParameters)

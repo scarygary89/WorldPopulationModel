@@ -21,7 +21,7 @@ Economy = function(
 	Pop_ijk,
 	parms) 
 {
-	with(parms,{
+	with(as.list(c(parms)),{
 
         # Auxiliary Variables
         NR = NRAccess * NonrenewableResources

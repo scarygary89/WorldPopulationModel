@@ -27,18 +27,18 @@ HealthEducation = function(
 	Inequality,
 	parms) 
 {
-	with(parms, {
+	with(as.list(c(parms)), {
 		# Auxiliary Variables
 		DeprecEducationServices = EducationServices * ZetaE
 		DeprecHealthServices = HealthServices * ZetaH
 		GrowthEducationServices = dEconOutput * EducationInvestFrac / LambdaE
 		GrowthHealthServices = dEconOutput * HealthInvestFrac / LambdaH
-		FemaleEduAttain_k = 1/(1 + exp(-ChiEF1_k * Inequality + ChiEF2_k * EducationServices 
-			- ChiEF3_k * TotalFemale_k))
-		FemaleHealthAccess_k = 1/(1 + exp(-ChiHF1_k * Inequality + ChiHF2_k * HealthServices
-			- ChiHF3_k * TotalFemale_k)) 
-		GeneralHealthAccess_k = 1/(1 + exp(-ChiHA1_k * Inequality + ChiHA2_k * HealthServices  
-			- ChiHA3_k * TotalPop_k))
+		FemaleEduAttain_k = 1/(1 + exp(ChiEF1_k * Inequality - ChiEF2_k * EducationServices 
+			+ ChiEF3_k * TotalFemale_k))
+		FemaleHealthAccess_k = 1/(1 + exp(ChiHF1_k * Inequality - ChiHF2_k * HealthServices
+			+ ChiHF3_k * TotalFemale_k))
+		GeneralHealthAccess_k = 1/(1 + exp(ChiHA1_k * Inequality - ChiHA2_k * HealthServices  
+			+ ChiHA3_k * TotalPop_k))
 
 		# Stock and Flow Variables
 		dEducationServices = GrowthEducationServices - DeprecEducationServices

@@ -8,7 +8,7 @@ Resource = function(
 	EconOutput_r,
 	parms)
 {	
-	with(parms,{
+	with(as.list(c(parms)),{
 		# Assemble Inputs
 		RenewableConsIntensity_r = c( 	
 			Low = RenewableConsIntensity_Low,

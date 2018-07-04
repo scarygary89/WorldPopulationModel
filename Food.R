@@ -18,7 +18,7 @@ Food = function(
     Freshwater,
     parms) 
 {
-    with(parms, {        
+    with(as.list(c(parms)), {        
 
         # Input Conversion
         FoodNutritionCoversion_l = c(

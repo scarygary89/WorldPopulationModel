@@ -11,7 +11,7 @@ Climate = function(
     RegPop,
     parms) 
 {
-    with(parms, {
+    with(as.list(c(parms)), {
         # Assemble Inputs
         PsiE_r = c(     
             Low = PsiE_Low, 

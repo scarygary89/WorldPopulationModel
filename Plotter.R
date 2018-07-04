@@ -90,6 +90,19 @@ PlotFunc = function(OutputData){
 		"Year", "Access to health facility during delivery (Percent)",
 		"Poor female health access")
 
+	RichHealthAccessPlot = MultiTimePlot(OutputData['time'],
+		OutputData[c( 	'GeneralHealthAccess_RichLow',
+						'GeneralHealthAccess_RichMid',
+						'GeneralHealthAccess_RichHigh')],
+		"Year", "Health Access and Quality Index",
+		"Rich general health access")
+
+	PoorHealthAccessPlot = MultiTimePlot(OutputData['time'],
+		OutputData[c( 	'GeneralHealthAccess_PoorHigh',
+						'GeneralHealthAccess_PoorMid',
+						'GeneralHealthAccess_PoorHigh')],
+		"Year", "Health Access and Quality Index",
+		"Poor general health access")
 
 	dev.new()
 	print(grid.arrange(LowRichMalePlot,LowRichFemalePlot,LowPoorMalePlot,LowPoorFemalePlot,nrow = 2,ncol = 2))
@@ -107,7 +120,7 @@ PlotFunc = function(OutputData){
 	print(grid.arrange(LandPlot,FoodPlot,FishPlot,WaterPlot,nrow = 2,ncol = 2))
 
 	dev.new()
-	print(grid.arrange(RichFemaleHealthAccessPlot,PoorFemaleHealthAccessPlot,nrow = 2,ncol = 1))
+	print(grid.arrange(RichFemaleHealthAccessPlot,PoorFemaleHealthAccessPlot,RichHealthAccessPlot,PoorHealthAccessPlot,nrow = 2,ncol = 2))
 }
 
 
@@ -197,6 +210,21 @@ PlotFuncWithObs = function(OutputData){
 		yobs,"Year", "Access to health facility during delivery (Percent)",
 		"Poor female health access")
 
+		RichHealthAccessPlot = MultiTimePlot2(OutputData['time'],
+		OutputData[c( 	'GeneralHealthAccess_RichLow',
+						'GeneralHealthAccess_RichMid',
+						'GeneralHealthAccess_RichHigh')],
+		yobs,"Year", "Health Access and Quality Index",
+		"Rich general health access")
+
+	PoorHealthAccessPlot = MultiTimePlot2(OutputData['time'],
+		OutputData[c( 	'GeneralHealthAccess_PoorHigh',
+						'GeneralHealthAccess_PoorMid',
+						'GeneralHealthAccess_PoorHigh')],
+		yobs,"Year", "Health Access and Quality Index",
+		"Poor general health access")
+
+
 
 	dev.new()
 	print(grid.arrange(LowRichMalePlot,LowRichFemalePlot,LowPoorMalePlot,LowPoorFemalePlot,nrow = 2,ncol = 2))
@@ -214,5 +242,5 @@ PlotFuncWithObs = function(OutputData){
 	print(grid.arrange(LandPlot,FoodPlot,FishPlot,WaterPlot,nrow = 2,ncol = 2))
 
 	dev.new()
-	print(grid.arrange(RichFemaleHealthAccessPlot,PoorFemaleHealthAccessPlot,nrow = 2,ncol = 1))
+	print(grid.arrange(RichFemaleHealthAccessPlot,PoorFemaleHealthAccessPlot,RichHealthAccessPlot,PoorHealthAccessPlot,nrow = 2,ncol = 2))
 }
