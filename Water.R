@@ -4,7 +4,7 @@
 
 Water = function(
     Freshwater,
-    GlobalTemp,
+    TempAnamoly,
     EconOutput_r,
     AgriWaterDemand,
     RegPop_r,
@@ -17,17 +17,22 @@ Water = function(
         Mid = WaterDemandPC_Mid,
         High = WaterDemandPC_High)
 
-    ZetaI_r = c(
-        Low = ZetaI_Low,
-        Mid = ZetaI_Mid,
-        High = ZetaH_High)
+    ZetaI1_r = c(
+        Low = ZetaI1_Low,
+        Mid = ZetaI1_Mid,
+        High = ZetaI1_High)
+    
+    ZetaI2_r = c(
+        Low = ZetaI2_Low,
+        Mid = ZetaI2_Mid,
+        High = ZetaI2_High)
 
     # Auxiliary Variables
-    ClimateChangeWaterLossRate = DeltaW*(GlobalTemp/RefTemp)
+    ClimateChangeWaterLossRate = DeltaW * TempAnamoly
     ClimateChangeWaterLoss = Freshwater * ClimateChangeWaterLossRate
-    WaterRepl = Freshwater * WaterReplRate
+    WaterRepl = max(WaterReplMax - Freshwater, 0)
     MunWaterDemand = sum(WaterDemandPC_r * RegPop_r)
-    IndWaterDemand = sum(ZetaI_r * EconOutput_r)
+    IndWaterDemand = sum(ZetaI1_r + ZetaI2_r * EconOutput_r)
     WaterDemand = AgriWaterDemand + MunWaterDemand + IndWaterDemand
     WaterCons = min(WaterDemand,Freshwater * (1 - ClimateChangeWaterLossRate))
 

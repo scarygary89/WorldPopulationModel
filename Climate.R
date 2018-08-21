@@ -5,7 +5,6 @@
 
 
 Climate = function(
-    GlobalTemp,
     CO2Conc,
     RegEconOutputPC,
     RegPop,
@@ -24,14 +23,14 @@ Climate = function(
         CO2Storage = Gamma * CO2Conc
         CO2Radiative = 5.35 * CO2Conc / RefCO2Conc
         RadiativeForce = CO2Radiative + OtherRadForce
-        TempChange = Lambda * RadiativeForce
+        TempAnomaly = Lambda * RadiativeForce
 
     # Stock and Flow Variables
         dCO2Conc = CO2Emission - CO2Storage
-        dGlobalTemp = TempChange
 
     # Output
         list(   dCO2Conc = dCO2Conc,
-                dGlobalTemp = dGlobalTemp)
+                TempAnamoly = TempAnomaly,
+                CO2EmissionPC = CO2EmissionPC)
     })
 }

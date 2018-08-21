@@ -76,19 +76,12 @@ PlotFunc = function(OutputData){
 	WaterPlot = MultiTimePlot(OutputData['time'],OutputData['Freshwater'],
 		"Year","Volume","Freshwater")
 
-	RichFemaleHealthAccessPlot = MultiTimePlot(OutputData['time'],
-		OutputData[c( 	'FemaleHealthAccess_RichLow',
-						'FemaleHealthAccess_RichMid',
-						'FemaleHealthAccess_RichHigh')],
+	FemaleHealthAccessPlot = MultiTimePlot(OutputData['time'],
+		OutputData[c( 	'FemaleHealthAccess_Low',
+						'FemaleHealthAccess_Mid',
+						'FemaleHealthAccess_High')],
 		"Year", "Access to health facility during delivery (Percent)",
-		"Rich female health access")
-
-	PoorFemaleHealthAccessPlot = MultiTimePlot(OutputData['time'],
-		OutputData[c( 	'FemaleHealthAccess_PoorLow',
-						'FemaleHealthAccess_PoorMid',
-						'FemaleHealthAccess_PoorHigh')],
-		"Year", "Access to health facility during delivery (Percent)",
-		"Poor female health access")
+		"Female health access")
 
 	RichHealthAccessPlot = MultiTimePlot(OutputData['time'],
 		OutputData[c( 	'GeneralHealthAccess_RichLow',
@@ -98,11 +91,26 @@ PlotFunc = function(OutputData){
 		"Rich general health access")
 
 	PoorHealthAccessPlot = MultiTimePlot(OutputData['time'],
-		OutputData[c( 	'GeneralHealthAccess_PoorHigh',
+		OutputData[c( 	'GeneralHealthAccess_PoorLow',
 						'GeneralHealthAccess_PoorMid',
 						'GeneralHealthAccess_PoorHigh')],
 		"Year", "Health Access and Quality Index",
 		"Poor general health access")
+
+	GFRPlot = MultiTimePlot2(OutputData['time'],
+		OutputData[c( 	'GFR_Low',
+						'GFR_Mid',
+						'GFR_High')],
+		"Year", "Births per 1000 people/year",
+		"General Fertility Rate")
+
+	TFRPlot = MultiTimePlot2(OutputData['time'],
+		OutputData[c( 	'TFR_Low',
+						'TFR_Mid',
+						'TFR_High')],
+		"Year", "Number of births per women",
+		"Total Fertility Rate")
+
 
 	dev.new()
 	print(grid.arrange(LowRichMalePlot,LowRichFemalePlot,LowPoorMalePlot,LowPoorFemalePlot,nrow = 2,ncol = 2))
@@ -120,7 +128,11 @@ PlotFunc = function(OutputData){
 	print(grid.arrange(LandPlot,FoodPlot,FishPlot,WaterPlot,nrow = 2,ncol = 2))
 
 	dev.new()
-	print(grid.arrange(RichFemaleHealthAccessPlot,PoorFemaleHealthAccessPlot,RichHealthAccessPlot,PoorHealthAccessPlot,nrow = 2,ncol = 2))
+	print(grid.arrange(FemaleHealthAccessPlot,RichHealthAccessPlot,PoorHealthAccessPlot,nrow = 2,ncol = 2))
+
+	dev.new()
+	print(grid.arrange(GFRPlot,TFRPlot,nrow = 2,ncol = 1))
+
 }
 
 
@@ -196,21 +208,14 @@ PlotFuncWithObs = function(OutputData){
 	WaterPlot = MultiTimePlot2(OutputData['time'],OutputData['Freshwater'],
 		yobs,"Year","Volume","Freshwater")
 
-	RichFemaleHealthAccessPlot = MultiTimePlot2(OutputData['time'],
-		OutputData[c( 	'FemaleHealthAccess_RichLow',
-						'FemaleHealthAccess_RichMid',
-						'FemaleHealthAccess_RichHigh')],
+	FemaleHealthAccessPlot = MultiTimePlot2(OutputData['time'],
+		OutputData[c( 	'FemaleHealthAccess_Low',
+						'FemaleHealthAccess_Mid',
+						'FemaleHealthAccess_High')],
 		yobs,"Year", "Access to health facility during delivery (Percent)",
-		"Rich female health access")
+		"female health access")
 
-	PoorFemaleHealthAccessPlot = MultiTimePlot2(OutputData['time'],
-		OutputData[c( 	'FemaleHealthAccess_PoorLow',
-						'FemaleHealthAccess_PoorMid',
-						'FemaleHealthAccess_PoorHigh')],
-		yobs,"Year", "Access to health facility during delivery (Percent)",
-		"Poor female health access")
-
-		RichHealthAccessPlot = MultiTimePlot2(OutputData['time'],
+	RichHealthAccessPlot = MultiTimePlot2(OutputData['time'],
 		OutputData[c( 	'GeneralHealthAccess_RichLow',
 						'GeneralHealthAccess_RichMid',
 						'GeneralHealthAccess_RichHigh')],
@@ -218,12 +223,19 @@ PlotFuncWithObs = function(OutputData){
 		"Rich general health access")
 
 	PoorHealthAccessPlot = MultiTimePlot2(OutputData['time'],
-		OutputData[c( 	'GeneralHealthAccess_PoorHigh',
+		OutputData[c( 	'GeneralHealthAccess_PoorLow',
 						'GeneralHealthAccess_PoorMid',
 						'GeneralHealthAccess_PoorHigh')],
 		yobs,"Year", "Health Access and Quality Index",
 		"Poor general health access")
 
+
+	GFRPlot = MultiTimePlot2(OutputData['time'],
+		OutputData[c( 	'GFR_Low',
+						'GFR_Mid',
+						'GFR_High')],
+		yobs,"Year", "Births per 1000 people/year",
+		"General Fertility Rate")
 
 
 	dev.new()
@@ -242,5 +254,8 @@ PlotFuncWithObs = function(OutputData){
 	print(grid.arrange(LandPlot,FoodPlot,FishPlot,WaterPlot,nrow = 2,ncol = 2))
 
 	dev.new()
-	print(grid.arrange(RichFemaleHealthAccessPlot,PoorFemaleHealthAccessPlot,RichHealthAccessPlot,PoorHealthAccessPlot,nrow = 2,ncol = 2))
+	print(grid.arrange(FemaleHealthAccessPlot,RichHealthAccessPlot,PoorHealthAccessPlot,nrow = 2,ncol = 2))
+
+	dev.new()
+	print(GFRPlot)
 }
