@@ -3,35 +3,43 @@
 ########################                       ########################
 
 Resource = function(
-	RenewableResources,
-	NonrenewableResources,
+	CoalReserves,
+	OilResources,
+	GasResources,
 	EconOutput_r,
 	parms)
 {	
 	with(as.list(c(parms)),{
 		# Assemble Inputs
-		RenewableConsIntensity_r = c( 	
-			Low = RenewableConsIntensity_Low,
-			Mid = RenewableConsIntensity_Mid,
-			High = RenewableConsIntensity_High)
+		CoalConsIntensity_r = c( 	
+			Low = CoalConsIntensity_Low,
+			Mid = CoalConsIntensity_Mid,
+			High = CoalConsIntensity_High)
 
-		NonrenewableConsIntensity_r = c(
-			Low = NonrenewableConsIntensity_Low,
-			Mid = NonrenewableConsIntensity_Mid, 
-			High = NonrenewableConsIntensity_High)
+		OilConsIntensity_r = c(
+			Low = OilConsIntensity_Low,
+			Mid = OilConsIntensity_Mid, 
+			High = OilConsIntensity_High)
+
+		GasConsIntensity_r = c(
+			Low = GasConsIntensity_Low,
+			Mid = GasConsIntensity_Mid, 
+			High = GasConsIntensity_High)
 
 		# Auxiliary Variables
-		RenewableRepl = RenewableResources * ReplRateRenewable
-		RenewableCons = sum(EconOutput_r * RenewableConsIntensity_r)
-		NonrenewableCons = sum(EconOutput_r * NonrenewableConsIntensity_r)
+		CoalCons = sum(EconOutput_r * CoalConsIntensity_r)
+		OilCons = sum(EconOutput_r * OilConsIntensity_r)
+		GasCons = sum(EconOutput_r * GasConsIntensity_r)
 
 		# Stock and Flow Variables
-		dRenewableResources = RenewableRepl - RenewableCons
-		dNonrenewableResources = - NonrenewableCons
+		dCoalReserves = - CoalCons
+		dOilReserves = - OilCons
+		dGasReserves = - GasCons
 
 		# Output
-		list( 	dRenewableResources = dRenewableResources,
-				dNonrenewableResources = dNonrenewableResources)
+		list( 	dCoalReserves = dCoalReserves,
+				dOilReserves = dOilReserves,
+				dGasReserves = dGasReserves)
 
 	})
 }

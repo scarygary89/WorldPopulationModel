@@ -12,13 +12,17 @@ Climate = function(
 {
     with(as.list(c(parms)), {
         # Assemble Inputs
-        PsiE_r = c(     
-            Low = PsiE_Low, 
-            Mid = PsiE_Mid, 
-            High = PsiE_High)
+        PsiE1_r = c(     
+            Low = PsiE1_Low, 
+            Mid = PsiE1_Mid, 
+            High = PsiE1_High)
+        PsiE2_r = c(     
+            Low = PsiE2_Low, 
+            Mid = PsiE2_Mid, 
+            High = PsiE2_High)
 
     # Auxiliary Variables
-        CO2EmissionPC = RegEconOutputPC ^ PsiE_r / 1000
+        CO2EmissionPC = PsiE1_r * RegEconOutputPC ^ PsiE2_r
         CO2Emission = sum(RegPop * CO2EmissionPC)
         CO2Storage = Gamma * CO2Conc
         CO2Radiative = 5.35 * CO2Conc / RefCO2Conc

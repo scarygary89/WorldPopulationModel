@@ -3,7 +3,7 @@
 ########################                       ########################
 
 Population = function(
-	Pop_ijk,
+	Pop_ij,
 	FemaleEduAttain,
 	FemaleHealthAccess,
 	GeneralHealthAccess_k,
@@ -12,9 +12,10 @@ Population = function(
 {
 	with(as.list(c(parms)), {
 		# Input Conversion
-		Pop_k   = matrix(Pop_ijk,nrow = length(Pop_ijk)/2,ncol = 2)
-		colnames(Pop_k) = c('Rich','Poor')
-		rownames(Pop_k) = c('M1','M2','M3','M4','F1','F2','F3','F4')
+		Pop_ijk   = matrix(c((1 - PoorFrac)*Pop_ij,PoorFrac*Pop_ij),nrow = length(Pop_ij),ncol = 2)
+		colnames(Pop_ijk) = c('Rich','Poor')
+		rownames(Pop_ijk) = c('M1','M2','M3','M4','F1','F2','F3','F4')
+
 		MinDeath_ijk = cbind(
 			Rich = c(		
 				M1 = MinDeath_RichM1,
@@ -78,7 +79,6 @@ Population = function(
 		NutritionConsPC_ijk = matrix(NutritionConsPC_k,
 			nrow = 8, ncol = 2, byrow = T)
 		colnames(NutritionConsPC_ijk) = c('Rich','Poor')
-
 		# Auxiliary Variables
 		GFR           = AlphaGFR  - BetaH * FemaleHealthAccess - BetaE * FemaleEduAttain
 
@@ -94,26 +94,26 @@ Population = function(
 
 		# Define Flows
 		MaturationMinus_ijk = sapply(c('Rich','Poor'),
-							  	function(x) MatRate_ijk * Pop_k[,x])
+							  	function(x) MatRate_ijk * Pop_ijk[,x])
 		MaturationPlus_ijk = sapply(c('Rich','Poor'), 
 							function(x) {
-								MaturationPlus_ijk = MatRate_ijk * Pop_k[,x] 
+								MaturationPlus_ijk = MatRate_ijk * Pop_ijk[,x] 
 								MaturationPlus_ijk = c(0,MaturationPlus_ijk[-length(MaturationPlus_ijk)])
 								return(MaturationPlus_ijk)
 							})
 		Deaths_ijk 		= sapply(c('Rich','Poor'), 
-							function(x) MortRate_ijk[,x]/1000 * Pop_k[,x])
+							function(x) MortRate_ijk[,x]/1000 * Pop_ijk[,x])
 		Births_ijk 		= cbind(rep(0,8),rep(0,8))
-		Births_ijk[1,] 	=  GFR/1000 * (1 - FemaleBirthRatio) * Pop_k['F2',]
-		Births_ijk[5,]	=  GFR/1000 * FemaleBirthRatio * Pop_k['F2',]
+		Births_ijk[1,] 	=  GFR/1000 * (1 - FemaleBirthRatio) * Pop_ijk['F2',]
+		Births_ijk[5,]	=  GFR/1000 * FemaleBirthRatio * Pop_ijk['F2',]
 
 		# Stock and Flow Variables
 		dPop_ijk = Births_ijk - Deaths_ijk + MaturationPlus_ijk - MaturationMinus_ijk
-		
+		dPop_ij = rowSums(dPop_ijk)
 
 		# Output
-		list( 	dPop_ijk = dPop_ijk,
-				MortRate_ijk = Deaths_ijk,
+		list( 	dPop_ij = dPop_ij,
+				MortRate_ijk = MortRate_ijk,
 				GFR = GFR)
 	})
 }

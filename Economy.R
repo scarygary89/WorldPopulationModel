@@ -3,17 +3,20 @@
 ########################                       ########################
 
 Economy = function(
-	RenewableResources,
-	NonrenewableResources,
+	CoalReserves,
+	OilReserves,
+	GasReserves,
 	TotalPop,
 	Capital,
-	RRAccess,
-	NRAccess,
+	CoalAccess,
+	OilAccess,
+	GasAccess,
 	TechMult,
 	LaborInputElast,
 	CapitalInputElast,
-	RenewableCapitalReturn,
-	NonrenewableCapitalReturn,
+	CoalCapitalReturn,
+	OilCapitalReturn,
+	GasCapitalReturn,
 	IneqMult,
 	SavingsRate,
 	DeprecRate,
@@ -24,14 +27,17 @@ Economy = function(
 	with(as.list(c(parms)),{
 
         # Auxiliary Variables
-        NR = NRAccess * NonrenewableResources
-        RR = RRAccess * RenewableResources
+        LocalCoalReserves = CoalAccess * CoalReserves
+        LocalOilReserves = OilAccess * OilReserves 
+        LocalGasReserves = GasAccess * GasReserves
 		EmployedLabor = sum(Pop_ijk * EmployedWorkRatio_ijk)
 		EconOutput 	= TechMult * (EmployedLabor ^ LaborInputElast) * 
 					(Capital ^ CapitalInputElast) 
 		EconOutputPC = EconOutput / (TotalPop * 1000)
-		CapitalInvest = EconOutput * SavingsRate 
-			+ NonrenewableCapitalReturn * NR +  RenewableCapitalReturn * RR
+		CapitalInvest = EconOutput * SavingsRate + 
+			CoalCapitalReturn * LocalCoalReserves + 
+			OilCapitalReturn * LocalOilReserves +
+			GasCapitalReturn * LocalGasReserves
 		CapitalDeprec = Capital * DeprecRate 
 		Inequality =  log(IneqMult * CapitalInvest / EconOutputPC )
 

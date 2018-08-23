@@ -102,112 +102,64 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 		StockData[1,] = stocks
 		for(i in 1:length(tspan)) {
   		# Assemble Lists and Vectors
-			RegPop_ijkr = list( 
+			RegPop_ijr = list( 
 				Low = c(
-					RM1 = as.numeric(stocks['Low_RM1']),
-					RM2 = as.numeric(stocks['Low_RM2']),
-					RM3 = as.numeric(stocks['Low_RM3']),
-					RM4 = as.numeric(stocks['Low_RM4']),
-					RF1 = as.numeric(stocks['Low_RF1']),
-					RF2 = as.numeric(stocks['Low_RF2']),
-					RF3 = as.numeric(stocks['Low_RF3']),
-					RF4 = as.numeric(stocks['Low_RF4']), 
-					PM1 = as.numeric(stocks['Low_PM1']),
-					PM2 = as.numeric(stocks['Low_PM2']),
-					PM3 = as.numeric(stocks['Low_PM3']),
-					PM4 = as.numeric(stocks['Low_PM4']),
-					PF1 = as.numeric(stocks['Low_PF1']),
-					PF2 = as.numeric(stocks['Low_PF2']),
-					PF3 = as.numeric(stocks['Low_PF3']),
-					PF4 = as.numeric(stocks['Low_PF4'])),
+					M1 = as.numeric(stocks['Low_M1']),
+					M2 = as.numeric(stocks['Low_M2']),
+					M3 = as.numeric(stocks['Low_M3']),
+					M4 = as.numeric(stocks['Low_M4']),
+					F1 = as.numeric(stocks['Low_F1']),
+					F2 = as.numeric(stocks['Low_F2']),
+					F3 = as.numeric(stocks['Low_F3']),
+					F4 = as.numeric(stocks['Low_F4'])),
 				Mid = c(
-					RM1 = as.numeric(stocks['Mid_RM1']),
-					RM2 = as.numeric(stocks['Mid_RM2']),
-					RM3 = as.numeric(stocks['Mid_RM3']),
-					RM4 = as.numeric(stocks['Mid_RM4']),
-					RF1 = as.numeric(stocks['Mid_RF1']),
-					RF2 = as.numeric(stocks['Mid_RF2']),
-					RF3 = as.numeric(stocks['Mid_RF3']),
-					RF4 = as.numeric(stocks['Mid_RF4']), 
-					PM1 = as.numeric(stocks['Mid_PM1']),
-					PM2 = as.numeric(stocks['Mid_PM2']),
-					PM3 = as.numeric(stocks['Mid_PM3']),
-					PM4 = as.numeric(stocks['Mid_PM4']),
-					PF1 = as.numeric(stocks['Mid_PF1']),
-					PF2 = as.numeric(stocks['Mid_PF2']),
-					PF3 = as.numeric(stocks['Mid_PF3']),
-					PF4 = as.numeric(stocks['Mid_PF4'])),
+					M1 = as.numeric(stocks['Mid_M1']),
+					M2 = as.numeric(stocks['Mid_M2']),
+					M3 = as.numeric(stocks['Mid_M3']),
+					M4 = as.numeric(stocks['Mid_M4']),
+					F1 = as.numeric(stocks['Mid_F1']),
+					F2 = as.numeric(stocks['Mid_F2']),
+					F3 = as.numeric(stocks['Mid_F3']),
+					F4 = as.numeric(stocks['Mid_F4'])),
 				High = c(
-					RM1 = as.numeric(stocks['High_RM1']),
-					RM2 = as.numeric(stocks['High_RM2']),
-					RM3 = as.numeric(stocks['High_RM3']),
-					RM4 = as.numeric(stocks['High_RM4']),
-					RF1 = as.numeric(stocks['High_RF1']),
-					RF2 = as.numeric(stocks['High_RF2']),
-					RF3 = as.numeric(stocks['High_RF3']),
-					RF4 = as.numeric(stocks['High_RF4']), 
-					PM1 = as.numeric(stocks['High_PM1']),
-					PM2 = as.numeric(stocks['High_PM2']),
-					PM3 = as.numeric(stocks['High_PM3']),
-					PM4 = as.numeric(stocks['High_PM4']),
-					PF1 = as.numeric(stocks['High_PF1']),
-					PF2 = as.numeric(stocks['High_PF2']),
-					PF3 = as.numeric(stocks['High_PF3']),
-					PF4 = as.numeric(stocks['High_PF4']))
+					M1 = as.numeric(stocks['High_M1']),
+					M2 = as.numeric(stocks['High_M2']),
+					M3 = as.numeric(stocks['High_M3']),
+					M4 = as.numeric(stocks['High_M4']),
+					F1 = as.numeric(stocks['High_F1']),
+					F2 = as.numeric(stocks['High_F2']),
+					F3 = as.numeric(stocks['High_F3']),
+					F4 = as.numeric(stocks['High_F4']))
 			)
 
 			EmployedWorkRatio_ijkr = list(
 				Low = c(
-					RM1 = LowEmployedWorkRatio_RM1,
-					RM2 = LowEmployedWorkRatio_RM2,
-					RM3 = LowEmployedWorkRatio_RM3,
-					RM4 = LowEmployedWorkRatio_RM4,
-					RF1 = LowEmployedWorkRatio_RF1,
-					RF2 = LowEmployedWorkRatio_RF2,
-					RF3 = LowEmployedWorkRatio_RF3,
-					RF4 = LowEmployedWorkRatio_RF4,
-					PM1 = LowEmployedWorkRatio_PM1,
-					PM2 = LowEmployedWorkRatio_PM2,
-					PM3 = LowEmployedWorkRatio_PM3,
-					PM4 = LowEmployedWorkRatio_PM4,
-					PF1 = LowEmployedWorkRatio_PF1,
-					PF2 = LowEmployedWorkRatio_PF2,
-					PF3 = LowEmployedWorkRatio_PF3,
-					PF4 = LowEmployedWorkRatio_PF4),
+					M1 = LowEmployedWorkRatio_M1,
+					M2 = LowEmployedWorkRatio_M2,
+					M3 = LowEmployedWorkRatio_M3,
+					M4 = LowEmployedWorkRatio_M4,
+					F1 = LowEmployedWorkRatio_F1,
+					F2 = LowEmployedWorkRatio_F2,
+					F3 = LowEmployedWorkRatio_F3,
+					F4 = LowEmployedWorkRatio_F4),
 				Mid = c(
-					RM1 = MidEmployedWorkRatio_RM1,
-					RM2 = MidEmployedWorkRatio_RM2,
-					RM3 = MidEmployedWorkRatio_RM3,
-					RM4 = MidEmployedWorkRatio_RM4,
-					RF1 = MidEmployedWorkRatio_RF1,
-					RF2 = MidEmployedWorkRatio_RF2,
-					RF3 = MidEmployedWorkRatio_RF3,
-					RF4 = MidEmployedWorkRatio_RF4,
-					PM1 = MidEmployedWorkRatio_PM1,
-					PM2 = MidEmployedWorkRatio_PM2,
-					PM3 = MidEmployedWorkRatio_PM3,
-					PM4 = MidEmployedWorkRatio_PM4,
-					PF1 = MidEmployedWorkRatio_PF1,
-					PF2 = MidEmployedWorkRatio_PF2,
-					PF3 = MidEmployedWorkRatio_PF3,
-					PF4 = MidEmployedWorkRatio_PF4),
+					M1 = MidEmployedWorkRatio_M1,
+					M2 = MidEmployedWorkRatio_M2,
+					M3 = MidEmployedWorkRatio_M3,
+					M4 = MidEmployedWorkRatio_M4,
+					F1 = MidEmployedWorkRatio_F1,
+					F2 = MidEmployedWorkRatio_F2,
+					F3 = MidEmployedWorkRatio_F3,
+					F4 = MidEmployedWorkRatio_F4),
 				High = c(
-					RM1 = HighEmployedWorkRatio_RM1,
-					RM2 = HighEmployedWorkRatio_RM2,
-					RM3 = HighEmployedWorkRatio_RM3,
-					RM4 = HighEmployedWorkRatio_RM4,
-					RF1 = HighEmployedWorkRatio_RF1,
-					RF2 = HighEmployedWorkRatio_RF2,
-					RF3 = HighEmployedWorkRatio_RF3,
-					RF4 = HighEmployedWorkRatio_RF4,
-					PM1 = HighEmployedWorkRatio_PM1,
-					PM2 = HighEmployedWorkRatio_PM2,
-					PM3 = HighEmployedWorkRatio_PM3,
-					PM4 = HighEmployedWorkRatio_PM4,
-					PF1 = HighEmployedWorkRatio_PF1,
-					PF2 = HighEmployedWorkRatio_PF2,
-					PF3 = HighEmployedWorkRatio_PF3,
-					PF4 = HighEmployedWorkRatio_PF4)
+					M1 = HighEmployedWorkRatio_M1,
+					M2 = HighEmployedWorkRatio_M2,
+					M3 = HighEmployedWorkRatio_M3,
+					M4 = HighEmployedWorkRatio_M4,
+					F1 = HighEmployedWorkRatio_F1,
+					F2 = HighEmployedWorkRatio_F2,
+					F3 = HighEmployedWorkRatio_F3,
+					F4 = HighEmployedWorkRatio_F4)
 			)
 			ChiEF1_r = c(
 				Low = ChiEF1_Low,
@@ -246,68 +198,77 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 				Mid = as.numeric(stocks['FoodDemandPC_Mid']),
 				High = as.numeric(stocks['FoodDemandPC_High']))
 			RegPop_r = c(
-				Low = sum(RegPop_ijkr[['Low']]),
-				Mid = sum(RegPop_ijkr[['Mid']]),
-				High = sum(RegPop_ijkr[['High']]))
+				Low = sum(RegPop_ijr[['Low']]),
+				Mid = sum(RegPop_ijr[['Mid']]),
+				High = sum(RegPop_ijr[['High']]))
 
 	# Combine Submodels
 
 			# Regional Economies
 			EconOut_Low    	= Economy(
-								stocks['RenewableResources'],
-								stocks['NonrenewableResources'],
+								stocks['CoalReserves'],
+								stocks['OilReserves'],
+								stocks['GasReserves'],
 								RegPop_r['Low'],
 								stocks['Capital_Low'],
-								RenewableAccess_Low,
-								NonrenewableAccess_Low,
+								CoalAccess_Low,
+								OilAccess_Low,
+								GasAccess_Low,
 								TechMult_Low,
 								LaborInputElast_Low,
 								CapitalInputElast_Low,
-								RenewableCapitalReturn_Low,
-								NonrenewableCapitalReturn_Low,
+								CoalCapitalReturn_Low,
+								OilCapitalReturn_Low,
+								GasCapitalReturn_Low,
 								IneqMult_Low,
 								SavingsRate_Low,
 								DeprecRate_Low,
 								EmployedWorkRatio_ijkr[['Low']],
-								RegPop_ijkr[['Low']],
+								RegPop_ijr[['Low']],
 								parms)  
 
 			EconOut_Mid    	= Economy(
-								stocks['RenewableResources'],
-								stocks['NonrenewableResources'],
+								stocks['CoalReserves'],
+								stocks['OilReserves'],
+								stocks['GasReserves'],
 								RegPop_r['Mid'],
 								stocks['Capital_Mid'],
-								RenewableAccess_Mid,
-								NonrenewableAccess_Mid,
+								CoalAccess_Mid,
+								OilAccess_Mid,
+								GasAccess_Mid,
 								TechMult_Mid,
 								LaborInputElast_Mid,
 								CapitalInputElast_Mid,
-								RenewableCapitalReturn_Mid,
-								NonrenewableCapitalReturn_Mid,
+								CoalCapitalReturn_Mid,
+								OilCapitalReturn_Mid,
+								GasCapitalReturn_Mid,
 								IneqMult_Mid,
 								SavingsRate_Mid,
 								DeprecRate_Mid,
 								EmployedWorkRatio_ijkr[['Mid']],
-								RegPop_ijkr[['Mid']],
+								RegPop_ijr[['Mid']],
 								parms)
 			
 			EconOut_High   	= Economy(
-								stocks['RenewableResources'],
-								stocks['NonrenewableResources'],
+								stocks['CoalReserves'],
+								stocks['OilReserves'],
+								stocks['GasReserves'],
 								RegPop_r['High'],
 								stocks['Capital_High'],
-								RenewableAccess_High,
-								NonrenewableAccess_High,
+								CoalAccess_High,
+								OilAccess_High,
+								GasAccess_High,
 								TechMult_High,
 								LaborInputElast_High,
 								CapitalInputElast_High,
-								RenewableCapitalReturn_High,
-								NonrenewableCapitalReturn_High,
+								CoalCapitalReturn_High,
+								OilCapitalReturn_High,
+								GasCapitalReturn_High,
 								IneqMult_High,
 								SavingsRate_High,
 								DeprecRate_High,
 								EmployedWorkRatio_ijkr[['High']],
-								RegPop_ijkr[['High']],
+								RegPop_ijr[['High']],
 								parms)  
 
 			EconOutput_r = 	 c( Low = EconOut_Low[['EconOutput']],
@@ -362,8 +323,9 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 
 			# Global Resources
 			ResourceOut  	= Resource(
-								stocks['RenewableResources'],
-								stocks['NonrenewableResources'],
+								stocks['CoalReserves'],
+								stocks['OilReserves'],
+								stocks['GasReserves'],
 								EconOutput_r,
 								parms)
 			
@@ -382,7 +344,6 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								stocks['GrazeLand'],
 								stocks['CropLand'],
 								stocks['GlobalTemp'],
-								RegPop_ijkr,
 								RegPop_r,
 								EconOutputPC_r,
 								PrevEconOutputPC_r,
@@ -392,34 +353,18 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 
 			# Regional Health and Education System
 
-			TotalFemale_kr = list(
-				Low = c(
-					Rich = sum(RegPop_ijkr[['Low']][c('RF1','RF2','RF3','RF4')]),
-					Poor = sum(RegPop_ijkr[['Low']][c('PF1','PF2','PF3','PF4')])),
-				Mid = c(					
-					Rich = sum(RegPop_ijkr[['Mid']][c('RF1','RF2','RF3','RF4')]),
-					Poor = sum(RegPop_ijkr[['Mid']][c('PF1','PF2','PF3','PF4')])),
-				High = c(
-					Rich = sum(RegPop_ijkr[['High']][c('RF1','RF2','RF3','RF4')]),
-					Poor = sum(RegPop_ijkr[['High']][c('PF1','PF2','PF3','PF4')]))
+			TotalFemale_r = c(
+				Low = sum(RegPop_ijr[['Low']][c('F1','F2','F3','F4')]),
+				Mid = sum(RegPop_ijr[['Mid']][c('F1','F2','F3','F4')]),
+				High = sum(RegPop_ijr[['High']][c('F1','F2','F3','F4')])
 			)
-			TotalPop_kr = list(
-				Low = c(
-					Rich = sum(RegPop_ijkr[['Low']][c('RM1','RM2','RM3','RM4','RF1','RF2','RF3','RF4')]),
-					Poor = sum(RegPop_ijkr[['Low']][c('PM1','PM2','PM3','PM4','PF1','PF2','PF3','PF4')])),
-				Mid = c(
-					Rich = sum(RegPop_ijkr[['Mid']][c('RM1','RM2','RM3','RM4','RF1','RF2','RF3','RF4')]),
-					Poor = sum(RegPop_ijkr[['Mid']][c('PM1','PM2','PM3','PM4','PF1','PF2','PF3','PF4')])),
-				High = c(
-					Rich = sum(RegPop_ijkr[['High']][c('RM1','RM2','RM3','RM4','RF1','RF2','RF3','RF4')]),
-					Poor = sum(RegPop_ijkr[['High']][c('PM1','PM2','PM3','PM4','PF1','PF2','PF3','PF4')]))
-			)
+			
 			HealthEduOut_Low = HealthEducation(
 								stocks['HealthServices_Low'],
 								stocks['EducationServices_Low'],
 								ChangeEconOutput_r['Low'],
-								TotalFemale_kr[['Low']],
-								TotalPop_kr[['Low']],
+								TotalFemale_r[['Low']],
+								RegPop_r[['Low']],
 								ZetaE_Low,
 								ZetaH_Low,
 								LambdaE_Low,
@@ -437,8 +382,8 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								stocks['HealthServices_Mid'],
 								stocks['EducationServices_Mid'],
 								ChangeEconOutput_r['Mid'],
-								TotalFemale_kr[['Mid']],
-								TotalPop_kr[['Mid']],
+								TotalFemale_r[['Mid']],
+								RegPop_r[['Mid']],
 								ZetaE_Mid,
 								ZetaH_Mid,
 								LambdaE_Mid,
@@ -456,8 +401,8 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								stocks['HealthServices_High'],
 								stocks['EducationServices_High'],
 								ChangeEconOutput_r['High'],
-								TotalFemale_kr[['High']],
-								TotalPop_kr[['High']],
+								TotalFemale_r[['High']],
+								RegPop_r[['High']],
 				 				ZetaE_High,
 								ZetaH_High,
 								LambdaE_High,
@@ -474,7 +419,7 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 
 			# Regional Population System 
 			PopOut_Low      = Population(
-								RegPop_ijkr[['Low']],
+								RegPop_ijr[['Low']],
 								HealthEduOut_Low[['FemaleEduAttain']],
 								HealthEduOut_Low[['FemaleHealthAccess']],
 								HealthEduOut_Low[['GeneralHealthAccess_k']],
@@ -482,7 +427,7 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								parms)
 
 			PopOut_Mid      = Population(
-								RegPop_ijkr[['Mid']],
+								RegPop_ijr[['Mid']],
 								HealthEduOut_Mid[['FemaleEduAttain']],
 								HealthEduOut_Mid[['FemaleHealthAccess']],
 								HealthEduOut_Mid[['GeneralHealthAccess_k']],
@@ -490,7 +435,7 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								parms)
 
 			PopOut_High      = Population(
-								RegPop_ijkr[['High']],
+								RegPop_ijr[['High']],
 								HealthEduOut_High[['FemaleEduAttain']],
 								HealthEduOut_High[['FemaleHealthAccess']],
 								HealthEduOut_High[['GeneralHealthAccess_k']],
@@ -567,9 +512,9 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 				HealthEduOut_High[["dHealthServices"]],
 
 				# Population Stocks (Regions)        
-				PopOut_Low[["dPop_ijk"]],
-				PopOut_Mid[["dPop_ijk"]],
-				PopOut_High[["dPop_ijk"]],
+				PopOut_Low[["dPop_ij"]],
+				PopOut_Mid[["dPop_ij"]],
+				PopOut_High[["dPop_ij"]],
 
 				# Water Stocks (Global)
 				WaterOut[["dFreshwater"]]

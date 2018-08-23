@@ -6,137 +6,7 @@ library(ggplot2)
 library(reshape)
 library(gridExtra)
 
-MultiTimePlot = function(time,y,xtit,ytit,tit){
-	dat = cbind(time,y)
-	meltdat = melt(dat,id = 'time')
-	ggplot(data=meltdat, aes(x = time,y=value, col = variable)) + 
-		geom_line() + theme_bw() + labs(title = tit, x = xtit, y = ytit) 
-
-}
-
-PlotFunc = function(OutputData){
-	# Plot Results
-	LowRichMalePlot = MultiTimePlot(OutputData['time'],OutputData[c('Low_RM1','Low_RM2','Low_RM3','Low_RM4')],
-		"Year", "Population","Rich Male -- Low Income")
-
-	LowRichFemalePlot = MultiTimePlot(OutputData['time'],OutputData[c('Low_RF1','Low_RF2','Low_RF3','Low_RF4')],
-		"Year", "Population","Rich Female -- Low Income")
-
-	LowPoorMalePlot = MultiTimePlot(OutputData['time'],OutputData[c('Low_PM1','Low_PM2','Low_PM3','Low_PM4')],
-		"Year", "Population","Poor Male -- Low Income")
-
-	LowPoorFemalePlot = MultiTimePlot(OutputData['time'],OutputData[c('Low_PF1','Low_PF2','Low_PF3','Low_PF4')],
-		"Year", "Population","Poor Female -- Low Income")
-
-	MidRichMalePlot = MultiTimePlot(OutputData['time'],OutputData[c('Mid_RM1','Mid_RM2','Mid_RM3','Mid_RM4')],
-		"Year", "Population","Rich Male -- Middle Income")
-
-	MidRichFemalePlot = MultiTimePlot(OutputData['time'],OutputData[c('Mid_RF1','Mid_RF2','Mid_RF3','Mid_RF4')],
-		"Year", "Population","Rich Female -- Middle Income")
-
-	MidPoorMalePlot = MultiTimePlot(OutputData['time'],OutputData[c('Mid_PM1','Mid_PM2','Mid_PM3','Mid_PM4')],
-		"Year", "Population","Poor Male -- Middle Income")
-
-	MidPoorFemalePlot = MultiTimePlot(OutputData['time'],OutputData[c('Mid_PF1','Mid_PF2','Mid_PF3','Mid_PF4')],
-		"Year", "Population","Poor Female -- Middle Income")
-
-	HighRichMalePlot = MultiTimePlot(OutputData['time'],OutputData[c('High_RM1','High_RM2','High_RM3','High_RM4')],
-		"Year", "Population","Rich Male -- High Income")
-
-	HighRichFemalePlot = MultiTimePlot(OutputData['time'],OutputData[c('High_RF1','High_RF2','High_RF3','High_RF4')],
-		"Year", "Population","Rich Female -- High Income")
-
-	HighPoorMalePlot = MultiTimePlot(OutputData['time'],OutputData[c('High_PM1','High_PM2','High_PM3','High_PM4')],
-		"Year", "Population","Poor Male -- High Income")
-
-	HighPoorFemalePlot = MultiTimePlot(OutputData['time'],OutputData[c('High_PF1','High_PF2','High_PF3','High_PF4')],
-		"Year", "Population","Poor Female -- High Income")
-
-	TotalPopPlot = MultiTimePlot(OutputData['time'],OutputData[c('LowPop','MidPop','HighPop')],
-		"Year","Population","Regional Population")
-
-	EconOutPlot = MultiTimePlot(OutputData['time'],OutputData[c('EconOutput_Low','EconOutput_Mid','EconOutput_High')],
-		"Year","US Dollars (GDP)","Economic Output")
-
-	HealthPlot = MultiTimePlot(OutputData['time'],OutputData[c('HealthServices_Low','HealthServices_Mid','HealthServices_High')],
-		"Year","Services","Health Services")
-
-	EducationPlot = MultiTimePlot(OutputData['time'],OutputData[c('EducationServices_Low','EducationServices_Mid','EducationServices_High')],
-		"Year","Services","Education Services")
-
-	LandPlot = MultiTimePlot(OutputData['time'],OutputData[c('CropLand','GrazeLand')],
-		"Year","Land Area","Land")
-
-	FoodPlot = MultiTimePlot(OutputData['time'],OutputData[c('Fishstock','Livestock','Crops')],
-		"Year","Weight","Food")
-
-	FishPlot = MultiTimePlot(OutputData['time'],OutputData['Fisheries'],
-		"Year","Area","Fisheries")
-
-	WaterPlot = MultiTimePlot(OutputData['time'],OutputData['Freshwater'],
-		"Year","Volume","Freshwater")
-
-	FemaleHealthAccessPlot = MultiTimePlot(OutputData['time'],
-		OutputData[c( 	'FemaleHealthAccess_Low',
-						'FemaleHealthAccess_Mid',
-						'FemaleHealthAccess_High')],
-		"Year", "Access to health facility during delivery (Percent)",
-		"Female health access")
-
-	RichHealthAccessPlot = MultiTimePlot(OutputData['time'],
-		OutputData[c( 	'GeneralHealthAccess_RichLow',
-						'GeneralHealthAccess_RichMid',
-						'GeneralHealthAccess_RichHigh')],
-		"Year", "Health Access and Quality Index",
-		"Rich general health access")
-
-	PoorHealthAccessPlot = MultiTimePlot(OutputData['time'],
-		OutputData[c( 	'GeneralHealthAccess_PoorLow',
-						'GeneralHealthAccess_PoorMid',
-						'GeneralHealthAccess_PoorHigh')],
-		"Year", "Health Access and Quality Index",
-		"Poor general health access")
-
-	GFRPlot = MultiTimePlot2(OutputData['time'],
-		OutputData[c( 	'GFR_Low',
-						'GFR_Mid',
-						'GFR_High')],
-		"Year", "Births per 1000 people/year",
-		"General Fertility Rate")
-
-	TFRPlot = MultiTimePlot2(OutputData['time'],
-		OutputData[c( 	'TFR_Low',
-						'TFR_Mid',
-						'TFR_High')],
-		"Year", "Number of births per women",
-		"Total Fertility Rate")
-
-
-	dev.new()
-	print(grid.arrange(LowRichMalePlot,LowRichFemalePlot,LowPoorMalePlot,LowPoorFemalePlot,nrow = 2,ncol = 2))
-
-	dev.new()
-	print(grid.arrange(MidRichMalePlot,MidRichFemalePlot,MidPoorMalePlot,MidPoorFemalePlot,nrow = 2,ncol = 2))
-
-	dev.new()
-	print(grid.arrange(HighRichMalePlot,HighRichFemalePlot,HighPoorMalePlot,HighPoorFemalePlot,nrow = 2,ncol = 2))
-
-	dev.new()
-	print(grid.arrange(TotalPopPlot,EconOutPlot,HealthPlot,EducationPlot,nrow = 2,ncol = 2))
-
-	dev.new()
-	print(grid.arrange(LandPlot,FoodPlot,FishPlot,WaterPlot,nrow = 2,ncol = 2))
-
-	dev.new()
-	print(grid.arrange(FemaleHealthAccessPlot,RichHealthAccessPlot,PoorHealthAccessPlot,nrow = 2,ncol = 2))
-
-	dev.new()
-	print(grid.arrange(GFRPlot,TFRPlot,nrow = 2,ncol = 1))
-
-}
-
-
-MultiTimePlot2 = function(time,y,ybos,xtit,ytit,tit){
+MultiTimePlot = function(time,y,ybos,xtit,ytit,tit){
 	dat = cbind(time,y)
 	meltdat = melt(dat,id = 'time')
 	obsdata = yobs[yobs$variable %in% meltdat$variable,]
@@ -148,104 +18,95 @@ MultiTimePlot2 = function(time,y,ybos,xtit,ytit,tit){
 
 PlotFuncWithObs = function(OutputData){
 	# Plot Results
-	LowRichMalePlot = MultiTimePlot2(OutputData['time'],OutputData[c('Low_RM1','Low_RM2','Low_RM3','Low_RM4')],
-		yobs, "Year", "Population","Rich Male -- Low Income")
+	LowMalePlot = MultiTimePlot(OutputData['time'],OutputData[c('Low_M1','Low_M2','Low_M3','Low_M4')],
+		yobs, "Year", "Population","Male -- Low Income")
 
-	LowRichFemalePlot = MultiTimePlot2(OutputData['time'],OutputData[c('Low_RF1','Low_RF2','Low_RF3','Low_RF4')],
-		yobs,"Year", "Population","Rich Female -- Low Income")
+	LowFemalePlot = MultiTimePlot(OutputData['time'],OutputData[c('Low_F1','Low_F2','Low_F3','Low_F4')],
+		yobs,"Year", "Population","Female -- Low Income")
 
-	LowPoorMalePlot = MultiTimePlot2(OutputData['time'],OutputData[c('Low_PM1','Low_PM2','Low_PM3','Low_PM4')],
-		yobs,"Year", "Population","Poor Male -- Low Income")
+	MidMalePlot = MultiTimePlot(OutputData['time'],OutputData[c('Mid_M1','Mid_M2','Mid_M3','Mid_M4')],
+		yobs,"Year", "Population","Male -- Middle Income")
 
-	LowPoorFemalePlot = MultiTimePlot2(OutputData['time'],OutputData[c('Low_PF1','Low_PF2','Low_PF3','Low_PF4')],
-		yobs,"Year", "Population","Poor Female -- Low Income")
+	MidFemalePlot = MultiTimePlot(OutputData['time'],OutputData[c('Mid_F1','Mid_F2','Mid_F3','Mid_F4')],
+		yobs,"Year", "Population","Female -- Middle Income")
 
-	MidRichMalePlot = MultiTimePlot2(OutputData['time'],OutputData[c('Mid_RM1','Mid_RM2','Mid_RM3','Mid_RM4')],
-		yobs,"Year", "Population","Rich Male -- Middle Income")
+	HighMalePlot = MultiTimePlot(OutputData['time'],OutputData[c('High_M1','High_M2','High_M3','High_M4')],
+		yobs,"Year", "Population","Male -- High Income")
 
-	MidRichFemalePlot = MultiTimePlot2(OutputData['time'],OutputData[c('Mid_RF1','Mid_RF2','Mid_RF3','Mid_RF4')],
-		yobs,"Year", "Population","Rich Female -- Middle Income")
+	HighFemalePlot = MultiTimePlot(OutputData['time'],OutputData[c('High_F1','High_F2','High_F3','High_F4')],
+		yobs,"Year", "Population","Female -- High Income")
 
-	MidPoorMalePlot = MultiTimePlot2(OutputData['time'],OutputData[c('Mid_PM1','Mid_PM2','Mid_PM3','Mid_PM4')],
-		yobs,"Year", "Population","Poor Male -- Middle Income")
-
-	MidPoorFemalePlot = MultiTimePlot2(OutputData['time'],OutputData[c('Mid_PF1','Mid_PF2','Mid_PF3','Mid_PF4')],
-		yobs,"Year", "Population","Poor Female -- Middle Income")
-
-	HighRichMalePlot = MultiTimePlot2(OutputData['time'],OutputData[c('High_RM1','High_RM2','High_RM3','High_RM4')],
-		yobs,"Year", "Population","Rich Male -- High Income")
-
-	HighRichFemalePlot = MultiTimePlot2(OutputData['time'],OutputData[c('High_RF1','High_RF2','High_RF3','High_RF4')],
-		yobs,"Year", "Population","Rich Female -- High Income")
-
-	HighPoorMalePlot = MultiTimePlot2(OutputData['time'],OutputData[c('High_PM1','High_PM2','High_PM3','High_PM4')],
-		yobs,"Year", "Population","Poor Male -- High Income")
-
-	HighPoorFemalePlot = MultiTimePlot2(OutputData['time'],OutputData[c('High_PF1','High_PF2','High_PF3','High_PF4')],
-		yobs,"Year", "Population","Poor Female -- High Income")
-
-	TotalPopPlot = MultiTimePlot2(OutputData['time'],OutputData[c('LowPop','MidPop','HighPop')],
+	TotalPopPlot = MultiTimePlot(OutputData['time'],OutputData[c('LowPop','MidPop','HighPop')],
 		yobs,"Year","Population","Regional Population")
 
-	EconOutPlot = MultiTimePlot2(OutputData['time'],OutputData[c('EconOutput_Low','EconOutput_Mid','EconOutput_High')],
+	EconOutPlot = MultiTimePlot(OutputData['time'],OutputData[c('EconOutput_Low','EconOutput_Mid','EconOutput_High')],
 		yobs,"Year","GDP","Economic Output")
 
-	HealthPlot = MultiTimePlot2(OutputData['time'],OutputData[c('HealthServices_Low','HealthServices_Mid','HealthServices_High')],
+	HealthPlot = MultiTimePlot(OutputData['time'],OutputData[c('HealthServices_Low','HealthServices_Mid','HealthServices_High')],
 		yobs,"Year","Services","Health Services")
 
-	EducationPlot = MultiTimePlot2(OutputData['time'],OutputData[c('EducationServices_Low','EducationServices_Mid','EducationServices_High')],
+	EducationPlot = MultiTimePlot(OutputData['time'],OutputData[c('EducationServices_Low','EducationServices_Mid','EducationServices_High')],
 		yobs,"Year","Services","Education Services")
 
-	LandPlot = MultiTimePlot2(OutputData['time'],OutputData[c('CropLand','GrazeLand')],
+	LandPlot = MultiTimePlot(OutputData['time'],OutputData[c('CropLand','GrazeLand')],
 		yobs,"Year","Land Area","Land")
 
-	FoodPlot = MultiTimePlot2(OutputData['time'],OutputData[c('Fishstock','Livestock','Crops')],
+	FoodPlot = MultiTimePlot(OutputData['time'],OutputData[c('Fishstock','Livestock','Crops')],
 		yobs,"Year","Weight","Food")
 
-	FishPlot = MultiTimePlot2(OutputData['time'],OutputData['Fisheries'],
+	FishPlot = MultiTimePlot(OutputData['time'],OutputData['Fisheries'],
 		yobs,"Year","Area","Fisheries")
 
-	WaterPlot = MultiTimePlot2(OutputData['time'],OutputData['Freshwater'],
+	WaterPlot = MultiTimePlot(OutputData['time'],OutputData['Freshwater'],
 		yobs,"Year","Volume","Freshwater")
 
-	FemaleHealthAccessPlot = MultiTimePlot2(OutputData['time'],
+	FemaleHealthAccessPlot = MultiTimePlot(OutputData['time'],
 		OutputData[c( 	'FemaleHealthAccess_Low',
 						'FemaleHealthAccess_Mid',
 						'FemaleHealthAccess_High')],
 		yobs,"Year", "Access to health facility during delivery (Percent)",
 		"female health access")
 
-	RichHealthAccessPlot = MultiTimePlot2(OutputData['time'],
+	RichHealthAccessPlot = MultiTimePlot(OutputData['time'],
 		OutputData[c( 	'GeneralHealthAccess_RichLow',
 						'GeneralHealthAccess_RichMid',
 						'GeneralHealthAccess_RichHigh')],
 		yobs,"Year", "Health Access and Quality Index",
 		"Rich general health access")
 
-	PoorHealthAccessPlot = MultiTimePlot2(OutputData['time'],
+	PoorHealthAccessPlot = MultiTimePlot(OutputData['time'],
 		OutputData[c( 	'GeneralHealthAccess_PoorLow',
 						'GeneralHealthAccess_PoorMid',
 						'GeneralHealthAccess_PoorHigh')],
 		yobs,"Year", "Health Access and Quality Index",
 		"Poor general health access")
 
-
-	GFRPlot = MultiTimePlot2(OutputData['time'],
+	GFRPlot = MultiTimePlot(OutputData['time'],
 		OutputData[c( 	'GFR_Low',
 						'GFR_Mid',
 						'GFR_High')],
 		yobs,"Year", "Births per 1000 people/year",
 		"General Fertility Rate")
 
+	TempAnamPlot = MultiTimePlot(OutputData['time'],
+		OutputData[c('TempAnamoly')],
+		yobs,"Year", "Celsius",
+		"Global Land and Ocean Temperature Anomalies")
+
+	
+	CO2EmissionPlot = MultiTimePlot(OutputData['time'],
+		OutputData[c('CO2EmissionPC_Low','CO2EmissionPC_Mid','CO2EmissionPC_High')],
+		yobs,"Year", "PPM",
+		"CO2 Emissions per capita")
+	
+	dev.new()
+	print(grid.arrange(LowMalePlot,LowFemalePlot,nrow = 2,ncol = 1))
 
 	dev.new()
-	print(grid.arrange(LowRichMalePlot,LowRichFemalePlot,LowPoorMalePlot,LowPoorFemalePlot,nrow = 2,ncol = 2))
+	print(grid.arrange(MidMalePlot,MidFemalePlot,nrow = 2,ncol = 1))
 
 	dev.new()
-	print(grid.arrange(MidRichMalePlot,MidRichFemalePlot,MidPoorMalePlot,MidPoorFemalePlot,nrow = 2,ncol = 2))
-
-	dev.new()
-	print(grid.arrange(HighRichMalePlot,HighRichFemalePlot,HighPoorMalePlot,HighPoorFemalePlot,nrow = 2,ncol = 2))
+	print(grid.arrange(HighMalePlot,HighFemalePlot,nrow = 2,ncol = 1))
 
 	dev.new()
 	print(grid.arrange(TotalPopPlot,EconOutPlot,HealthPlot,EducationPlot,nrow = 2,ncol = 2))
@@ -254,7 +115,11 @@ PlotFuncWithObs = function(OutputData){
 	print(grid.arrange(LandPlot,FoodPlot,FishPlot,WaterPlot,nrow = 2,ncol = 2))
 
 	dev.new()
-	print(grid.arrange(FemaleHealthAccessPlot,RichHealthAccessPlot,PoorHealthAccessPlot,nrow = 2,ncol = 2))
+	print(grid.arrange(FemaleHealthAccessPlot,RichHealthAccessPlot,
+		PoorHealthAccessPlot,nrow = 2,ncol = 2))
+
+	dev.new()
+	print(grid.arrange(TempAnamPlot,CO2EmissionPlot,nrow = 2,ncol = 1))
 
 	dev.new()
 	print(GFRPlot)

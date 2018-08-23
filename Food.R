@@ -10,7 +10,6 @@ Food = function(
     GrazeLand,    
     CropLand,
     GlobalTemp,
-    RegPop_ijkr,
     RegPop_r,
     EconOutputPC_r,
     PrevEconOutputPC_r,
@@ -112,14 +111,15 @@ Food = function(
         CropLandLoss = CropLandLossRate * CropLand
         RegPop_kr = cbind(
             Low = c(
-                Rich  = sum(RegPop_ijkr[['Low']][c('RM1','RM2','RM3','RM4','RF1','RF2','RF3','RF4')]),
-                Poor  = sum(RegPop_ijkr[['Low']][c('PM1','PM2','PM3','PM4','PF1','PF2','PF3','PF4')])),
-            Mid = c(    
-                Rich  = sum(RegPop_ijkr[['Mid']][c('RM1','RM2','RM3','RM4','RF1','RF2','RF3','RF4')]),
-                Poor  = sum(RegPop_ijkr[['Mid']][c('PM1','PM2','PM3','PM4','PF1','PF2','PF3','PF4')])),
+                Rich  = (1- PoorFrac) * RegPop_r['Low'],
+                Poor  = PoorFrac * RegPop_r['Low']),
+            Mid = c(
+                Rich  = (1- PoorFrac) * RegPop_r['Mid'],
+                Poor  = PoorFrac * RegPop_r['Mid']),
             High = c(
-                Rich = sum(RegPop_ijkr[['High']][c('RM1','RM2','RM3','RM4','RF1','RF2','RF3','RF4')]),
-                Poor = sum(RegPop_ijkr[['High']][c('PM1','PM2','PM3','PM4','PF1','PF2','PF3','PF4')])))
+                Rich  = (1- PoorFrac) * RegPop_r['High'],
+                Poor  = PoorFrac * RegPop_r['High'])
+            )
         FoodConsPC_krl = sapply(c('Fish','Livestock','Crops'), function(x) {
             (FoodCons_l[x] * FoodAccess_krl[,,x]) / RegPop_kr },
             simplify = 'array')
