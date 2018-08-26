@@ -77,8 +77,8 @@ PlotFuncWithObs(OutputData)
 print('*************  RUN CALIBRATION  *************')
 # OptSolver = 'Newton'
 # OptSolver = 'BFGS'
-# OptSolver = 'CG'
-OptSolver = 'Pseudo'
+OptSolver = 'CG'
+# OptSolver = 'Pseudo'
 # OptSolver = 'Marq'
 source('ModelCalibration.R')
 print('COMPLETED.')

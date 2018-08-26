@@ -2,9 +2,9 @@
 Capital_Low,134604,NA,NA,economy
 Capital_Mid,472979,NA,NA,economy
 Capital_High,312807,NA,NA,economy
-CoalReserves,1.00E+03,NA,NA,resource
-OilReserves,1.00E+03,NA,NA,resource
-GasReserves,1.00E+03,NA,NA,resource
+CoalReserves,1243328,NA,NA,resource
+OilReserves,2655498,NA,NA,resource
+GasReserves,6922247,NA,NA,resource
 CO2Conc,338.8,NA,NA,climate
 Fisheries,2.92E+09,NA,NA,food
 Fishstock,50347682,NA,NA,food

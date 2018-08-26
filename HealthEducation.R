@@ -7,8 +7,8 @@ HealthEducation = function(
 	HealthServices,
 	EducationServices,
 	dEconOutput,
-	TotalFemale_k,
-	TotalPop_k,
+	EconOutput,
+	TotalPop,
 	ZetaE,
 	ZetaH,
 	LambdaE,
@@ -31,9 +31,12 @@ HealthEducation = function(
 		GrowthHealthServices = dEconOutput * LambdaH
 		FemaleEduAttain =  ChiEF1 + EducationServices ^ ChiEF2 
 		FemaleHealthAccess = ChiHF1 + HealthServices ^ ChiHF2
+		EconOutputPC = c(Rich = EconOutput * (1 - Inequality) / (TotalPop * 4 / 5),
+						 Poor = EconOutput * Inequality / (TotalPop * 1 / 5))
+		names(EconOutputPC) = c('Rich','Poor')
 		GeneralHealthAccess_k = sapply(c('Rich','Poor'),
-			function(x) {ChiHA1_k[x] +  HealthServices ^ ChiHA2_k[x] 
-		+ Inequality ^ ChiHA3_k[x]})
+			function(x) {ChiHA1_k[x] +  HealthServices * ChiHA2_k[x] 
+		+ EconOutputPC[x] * ChiHA3_k[x]})
 		names(GeneralHealthAccess_k) = c('Rich','Poor')
 
 		# Stock and Flow Variables

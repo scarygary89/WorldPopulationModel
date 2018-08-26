@@ -212,7 +212,9 @@ ObjCost = function(p, obstime, delta_t, delayyearlength, init, parms, yactual){
 	t0 = min(obstime)
 	tf = max(obstime)
 	ysim = WorldMod(t0,tf,delta_t,delayyearlength,init,parms)
-	modCost(ysim,yactual,x = 'time',y='value')
+	RunCost = modCost(ysim,yactual,x = 'time',y='value')
+	# print(RunCost)
+	return(RunCost)
 }
 
 ParValue = setNames(as.numeric(as.character(ParameterData[CalibParms,'value'])),CalibParms)
@@ -225,22 +227,22 @@ ParMax = setNames(as.numeric(as.character(ParameterData[CalibParms,'max'])),Cali
 print(paste('Optimization Solver: ',OptSolver))
 ptm = proc.time() 
 Fit = modFit(
-		p = ParValue, 
-		lower = ParMin, 
-		upper = ParMax, 
-		f = ObjCost, 
-		obstime=obstime,
-		delta_t=delta_t,
-		delayyearlength = delayyearlength,
-		init =InitValue,
-		parms = ParameterValue, 
-		yactual = yactual, 
-		method = OptSolver,
-		control = list( 
-				verbose = T
-				# print.level = 1 
-			)
-		)		
+	p = ParValue, 
+	lower = ParMin, 
+	upper = ParMax, 
+	f = ObjCost, 
+	obstime=obstime,
+	delta_t=delta_t,
+	delayyearlength = delayyearlength,
+	init =InitValue,
+	parms = ParameterValue, 
+	yactual = yactual, 
+	method = OptSolver,
+	control = list( 
+		verbose = T
+		# print.level = 1 
+	)
+)		
 ptm = proc.time() - ptm
 print(ptm)
 print(suppressWarnings(summary(Fit)))

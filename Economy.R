@@ -17,7 +17,6 @@ Economy = function(
 	CoalCapitalReturn,
 	OilCapitalReturn,
 	GasCapitalReturn,
-	IneqMult,
 	SavingsRate,
 	DeprecRate,
 	EmployedWorkRatio_ijk,
@@ -39,7 +38,6 @@ Economy = function(
 			OilCapitalReturn * LocalOilReserves +
 			GasCapitalReturn * LocalGasReserves
 		CapitalDeprec = Capital * DeprecRate 
-		Inequality =  log(IneqMult * CapitalInvest / EconOutputPC )
 
         # Stock and Flow Variables
 		dCapital = CapitalInvest - CapitalDeprec
@@ -47,8 +45,6 @@ Economy = function(
         # Output
 		list( 	dCapital = dCapital,
 				EconOutput = EconOutput,
-				EconOutputPC = EconOutputPC,
-				Inequality = Inequality)
+				EconOutputPC = EconOutputPC)
 	})
-	
 }

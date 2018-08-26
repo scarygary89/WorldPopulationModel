@@ -13,7 +13,7 @@ ParameterData = read.csv(  file = './DataInput/ParameterInput.csv',sep =',',row.
 CalibData = read.csv(  file = './DataInput/CalibrationInput.csv',sep =',',
 						header = T, fileEncoding="UTF-8-BOM")
 
-InitCO2Concentration = InitialData['CO2Conc','value']
+
 
 ################# STOCK DATA #################
 
@@ -29,7 +29,7 @@ InitValue = c(
 		GasReserves = InitialData['GasReserves','value'],
 
   # Climate Stocks (Global)
-		CO2Conc = InitCO2Concentration,
+		CO2Conc = InitialData['CO2Conc','value'],
 
   # Food Stocks (Global)
 		Fisheries = InitialData['Fisheries','value'],  
@@ -186,7 +186,7 @@ ParameterValue = list(
 		PsiE2_Mid = ParameterData['PsiE2_Mid','value'],		
 		PsiE2_High = ParameterData['PsiE2_High','value'],
 		Gamma = ParameterData['Gamma','value'],
-		RefCO2Conc = InitCO2Concentration,
+		RefCO2Conc = InitialData['CO2Conc','value'],
 		OtherRadForce = ParameterData['OtherRadForce','value'],
 
     # Economy Coefficients
@@ -279,12 +279,6 @@ ParameterValue = list(
 		WaterDemandPC_High = ParameterData['WaterDemandPC_High','value'],
 
     # Health and Education Coefficients
-		EducationInvestFrac_Low = ParameterData['EducationInvestFrac_Low','value'],
-		EducationInvestFrac_Mid = ParameterData['EducationInvestFrac_Mid','value'],
-		EducationInvestFrac_High = ParameterData['EducationInvestFrac_High','value'],
-		HealthInvestFrac_Low = ParameterData['HealthInvestFrac_Low','value'],
-		HealthInvestFrac_Mid = ParameterData['HealthInvestFrac_Mid','value'],
-		HealthInvestFrac_High = ParameterData['HealthInvestFrac_High','value'],
 		ZetaE_Low = ParameterData['ZetaE_Low','value'],
 		ZetaE_Mid = ParameterData['ZetaE_Mid','value'],
 		ZetaE_High = ParameterData['ZetaE_High','value'],

@@ -220,7 +220,6 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								CoalCapitalReturn_Low,
 								OilCapitalReturn_Low,
 								GasCapitalReturn_Low,
-								IneqMult_Low,
 								SavingsRate_Low,
 								DeprecRate_Low,
 								EmployedWorkRatio_ijkr[['Low']],
@@ -242,7 +241,6 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								CoalCapitalReturn_Mid,
 								OilCapitalReturn_Mid,
 								GasCapitalReturn_Mid,
-								IneqMult_Mid,
 								SavingsRate_Mid,
 								DeprecRate_Mid,
 								EmployedWorkRatio_ijkr[['Mid']],
@@ -264,7 +262,6 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								CoalCapitalReturn_High,
 								OilCapitalReturn_High,
 								GasCapitalReturn_High,
-								IneqMult_High,
 								SavingsRate_High,
 								DeprecRate_High,
 								EmployedWorkRatio_ijkr[['High']],
@@ -317,9 +314,23 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 				Low = 	PrevEconOutput_Low, 
 				Mid = 	PrevEconOutput_Mid, 
 				High =	PrevEconOutput_High)			
-
 			ChangeEconOutput_r = EconOutput_r - PrevEconOutput_r
+			names(PrevEconOutput_r) = c('Low','Mid','High')
 			names(ChangeEconOutput_r) = c('Low','Mid','High')
+
+			# Calculate Inequality
+			Inequality_r =  c(
+				Low = IneqMult_Low * 
+					(EconOut_Low[['dCapital']]/stocks[['Capital_Low']]) / 
+					(ChangeEconOutput_r['Low']/PrevEconOutput_r['Low']),
+				Mid = IneqMult_Mid * 
+					(EconOut_Mid[['dCapital']]/stocks[['Capital_Mid']]) / 
+					(ChangeEconOutput_r['Mid']/PrevEconOutput_r['Mid']),
+				High = IneqMult_High * 
+					(EconOut_High[['dCapital']]/stocks[['Capital_High']]) / 
+					(ChangeEconOutput_r['High']/PrevEconOutput_r['High'])
+				)	
+			names(Inequality_r) = c('Low','Mid','High')
 
 			# Global Resources
 			ResourceOut  	= Resource(
@@ -353,18 +364,14 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 
 			# Regional Health and Education System
 
-			TotalFemale_r = c(
-				Low = sum(RegPop_ijr[['Low']][c('F1','F2','F3','F4')]),
-				Mid = sum(RegPop_ijr[['Mid']][c('F1','F2','F3','F4')]),
-				High = sum(RegPop_ijr[['High']][c('F1','F2','F3','F4')])
-			)
+
 			
 			HealthEduOut_Low = HealthEducation(
 								stocks['HealthServices_Low'],
 								stocks['EducationServices_Low'],
 								ChangeEconOutput_r['Low'],
-								TotalFemale_r[['Low']],
-								RegPop_r[['Low']],
+								EconOut_Low[['EconOutput']],
+								RegPop_r['Low'],
 								ZetaE_Low,
 								ZetaH_Low,
 								LambdaE_Low,
@@ -376,14 +383,14 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								ChiHF2_r[['Low']],
 								ChiHA2_kr[['Low']],
 								ChiHA3_kr[['Low']],
-								EconOut_Low[['Inequality']],
+								Inequality_r['Low'],
 								parms)
 			HealthEduOut_Mid = HealthEducation(
 								stocks['HealthServices_Mid'],
 								stocks['EducationServices_Mid'],
 								ChangeEconOutput_r['Mid'],
-								TotalFemale_r[['Mid']],
-								RegPop_r[['Mid']],
+								EconOut_Mid[['EconOutput']],
+								RegPop_r['Mid'],
 								ZetaE_Mid,
 								ZetaH_Mid,
 								LambdaE_Mid,
@@ -395,14 +402,14 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								ChiHF2_r[['Mid']],
 								ChiHA2_kr[['Mid']],
 								ChiHA3_kr[['Mid']],
-								EconOut_Mid[['Inequality']],
+								Inequality_r['Mid'],
 								parms)
 			HealthEduOut_High = HealthEducation(
 								stocks['HealthServices_High'],
 								stocks['EducationServices_High'],
 								ChangeEconOutput_r['High'],
-								TotalFemale_r[['High']],
-								RegPop_r[['High']],
+								EconOut_High[['EconOutput']],
+								RegPop_r['High'],
 				 				ZetaE_High,
 								ZetaH_High,
 								LambdaE_High,
@@ -414,7 +421,7 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								ChiHF2_r[['High']],
 								ChiHA2_kr[['High']],
 								ChiHA3_kr[['High']],
-								EconOut_High[['Inequality']],
+								Inequality_r['High'],
 								parms)
 
 			# Regional Population System 
@@ -489,12 +496,12 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 				EconOut_High[["dCapital"]],
 				
 				# Resource Stocks (Global)		
-				ResourceOut[["dRenewableResources"]],
-				ResourceOut[["dNonrenewableResources"]],
-				 
+				ResourceOut[["dCoalReserves"]],
+				ResourceOut[["dOilReserves"]],
+				ResourceOut[["dGasReserves"]],
+
 				# Climate Stocks (Global)
 				ClimateOut[["dCO2Conc"]],
-				ClimateOut[["dGlobalTemp"]],
 
 				# Food Stocks (Global)
 				FoodOut[["dFisheries"]], 
