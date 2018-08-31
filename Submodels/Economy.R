@@ -12,15 +12,17 @@ Economy = function(
 	OilAccess,
 	GasAccess,
 	TechMult,
+	TechGrowth,
 	LaborInputElast,
 	CapitalInputElast,
-	CoalCapitalReturn,
-	OilCapitalReturn,
-	GasCapitalReturn,
+	CoalInputElast,
+	OilInputElast,
+	GasInputElast,
 	SavingsRate,
 	DeprecRate,
-	EmployedWorkRatio_ijk,
-	Pop_ijk,
+	EmployedWorkRatio_ij,
+	Pop_ij,
+	IneqMult,
 	parms) 
 {
 	with(as.list(c(parms)),{
@@ -29,22 +31,32 @@ Economy = function(
         LocalCoalReserves = CoalAccess * CoalReserves
         LocalOilReserves = OilAccess * OilReserves 
         LocalGasReserves = GasAccess * GasReserves
-		EmployedLabor = sum(Pop_ijk * EmployedWorkRatio_ijk)
+		EmployedLabor = sum(Pop_ij * EmployedWorkRatio_ij)
 		EconOutput 	= TechMult * (EmployedLabor ^ LaborInputElast) * 
-					(Capital ^ CapitalInputElast) 
+						(Capital ^ CapitalInputElast) * 
+						(LocalCoalReserves ^ CoalInputElast) * 
+						(LocalOilReserves ^ OilInputElast) *
+						(LocalGasReserves ^ GasInputElast)
+		logEconOutput = log(TechMult) + LaborInputElast * log(EmployedLabor) +
+						CapitalInputElast * log(Capital) +
+						CoalInputElast * log(LocalCoalReserves) +  
+						OilInputElast * log(LocalOilReserves) +  
+						GasInputElast * log(LocalGasReserves) 
 		EconOutputPC = EconOutput / (TotalPop * 1000)
-		CapitalInvest = EconOutput * SavingsRate + 
-			CoalCapitalReturn * LocalCoalReserves + 
-			OilCapitalReturn * LocalOilReserves +
-			GasCapitalReturn * LocalGasReserves
+		CapitalInvest = EconOutput  * SavingsRate
 		CapitalDeprec = Capital * DeprecRate 
+		Inequality =    IneqMult * log(Capital / EconOutputPC)
 
         # Stock and Flow Variables
 		dCapital = CapitalInvest - CapitalDeprec
+		dTechMult = TechMult * TechGrowth
 
         # Output
 		list( 	dCapital = dCapital,
+				dTechMult = dTechMult,
 				EconOutput = EconOutput,
-				EconOutputPC = EconOutputPC)
+				logEconOutput = logEconOutput,
+				EconOutputPC = EconOutputPC,
+				Inequality = Inequality)
 	})
 }

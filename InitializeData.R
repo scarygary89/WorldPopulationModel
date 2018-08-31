@@ -22,6 +22,9 @@ InitValue = c(
 		Capital_Low = InitialData['Capital_Low','value'],
 		Capital_Mid = InitialData['Capital_Mid','value'],
 		Capital_High = InitialData['Capital_High','value'],
+		TechMult_Low = InitialData['TechMult_Low','value'],
+		TechMult_Mid = InitialData['TechMult_Mid','value'],
+		TechMult_High = InitialData['TechMult_High','value'],
 
   # Resource Stocks (Global)		
 		CoalReserves = InitialData['CoalReserves','value'],
@@ -82,7 +85,7 @@ InitValue = c(
 
 ################# PARAMETER DATA #################
 
-ParameterValue = list(
+ParameterValue = c(
   # Population Coefficients
 		MinDeath_RichM1 = ParameterData['MinDeath_RichM1','value'],
 		MinDeath_PoorM1 = ParameterData['MinDeath_PoorM1','value'],
@@ -121,7 +124,6 @@ ParameterValue = list(
 		BetaH = ParameterData['BetaH','value'],
 
 		FemaleBirthRatio = ParameterData['FemaleBirthRatio','value'],
-		NutritionReq = ParameterData['NutritionReq','value'],
 		PoorFrac = ParameterData['PoorFrac','value'],
 
   # Food Coefficients
@@ -190,24 +192,24 @@ ParameterValue = list(
 		OtherRadForce = ParameterData['OtherRadForce','value'],
 
     # Economy Coefficients
-		CoalCapitalReturn_Low = ParameterData['CoalCapitalReturn_Low','value'],
-		CoalCapitalReturn_Mid = ParameterData['CoalCapitalReturn_Mid','value'],
-		CoalCapitalReturn_High = ParameterData['CoalCapitalReturn_High','value'],
-		OilCapitalReturn_Low = ParameterData['OilCapitalReturn_Low','value'],
-		OilCapitalReturn_Mid = ParameterData['OilCapitalReturn_Mid','value'],
-		OilCapitalReturn_High = ParameterData['OilCapitalReturn_High','value'],
-		GasCapitalReturn_Low = ParameterData['GasCapitalReturn_Low','value'],
-		GasCapitalReturn_Mid = ParameterData['GasCapitalReturn_Mid','value'],
-		GasCapitalReturn_High = ParameterData['GasCapitalReturn_High','value'],
+		CoalInputElast_Low = ParameterData['CoalInputElast_Low','value'],
+		CoalInputElast_Mid = ParameterData['CoalInputElast_Mid','value'],
+		CoalInputElast_High = ParameterData['CoalInputElast_High','value'],
+		OilInputElast_Low = ParameterData['OilInputElast_Low','value'],
+		OilInputElast_Mid = ParameterData['OilInputElast_Mid','value'],
+		OilInputElast_High = ParameterData['OilInputElast_High','value'],
+		GasInputElast_Low = ParameterData['GasInputElast_Low','value'],
+		GasInputElast_Mid = ParameterData['GasInputElast_Mid','value'],
+		GasInputElast_High = ParameterData['GasInputElast_High','value'],
 		CapitalInputElast_Low = ParameterData['CapitalInputElast_Low','value'],
 		CapitalInputElast_Mid = ParameterData['CapitalInputElast_Mid','value'],
 		CapitalInputElast_High = ParameterData['CapitalInputElast_High','value'],
 		LaborInputElast_Low = ParameterData['LaborInputElast_Low','value'],
 		LaborInputElast_Mid = ParameterData['LaborInputElast_Mid','value'],
 		LaborInputElast_High = ParameterData['LaborInputElast_High','value'],
-		TechMult_Low = ParameterData['TechMult_Low','value'],
-		TechMult_Mid = ParameterData['TechMult_Mid','value'],
-		TechMult_High = ParameterData['TechMult_High','value'],
+		TechGrowth_Low = ParameterData['TechGrowth_Low','value'],
+		TechGrowth_Mid = ParameterData['TechGrowth_Mid','value'],
+		TechGrowth_High = ParameterData['TechGrowth_High','value'],
 		CoalAccess_Low = ParameterData['CoalAccess_Low','value'],
 		CoalAccess_Mid = ParameterData['CoalAccess_Mid','value'],
 		CoalAccess_High = ParameterData['CoalAccess_High','value'],
@@ -277,7 +279,8 @@ ParameterValue = list(
 		WaterDemandPC_Low = ParameterData['WaterDemandPC_Low','value'],
 		WaterDemandPC_Mid = ParameterData['WaterDemandPC_Mid','value'],
 		WaterDemandPC_High = ParameterData['WaterDemandPC_High','value'],
-
+		WaterReplDelay = ParameterData['WaterReplDelay','value'],
+		
     # Health and Education Coefficients
 		ZetaE_Low = ParameterData['ZetaE_Low','value'],
 		ZetaE_Mid = ParameterData['ZetaE_Mid','value'],

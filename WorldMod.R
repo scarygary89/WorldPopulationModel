@@ -132,7 +132,7 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 					F4 = as.numeric(stocks['High_F4']))
 			)
 
-			EmployedWorkRatio_ijkr = list(
+			EmployedWorkRatio_ijr = list(
 				Low = c(
 					M1 = LowEmployedWorkRatio_M1,
 					M2 = LowEmployedWorkRatio_M2,
@@ -214,16 +214,18 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								CoalAccess_Low,
 								OilAccess_Low,
 								GasAccess_Low,
-								TechMult_Low,
+								stocks['TechMult_Low'],
+								TechGrowth_Low,
 								LaborInputElast_Low,
 								CapitalInputElast_Low,
-								CoalCapitalReturn_Low,
-								OilCapitalReturn_Low,
-								GasCapitalReturn_Low,
+								CoalInputElast_Low,
+								OilInputElast_Low,
+								GasInputElast_Low,
 								SavingsRate_Low,
 								DeprecRate_Low,
-								EmployedWorkRatio_ijkr[['Low']],
+								EmployedWorkRatio_ijr[['Low']],
 								RegPop_ijr[['Low']],
+								IneqMult_Low,
 								parms)  
 
 			EconOut_Mid    	= Economy(
@@ -235,16 +237,18 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								CoalAccess_Mid,
 								OilAccess_Mid,
 								GasAccess_Mid,
-								TechMult_Mid,
+								stocks['TechMult_Mid'],
+								TechGrowth_Mid,								
 								LaborInputElast_Mid,
 								CapitalInputElast_Mid,
-								CoalCapitalReturn_Mid,
-								OilCapitalReturn_Mid,
-								GasCapitalReturn_Mid,
+								CoalInputElast_Mid,
+								OilInputElast_Mid,
+								GasInputElast_Mid,
 								SavingsRate_Mid,
 								DeprecRate_Mid,
-								EmployedWorkRatio_ijkr[['Mid']],
+								EmployedWorkRatio_ijr[['Mid']],
 								RegPop_ijr[['Mid']],
+								IneqMult_Mid,
 								parms)
 			
 			EconOut_High   	= Economy(
@@ -256,16 +260,18 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								CoalAccess_High,
 								OilAccess_High,
 								GasAccess_High,
-								TechMult_High,
+								stocks['TechMult_High'],
+								TechGrowth_High,								
 								LaborInputElast_High,
 								CapitalInputElast_High,
-								CoalCapitalReturn_High,
-								OilCapitalReturn_High,
-								GasCapitalReturn_High,
+								CoalInputElast_High,
+								OilInputElast_High,
+								GasInputElast_High,
 								SavingsRate_High,
 								DeprecRate_High,
-								EmployedWorkRatio_ijkr[['High']],
+								EmployedWorkRatio_ijr[['High']],
 								RegPop_ijr[['High']],
+								IneqMult_High,
 								parms)  
 
 			EconOutput_r = 	 c( Low = EconOut_Low[['EconOutput']],
@@ -275,16 +281,16 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 			EconOutputPC_r = c( Low = EconOut_Low[['EconOutputPC']], 
 								Mid = EconOut_Mid[['EconOutputPC']], 
 								High = EconOut_High[['EconOutputPC']])
-	# Extract Delayed Values
+		# Extract Delayed Values
 			if (i < (1 + delayyearlength / delta_t)) {
 				PrevFoodDemandPC_Low = stocks['FoodDemandPC_Low'] 
 				PrevFoodDemandPC_Mid = stocks['FoodDemandPC_Mid']
 				PrevFoodDemandPC_High = stocks['FoodDemandPC_High']
 				PrevEconOutput_Low = (1 - InitEconOutputGrowth_Low) * EconOut_Low[['EconOutput']]
 				PrevEconOutput_Mid = (1 - InitEconOutputGrowth_Mid) * EconOut_Mid[['EconOutput']]
-				PrevEconOutput_High = (1 - InitEconOutputGrowth_Low) * EconOut_High[['EconOutput']]
-				PrevEconOutputPC_Low = PrevEconOutput_Low / RegPop_r['Low']
-				PrevEconOutputPC_Mid = PrevEconOutput_Mid / RegPop_r['Mid']
+				PrevEconOutput_High = (1 - InitEconOutputGrowth_High) * EconOut_High[['EconOutput']]
+				PrevEconOutputPC_Low =  PrevEconOutput_Low / RegPop_r['Low']
+				PrevEconOutputPC_Mid =  PrevEconOutput_Mid / RegPop_r['Mid']
 				PrevEconOutputPC_High = PrevEconOutput_High / RegPop_r['High']
 			}
 
@@ -313,24 +319,11 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 			PrevEconOutput_r = c(		
 				Low = 	PrevEconOutput_Low, 
 				Mid = 	PrevEconOutput_Mid, 
-				High =	PrevEconOutput_High)			
+				High =	PrevEconOutput_High)		
+
 			ChangeEconOutput_r = EconOutput_r - PrevEconOutput_r
 			names(PrevEconOutput_r) = c('Low','Mid','High')
 			names(ChangeEconOutput_r) = c('Low','Mid','High')
-
-			# Calculate Inequality
-			Inequality_r =  c(
-				Low = IneqMult_Low * 
-					(EconOut_Low[['dCapital']]/stocks[['Capital_Low']]) / 
-					(ChangeEconOutput_r['Low']/PrevEconOutput_r['Low']),
-				Mid = IneqMult_Mid * 
-					(EconOut_Mid[['dCapital']]/stocks[['Capital_Mid']]) / 
-					(ChangeEconOutput_r['Mid']/PrevEconOutput_r['Mid']),
-				High = IneqMult_High * 
-					(EconOut_High[['dCapital']]/stocks[['Capital_High']]) / 
-					(ChangeEconOutput_r['High']/PrevEconOutput_r['High'])
-				)	
-			names(Inequality_r) = c('Low','Mid','High')
 
 			# Global Resources
 			ResourceOut  	= Resource(
@@ -383,7 +376,7 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								ChiHF2_r[['Low']],
 								ChiHA2_kr[['Low']],
 								ChiHA3_kr[['Low']],
-								Inequality_r['Low'],
+								EconOut_Low[['Inequality']],
 								parms)
 			HealthEduOut_Mid = HealthEducation(
 								stocks['HealthServices_Mid'],
@@ -402,7 +395,7 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								ChiHF2_r[['Mid']],
 								ChiHA2_kr[['Mid']],
 								ChiHA3_kr[['Mid']],
-								Inequality_r['Mid'],
+								EconOut_Mid[['Inequality']],
 								parms)
 			HealthEduOut_High = HealthEducation(
 								stocks['HealthServices_High'],
@@ -421,7 +414,7 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								ChiHF2_r[['High']],
 								ChiHA2_kr[['High']],
 								ChiHA3_kr[['High']],
-								Inequality_r['High'],
+								EconOut_Mid[['Inequality']],
 								parms)
 
 			# Regional Population System 
@@ -484,7 +477,6 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 				FoodOut[['FoodProd_l']],
 				FoodOut[['FoodWaste_l']],
 				FoodOut[['FoodCons_l']]
-				
 			)
 			AuxData[i,] = aux
 
@@ -494,6 +486,9 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 				EconOut_Low[["dCapital"]],
 				EconOut_Mid[["dCapital"]],
 				EconOut_High[["dCapital"]],
+				EconOut_Low[["dTechMult"]],
+				EconOut_Mid[["dTechMult"]],
+				EconOut_High[["dTechMult"]],
 				
 				# Resource Stocks (Global)		
 				ResourceOut[["dCoalReserves"]],
@@ -529,9 +524,8 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 			stocks = stocks + dstocks * delta_t
 			stocks = pmax(stocks,1e-16)
 			StockData[i+1,] = stocks
-
 		}
-	Output = cbind(tspan, StockData[-length(tspan),],AuxData)
+	Output = cbind(tspan, StockData[-(length(tspan)+1),],AuxData)
 	colnames(Output)[1] = 'time'
 	return(Output)
 	})

@@ -2,6 +2,9 @@
 Capital_Low,134604,NA,NA,economy
 Capital_Mid,472979,NA,NA,economy
 Capital_High,312807,NA,NA,economy
+TechMult_Low,0.23111787,1.00E-16,1,economy
+TechMult_Mid,0.71166339,1.00E-16,1,economy
+TechMult_High,0.316468068,1.00E-16,1,economy
 CoalReserves,1243328,NA,NA,resource
 OilReserves,2655498,NA,NA,resource
 GasReserves,6922247,NA,NA,resource

@@ -99,7 +99,7 @@ Food = function(
         AgriWaterDemand = (FoodStock_l['Crops'] / 
             (CropsTechMult*CropLand^LandProdElastCrops))^(1/WaterProdEastCrops) + 
             (FoodStock_l['Livestock']/(LivestockTechMult*GrazeLand^LandProdElastLivestock)) ^ 
-            (1/WaterProdElastLivestock)
+            (1/WaterProdElastLivestock)  ############## change
         FoodCons_l = pmin(TargetFood_l,FoodStock_l)
         names(FoodCons_l) = c('Fish','Livestock','Crops')
         FoodProd_l = pmax(pmin((TargetFood_l - FoodStock_l)/ProdDelay_l,FoodProdCap_l),MinFoodProd)

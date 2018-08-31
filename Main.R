@@ -17,27 +17,27 @@ print('COMPLETED.')
 
 source('InitializeData.R')
 
-# LOAD SUBSYSTEMS
+# LOAD SUBMODELS
 print('------------- LOAD ECONOMY SUBMODEL')
-source('Economy.R')
+source('./Submodels/Economy.R')
 
 print('------------- LOAD RESOURCE SUBMODEL')
-source('Resource.R')
+source('./Submodels/Resource.R')
 
 print('------------- LOAD FOOD SUBMODEL')
-source('Food.R')
+source('./Submodels/Food.R')
 
 print('------------- LOAD CLIMATE SUBMODEL')
-source('Climate.R')
+source('./Submodels/Climate.R')
 
 print('------------- LOAD POPULATION SUBMODEL')
-source('Population.R')
+source('./Submodels/Population.R')
 
 print('------------- LOAD HEALTH & EDUCATION SUBMODEL')
-source('HealthEducation.R')
+source('./Submodels/HealthEducation.R')
 
 print('------------- LOAD WATER SUBMODEL')
-source('Water.R')
+source('./Submodels/Water.R')
 print('ALL COMPONENTS LOADED.')
 
 # PRINT AND PLOT FUNCTION
@@ -49,9 +49,8 @@ printvar = function(x){
 		
 source('plotter.R')
 
-# DEFINE MODEL
+# DEFINE MODEL AND SET TIME STEPS
 print('************* LOAD MAIN MODEL *************')
-
 t0 = 1980
 tf = 2080
 delta_t = 1
@@ -59,28 +58,42 @@ delayyearlength = 1
 source('WorldMod.R')
 print('COMPLETED.')
 
-########################### Initial Simulate
+########################### Run Local Calibration
+print('*****RUN INITIAL PARAMETER ESTIMATION********')
+print('------------- CALIBRATE ECONOMY SUBMODEL')
+source('./Calibration/EconomyCalibration.R')
 
-print('*************  SIMULATE MODEL   *************')
-ptm = proc.time()
+print('------------- CALIBRATE RESOURCE SUBMODEL')
+source('./Calibration/ResourceCalibration.R')
+
+print('------------- CALIBRATE FOOD SUBMODEL')
+source('./Calibration/FoodCalibration.R')
+
+print('------------- CALIBRATE CLIMATE SUBMODEL')
+source('./Calibration/ClimateCalibration.R')
+
+print('------------- CALIBRATE POPULATION SUBMODEL')
+source('./Calibration/PopulationCalibration.R')
+
+print('------------- CALIBRATE HEALTH & EDUCATION SUBMODEL')
+source('./Calibration/HealthEducationCalibration.R')
+
+print('------------- CALIBRATE WATER SUBMODEL')
+source('./Calibration/WaterCalibration.R')
+print('ALL COMPONENTS LOADED.')
+
 OutputData = WorldMod(t0,tf,delta_t,delayyearlength,InitValue,ParameterValue)
-ptm = proc.time() - ptm
-OutputData = data.frame(OutputData)
-print('COMPLETED.')
-print(ptm)
-########################### Plot results
-
 PlotFuncWithObs(OutputData)
 
 ########################### Run Calibration
 
-print('*************  RUN CALIBRATION  *************')
+print('************RUN GLOBAL CALIBRATION***********')
 # OptSolver = 'Newton'
 # OptSolver = 'BFGS'
 OptSolver = 'CG'
 # OptSolver = 'Pseudo'
 # OptSolver = 'Marq'
-source('ModelCalibration.R')
+source('./Calibration/GlobalCalibration.R')
 print('COMPLETED.')
 
 ########################### Simulated Fitted Parameters

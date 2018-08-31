@@ -30,7 +30,7 @@ Water = function(
     # Auxiliary Variables
     ClimateChangeWaterLossRate = DeltaW * TempAnamoly
     ClimateChangeWaterLoss = Freshwater * ClimateChangeWaterLossRate
-    WaterRepl = max(WaterReplMax - Freshwater, 0)
+    WaterRepl = max((WaterReplMax - Freshwater)/WaterReplDelay, 0)
     MunWaterDemand = sum(WaterDemandPC_r * RegPop_r)
     IndWaterDemand = sum(ZetaI1_r + ZetaI2_r * EconOutput_r)
     WaterDemand = AgriWaterDemand + MunWaterDemand + IndWaterDemand
