@@ -23,6 +23,7 @@ Economy = function(
 	EmployedWorkRatio_ij,
 	Pop_ij,
 	IneqMult,
+	IneqInt,
 	parms) 
 {
 	with(as.list(c(parms)),{
@@ -45,7 +46,7 @@ Economy = function(
 		EconOutputPC = EconOutput / (TotalPop * 1000)
 		CapitalInvest = EconOutput  * SavingsRate
 		CapitalDeprec = Capital * DeprecRate 
-		Inequality =    IneqMult * log(Capital / EconOutputPC)
+		Inequality =    IneqInt + IneqMult * log(Capital) / logEconOutput
 
         # Stock and Flow Variables
 		dCapital = CapitalInvest - CapitalDeprec

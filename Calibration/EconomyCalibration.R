@@ -2,6 +2,12 @@
 ########################  ECONOMY SUBMODEL     ########################
 ########################                       ########################
 
+library(foreach)
+library(doParallel)
+numcore = detectCores()
+cl<-makeCluster(numcore) 
+print(cl)
+
 ################# SUBMODEL WITH EXOGENOUS INPUTS
 
 EconomyMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms)
@@ -39,7 +45,8 @@ EconomyMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms)
 				F3 = exog[i,'Pop_F3'],
 				F4 = exog[i,'Pop_F4']
 			)
-			RegPop = sum(RegPop_ij)
+			RegPop = exog[i,'RegPop']
+
 			EconOut	= Economy(
 				exog[i,'CoalReserves'],
 				exog[i,'OilReserves'],
@@ -61,8 +68,10 @@ EconomyMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms)
 				EmployedWorkRatio_ij,
 				RegPop_ij,
 				IneqMult,
+				IneqInt,
 				parms
 			)
+
 			aux = c(
 				EconOut[['Inequality']],
 				EconOut[['EconOutput']],
@@ -146,10 +155,12 @@ EconParms_Low = c(
 	SavingsRate = as.numeric(ParameterValue['SavingsRate_Low']),
 	DeprecRate = as.numeric(ParameterValue['DeprecRate_Low']),
 	IneqMult = as.numeric(ParameterValue['IneqMult_Low']),
+	IneqInt = as.numeric(ParameterValue['IneqInt_Low']),
 	InitEconOutputGrowth = as.numeric(ParameterValue['InitEconOutputGrowth_Low']),
 	CoalInputElast = as.numeric(ParameterValue['CoalInputElast_Low']),
 	OilInputElast = as.numeric(ParameterValue['OilInputElast_Low']),
 	GasInputElast = as.numeric(ParameterValue['GasInputElast_Low'])
+
 )
 
 EconParms_Mid = c( 	
@@ -170,6 +181,7 @@ EconParms_Mid = c(
 	SavingsRate = as.numeric(ParameterValue['SavingsRate_Mid']),
 	DeprecRate = as.numeric(ParameterValue['DeprecRate_Mid']),
 	IneqMult = as.numeric(ParameterValue['IneqMult_Mid']),
+	IneqInt = as.numeric(ParameterValue['IneqInt_Mid']),
 	InitEconOutputGrowth = as.numeric(ParameterValue['InitEconOutputGrowth_Mid']),
 	CoalInputElast = as.numeric(ParameterValue['CoalInputElast_Mid']),
 	OilInputElast = as.numeric(ParameterValue['OilInputElast_Mid']),
@@ -194,6 +206,7 @@ EconParms_High = c(
 	SavingsRate = as.numeric(ParameterValue['SavingsRate_High']),
 	DeprecRate = as.numeric(ParameterValue['DeprecRate_High']),
 	IneqMult = as.numeric(ParameterValue['IneqMult_High']),
+	IneqInt = as.numeric(ParameterValue['IneqInt_High']),
 	InitEconOutputGrowth = as.numeric(ParameterValue['InitEconOutputGrowth_High']),
 	CoalInputElast = as.numeric(ParameterValue['CoalInputElast_High']),
 	OilInputElast = as.numeric(ParameterValue['OilInputElast_High']),
@@ -231,7 +244,8 @@ EconExog_Low = na.omit(cbind(
 	Pop_F4 = CalibData[,'Low_F4'],
 	CoalReserves = CalibData[,'CoalReserves'],
 	OilReserves = CalibData[,'OilReserves'],
-	GasReserves = CalibData[,'GasReserves']
+	GasReserves = CalibData[,'GasReserves'],
+	RegPop = CalibData[,'LowPop']
 ))
 
 EconExog_Mid = na.omit(cbind(
@@ -246,7 +260,8 @@ EconExog_Mid = na.omit(cbind(
 	Pop_F4 = CalibData[,'Mid_F4'],
 	CoalReserves = CalibData[,'CoalReserves'],
 	OilReserves = CalibData[,'OilReserves'],
-	GasReserves = CalibData[,'GasReserves']
+	GasReserves = CalibData[,'GasReserves'],
+	RegPop = CalibData[,'LowPop']
 ))
 
 EconExog_High = na.omit(cbind(
@@ -261,7 +276,9 @@ EconExog_High = na.omit(cbind(
 	Pop_F4 = CalibData[,'High_F4'],
 	CoalReserves = CalibData[,'CoalReserves'],
 	OilReserves = CalibData[,'OilReserves'],
-	GasReserves = CalibData[,'GasReserves']
+	GasReserves = CalibData[,'GasReserves'],
+	RegPop = CalibData[,'LowPop']
+
 ))
 
 ################# LOAD ACTUAL DATA
@@ -277,8 +294,8 @@ EconActual_Low = na.omit(melt(
 EconActual_Low$variable = as.character(EconActual_Low$variable)
 EconActual_Low = EconActual_Low[,c('variable','time','value')]
 # EconActual_Low$error[EconActual_Low$variable == 'EconOutput'] = 
-	# mean(EconActual_Low$value[EconActual_Low$variable == 'EconOutput']) #/ 
-	# (EconActual_Low$time[EconActual_Low$variable == 'EconOutput'] - 1979) ^ 2
+# 	mean(EconActual_Low$value[EconActual_Low$variable == 'EconOutput']) #/ 
+# 	# (EconActual_Low$time[EconActual_Low$variable == 'EconOutput'] - 1979) ^ 2
 EconActual_Low$error[EconActual_Low$variable == 'logEconOutput'] = 
 	mean(EconActual_Low$value[EconActual_Low$variable == 'logEconOutput']) #/ 
 	# (EconActual_Low$time[EconActual_Low$variable == 'logEconOutput'] - 1979) ^ 2
@@ -300,8 +317,8 @@ EconActual_Mid = na.omit(melt(
 EconActual_Mid$variable = as.character(EconActual_Mid$variable)
 EconActual_Mid = EconActual_Mid[,c('variable','time','value')]
 # EconActual_Mid$error[EconActual_Mid$variable == 'EconOutput'] = 
-	# mean(EconActual_Mid$value[EconActual_Mid$variable == 'EconOutput']) #/ 
-	# (EconActual_Mid$time[EconActual_Mid$variable == 'EconOutput'] - 1979) ^ 2
+# 	mean(EconActual_Mid$value[EconActual_Mid$variable == 'EconOutput']) #/ 
+# 	# (EconActual_Mid$time[EconActual_Mid$variable == 'EconOutput'] - 1979) ^ 2
 EconActual_Mid$error[EconActual_Mid$variable == 'logEconOutput'] = 
 	mean(EconActual_Mid$value[EconActual_Mid$variable == 'logEconOutput']) #/ 
 	# (EconActual_Mid$time[EconActual_Mid$variable == 'logEconOutput'] - 1979) ^ 2
@@ -323,8 +340,8 @@ EconActual_High = na.omit(melt(
 EconActual_High$variable = as.character(EconActual_High$variable)
 EconActual_High = EconActual_High[,c('variable','time','value')]
 # EconActual_High$error[EconActual_High$variable == 'EconOutput'] = 
-	# mean(EconActual_High$value[EconActual_High$variable == 'EconOutput']) #/ 
-	# (EconActual_High$time[EconActual_High$variable == 'EconOutput'] - 1979) ^ 2
+# 	mean(EconActual_High$value[EconActual_High$variable == 'EconOutput']) # / 
+# 	# (EconActual_High$time[EconActual_High$variable == 'EconOutput'] - 1979) ^ 2
 EconActual_High$error[EconActual_High$variable == 'logEconOutput'] = 
 	mean(EconActual_High$value[EconActual_High$variable == 'logEconOutput']) #/ 
 	# (EconActual_High$time[EconActual_High$variable == 'logEconOutput'] - 1979) ^ 2
@@ -348,7 +365,8 @@ EconCalibPars_Low =  rbind(
 	GasInputElast = as.numeric(ParameterData['GasInputElast_Low',]),
 	CapitalInputElast = as.numeric(ParameterData['CapitalInputElast_Low',]),
 	LaborInputElast = as.numeric(ParameterData['LaborInputElast_Low',]),
-	IneqMult = as.numeric(ParameterData['IneqMult_Low',])
+	IneqMult = as.numeric(ParameterData['IneqMult_Low',]),
+	IneqInt = as.numeric(ParameterData['IneqInt_Low',])
 )
 EconParValue_Low = EconCalibPars_Low[,1]
 EconParMin_Low =  EconCalibPars_Low[,2]
@@ -364,7 +382,8 @@ EconCalibPars_Mid =  rbind(
 	GasInputElast = as.numeric(ParameterData['GasInputElast_Mid',]),
 	CapitalInputElast = as.numeric(ParameterData['CapitalInputElast_Mid',]),
 	LaborInputElast = as.numeric(ParameterData['LaborInputElast_Mid',]),
-	IneqMult = as.numeric(ParameterData['IneqMult_Mid',])
+	IneqMult = as.numeric(ParameterData['IneqMult_Mid',]),
+	IneqInt = as.numeric(ParameterData['IneqInt_Mid',])
 )
 EconParValue_Mid = EconCalibPars_Mid[,1]
 EconParMin_Mid =  EconCalibPars_Mid[,2]
@@ -380,7 +399,8 @@ EconCalibPars_High =  rbind(
 	GasInputElast = as.numeric(ParameterData['GasInputElast_High',]),
 	CapitalInputElast = as.numeric(ParameterData['CapitalInputElast_High',]),
 	LaborInputElast = as.numeric(ParameterData['LaborInputElast_High',]),
-	IneqMult = as.numeric(ParameterData['IneqMult_High',])
+	IneqMult = as.numeric(ParameterData['IneqMult_High',]),
+	IneqInt = as.numeric(ParameterData['IneqInt_High',])
 )
 EconParValue_High = EconCalibPars_High[,1]
 EconParMin_High =  EconCalibPars_High[,2]
@@ -388,13 +408,15 @@ EconParMax_High = EconCalibPars_High[,3]
 
 ################# 2-STAGE FIT PARAMETERS
 
-N = 100
-EconResults_Low = list()
-EconResults_Mid = list()
-EconResults_High = list()
-
-for(i in 1:N)
+N = 1000
+registerDoParallel(cl)
+ptm = proc.time() 
+EconResults_Low = foreach(i=1:N,.packages='FME') %dopar%
 {
+	EconParValue_Low = sapply(names(EconParMin_Low),function(x) {
+		runif(1,EconParMin_Low[x],EconParMax_Low[x])
+	})	
+
 	EconFitPseudo_Low = EconomyFit(
 		parvalue = EconParValue_Low,
 		parmin = EconParMin_Low,
@@ -410,16 +432,28 @@ for(i in 1:N)
 
 	EconFit_Low = EconomyFit(
 		parvalue = coef(EconFitPseudo_Low),
+		# parvalue = EconParValue_Low,
 		parmin = EconParMin_Low,
 		parmax = EconParMax_Low,
 		yactual = EconActual_Low,
-		optmethod = 'Marq',
+		optmethod = 'CG',
 		delta_t = delta_t,
 		delayyearlength = delayyearlength,
 		exog = EconExog_Low,
 		init = EconInit_Low,
 		parms = EconParms_Low)
+	
+	return(EconFit_Low)
+}
+ptm = proc.time() - ptm
+print(ptm)
+ptm = proc.time() 
+EconResults_Mid = foreach(i=1:N,.packages='FME') %dopar%
+{
 
+	EconParValue_Mid = sapply(names(EconParMin_Mid),function(x) {
+		runif(1,EconParMin_Mid[x],EconParMax_Mid[x])
+	})
 
 	EconFitPseudo_Mid = EconomyFit(
 		parvalue = EconParValue_Mid,
@@ -436,32 +470,44 @@ for(i in 1:N)
 
 	EconFit_Mid = EconomyFit(
 		parvalue = coef(EconFitPseudo_Mid),
+		# parvalue = EconParValue_High,
 		parmin = EconParMin_Mid,
 		parmax = EconParMax_Mid,
 		yactual = EconActual_Mid,
-		optmethod = 'Marq',
+		optmethod = 'CG',
 		delta_t = delta_t,
 		delayyearlength = delayyearlength,
 		exog = EconExog_Mid,
 		init = EconInit_Mid,
 		parms = EconParms_Mid)
 
+	return(EconFit_Mid)
+}
+ptm = proc.time() - ptm
+print(ptm)
+ptm = proc.time() 	
+EconResults_High = foreach(i = 1:N,.packages='FME') %dopar%
+{
+	EconParValue_High = sapply(names(EconParMin_High),function(x) {
+		runif(1,EconParMin_High[x],EconParMax_High[x])
+	})	
 
-	EconFitPseudo_High = EconomyFit(
-		parvalue = EconParValue_High,
-		parmin = EconParMin_High,
-		parmax = EconParMax_High,
-		yactual = EconActual_High,
-		optmethod = 'Pseudo',
-		# control = list(numiter = 100000),
-		delta_t = delta_t,
-		delayyearlength = delayyearlength,
-		exog = EconExog_High,
-		init = EconInit_High,
-		parms = EconParms_High)
+	# EconFitPseudo_High = EconomyFit(
+	# 	parvalue = EconParValue_High,
+	# 	parmin = EconParMin_High,
+	# 	parmax = EconParMax_High,
+	# 	yactual = EconActual_High,
+	# 	optmethod = 'Pseudo',
+	# 	# control = list(numiter = 100000),
+	# 	delta_t = delta_t,
+	# 	delayyearlength = delayyearlength,
+	# 	exog = EconExog_High,
+	# 	init = EconInit_High,
+	# 	parms = EconParms_High)
 
 	EconFit_High = EconomyFit(
-		parvalue = coef(EconFitPseudo_High),
+		# parvalue = coef(EconFitPseudo_High),
+		parvalue = EconParValue_High,
 		parmin = EconParMin_High,
 		parmax = EconParMax_High,
 		yactual = EconActual_High,
@@ -472,86 +518,102 @@ for(i in 1:N)
 		init = EconInit_High,
 		parms = EconParms_High)
 
-	EconParValue_Low = sapply(names(EconParMin_Low),function(x) {
-		runif(1,EconParMin_Low[x],EconParMax_Low[x])
-	})
-	EconParValue_Mid = sapply(names(EconParMin_Mid),function(x) {
-		runif(1,EconParMin_Mid[x],EconParMax_Mid[x])
-	})
-	EconParValue_High = sapply(names(EconParMin_High),function(x) {
-		runif(1,EconParMin_High[x],EconParMax_High[x])
-	})
-
-	EconResults_Low[[i]] = EconFit_Low
-	EconResults_Mid[[i]] = EconFit_Mid
-	EconResults_High[[i]] = EconFit_High
+	return(EconFit_High)
 }
-
+ptm = proc.time() - ptm
+print(ptm)
+stopCluster(cl)
 
 ################# PLOT FITTED VALUES
 
-EconFitParm_Low  = EconParms_Low
-EconFitParm_Low[names(coef(EconFit_Low))] = coef(EconFit_Low)
-EconFitData_Low = EconomyMod(min(EconExog_Low$time),max(EconExog_Low$time),
-	delta_t,delayyearlength,EconExog_Low,EconInit_Low,EconFitParm_Low)
+CalibPlotFunc(EconResults_Low,EconActual_Low,EconParms_Low,EconExog_Low,EconInit_Low,
+	EconomyMod,delta_t,delayyearlength,'EconomySubmodel_LowIncome')
+CalibPlotFunc(EconResults_Mid,EconActual_Mid,EconParms_Mid,EconExog_Mid,
+	EconInit_Mid,EconomyMod,delta_t,delayyearlength,'EconomySubmodel_MiddleIncome')
+CalibPlotFunc(EconResults_High,EconActual_High,EconParms_High,EconExog_High,
+	EconInit_High,EconomyMod,delta_t,delayyearlength,'EconomySubmodel_HighIncome')
 
-dev.new()
-plot(EconActual_Low[EconActual_Low$variable %in% 'logEconOutput',c('time')],
-	exp(EconActual_Low[EconActual_Low$variable %in% 'logEconOutput',c('value')]),
-	xlab = 'time',ylab = 'value',
-	col = 'red',ylim = c(0,9e11), main = 'EconOutput -- Low Income')
-lines(EconFitData_Low[,'time'],EconFitData_Low[,'EconOutput'],col = 'blue')
 
-dev.new()
-plot(EconActual_Low[EconActual_Low$variable %in% 'Capital',c('time','value')],
-	col = 'red',ylim = c(0,500000), main = 'Capital -- Low Income')
-lines(EconFitData_Low[,'time'],EconFitData_Low[,'Capital'],col = 'blue')
+################# REASSEMBLE GLOBAL PARAMTER VECTOR
+BestParmExtract = function(CalibModResults,Parms){
+	SSR = sapply(CalibModResults,function(x) x$ssr)
+	BestFit = CalibModResults[[which.min(SSR[which(SSR != 0)])]]
+	FitParm  = Parms
+	FitParm[names(coef(BestFit))] = coef(BestFit)
+	return(FitParm)
+}
 
-dev.new()
-plot(EconActual_Low[EconActual_Low$variable %in% 'Inequality',c('time','value')],
-	col = 'red',ylim = c(0,1), main = 'Inequality -- Low Income')
-lines(EconFitData_Low[,'time'],EconFitData_Low[,'Inequality'],col = 'blue')
+EconFitParm_Low = BestParmExtract(EconResults_Low,EconParms_Low)
+EconFitParm_Mid = BestParmExtract(EconResults_Mid,EconParms_Mid)
+EconFitParm_High = BestParmExtract(EconResults_High,EconParms_High)
 
-EconFitParm_Mid  = EconParms_Mid
-EconFitParm_Mid[names(coef(EconFit_Mid))] = coef(EconFit_Mid)
-EconFitData_Mid = EconomyMod(min(EconExog_Mid$time),max(EconExog_Mid$time),
-	delta_t,delayyearlength,EconExog_Mid,EconInit_Mid,EconFitParm_Mid)
+LocalFitParmameterValue['CoalAccess_Low'] = EconFitParm_Low['CoalAccess']
+LocalFitParmameterValue['CoalAccess_Mid'] = EconFitParm_Mid['CoalAccess']
+LocalFitParmameterValue['CoalAccess_Mid'] = EconFitParm_High['CoalAccess']
+LocalFitParmameterValue['OilAccess_Low'] = EconFitParm_Low['OilAccess']
+LocalFitParmameterValue['OilAccess_Mid'] = EconFitParm_Mid['OilAccess']
+LocalFitParmameterValue['OilAccess_Mid'] = EconFitParm_High['OilAccess']
+LocalFitParmameterValue['GasAccess_Low'] = EconFitParm_Low['GasAccess']
+LocalFitParmameterValue['GasAccess_Mid'] = EconFitParm_Mid['GasAccess']
+LocalFitParmameterValue['GasAccess_Mid'] = EconFitParm_High['GasAccess']
+LocalFitParmameterValue['TechGrowth_Low'] = EconFitParm_Low['TechGrowth']
+LocalFitParmameterValue['TechGrowth_Mid'] = EconFitParm_Mid['TechGrowth']
+LocalFitParmameterValue['TechGrowth_Mid'] = EconFitParm_High['TechGrowth']
+LocalFitParmameterValue['LaborInputElast_Low'] = EconFitParm_Low['LaborInputElast']
+LocalFitParmameterValue['LaborInputElast_Mid'] = EconFitParm_Mid['LaborInputElast']
+LocalFitParmameterValue['LaborInputElast_Mid'] = EconFitParm_High['LaborInputElast']
+LocalFitParmameterValue['CapitalInputElast_Low'] = EconFitParm_Low['CapitalInputElast']
+LocalFitParmameterValue['CapitalInputElast_Mid'] = EconFitParm_Mid['CapitalInputElast']
+LocalFitParmameterValue['CapitalInputElast_Mid'] = EconFitParm_High['CapitalInputElast']
+LocalFitParmameterValue['LowEmployedWorkRatio_M1'] = EconFitParm_Low['EmployedWorkRatio_M1']
+LocalFitParmameterValue['MidEmployedWorkRatio_M1'] = EconFitParm_Mid['EmployedWorkRatio_M1']
+LocalFitParmameterValue['HighEmployedWorkRatio_M1'] = EconFitParm_High['EmployedWorkRatio_M1']
+LocalFitParmameterValue['LowEmployedWorkRatio_M2'] = EconFitParm_Low['EmployedWorkRatio_M2']
+LocalFitParmameterValue['MidEmployedWorkRatio_M2'] = EconFitParm_Mid['EmployedWorkRatio_M2']
+LocalFitParmameterValue['HighEmployedWorkRatio_M2'] = EconFitParm_High['EmployedWorkRatio_M2']
+LocalFitParmameterValue['LowEmployedWorkRatio_M3'] = EconFitParm_Low['EmployedWorkRatio_M3']
+LocalFitParmameterValue['MidEmployedWorkRatio_M3'] = EconFitParm_Mid['EmployedWorkRatio_M3']
+LocalFitParmameterValue['HighEmployedWorkRatio_M3'] = EconFitParm_High['EmployedWorkRatio_M3']
+LocalFitParmameterValue['LowEmployedWorkRatio_M4'] = EconFitParm_Low['EmployedWorkRatio_M4']
+LocalFitParmameterValue['MidEmployedWorkRatio_M4'] = EconFitParm_Mid['EmployedWorkRatio_M4']
+LocalFitParmameterValue['HighEmployedWorkRatio_M4'] = EconFitParm_High['EmployedWorkRatio_M4']
+LocalFitParmameterValue['LowEmployedWorkRatio_F1'] = EconFitParm_Low['EmployedWorkRatio_F1']
+LocalFitParmameterValue['MidEmployedWorkRatio_F1'] = EconFitParm_Mid['EmployedWorkRatio_F1']
+LocalFitParmameterValue['HighEmployedWorkRatio_F1'] = EconFitParm_High['EmployedWorkRatio_F1']
+LocalFitParmameterValue['LowEmployedWorkRatio_F2'] = EconFitParm_Low['EmployedWorkRatio_F2']
+LocalFitParmameterValue['MidEmployedWorkRatio_F2'] = EconFitParm_Mid['EmployedWorkRatio_F2']
+LocalFitParmameterValue['HighEmployedWorkRatio_F2'] = EconFitParm_High['EmployedWorkRatio_F2']
+LocalFitParmameterValue['LowEmployedWorkRatio_F3'] = EconFitParm_Low['EmployedWorkRatio_F3']
+LocalFitParmameterValue['MidEmployedWorkRatio_F3'] = EconFitParm_Mid['EmployedWorkRatio_F3']
+LocalFitParmameterValue['HighEmployedWorkRatio_F3'] = EconFitParm_High['EmployedWorkRatio_F3']
+LocalFitParmameterValue['LowEmployedWorkRatio_F4'] = EconFitParm_Low['EmployedWorkRatio_F4']
+LocalFitParmameterValue['MidEmployedWorkRatio_F4'] = EconFitParm_Mid['EmployedWorkRatio_F4']
+LocalFitParmameterValue['HighEmployedWorkRatio_F4'] = EconFitParm_High['EmployedWorkRatio_F4']
+LocalFitParmameterValue['SavingsRate_Low'] = EconFitParm_Low['SavingsRate']
+LocalFitParmameterValue['SavingsRate_Mid'] = EconFitParm_Mid['SavingsRate']
+LocalFitParmameterValue['SavingsRate_High'] = EconFitParm_High['SavingsRate']
+LocalFitParmameterValue['DeprecRate_Low'] = EconFitParm_Low['DeprecRate']
+LocalFitParmameterValue['DeprecRate_Mid'] = EconFitParm_Mid['DeprecRate']
+LocalFitParmameterValue['DeprecRate_High'] = EconFitParm_High['DeprecRate']
+LocalFitParmameterValue['IneqMult_Low'] = EconFitParm_Low['IneqMult']
+LocalFitParmameterValue['IneqMult_Mid'] = EconFitParm_Mid['IneqMult']
+LocalFitParmameterValue['IneqMult_High'] = EconFitParm_High['IneqMult']
+LocalFitParmameterValue['IneqInt_Low'] = EconFitParm_Low['IneqInt']
+LocalFitParmameterValue['IneqInt_Mid'] = EconFitParm_Mid['IneqInt']
+LocalFitParmameterValue['IneqInt_High'] = EconFitParm_High['IneqInt']
+LocalFitParmameterValue['InitEconOutputGrowth_Low'] = EconFitParm_Low['InitEconOutputGrowth']
+LocalFitParmameterValue['InitEconOutputGrowth_Mid'] = EconFitParm_Mid['InitEconOutputGrowth']
+LocalFitParmameterValue['InitEconOutputGrowth_High'] = EconFitParm_High['InitEconOutputGrowth']
+LocalFitParmameterValue['CoalInputElast_Low'] = EconFitParm_Low['CoalInputElast']
+LocalFitParmameterValue['CoalInputElast_Mid'] = EconFitParm_Mid['CoalInputElast']
+LocalFitParmameterValue['CoalInputElast_High'] = EconFitParm_High['CoalInputElast']
+LocalFitParmameterValue['OilInputElast_Low'] = EconFitParm_Low['OilInputElast']
+LocalFitParmameterValue['OilInputElast_Mid'] = EconFitParm_Mid['OilInputElast']
+LocalFitParmameterValue['OilInputElast_High'] = EconFitParm_High['OilInputElast']
+LocalFitParmameterValue['GasInputElast_Low'] = EconFitParm_Low['GasInputElast']
+LocalFitParmameterValue['GasInputElast_Mid'] = EconFitParm_Mid['GasInputElast']
+LocalFitParmameterValue['GasInputElast_High'] = EconFitParm_High['GasInputElast']
+LocalFitInitValue['TechMult_Low'] = EconFitParm_Low['TechMult']
+LocalFitInitValue['TechMult_Mid'] = EconFitParm_Mid['TechMult']
+LocalFitInitValue['TechMult_High'] = EconFitParm_High['TechMult']
 
-dev.new()
-plot(EconActual_Mid[EconActual_Mid$variable %in% 'logEconOutput',c('time')],
-	exp(EconActual_Mid[EconActual_Mid$variable %in% 'logEconOutput',c('value')]),
-	xlab = 'time',ylab = 'value',
-	col = 'red',ylim = c(0,4e13), main = 'EconOutput -- Mid Income')
-lines(EconFitData_Mid[,'time'],EconFitData_Mid[,'EconOutput'],col = 'blue')
-
-dev.new()
-plot(EconActual_Mid[EconActual_Mid$variable %in% 'Capital',c('time','value')],
-	col = 'red',ylim = c(0,500000), main = 'Capital -- Mid Income')
-lines(EconFitData_Mid[,'time'],EconFitData_Mid[,'Capital'],col = 'blue')
-
-dev.new()
-plot(EconActual_Mid[EconActual_Mid$variable %in% 'Inequality',c('time','value')],
-	col = 'red',ylim = c(0,1), main = 'Inequality -- Mid Income')
-lines(EconFitData_Mid[,'time'],EconFitData_Mid[,'Inequality'],col = 'blue')
-
-EconFitParm_High  = EconParms_High
-EconFitParm_High[names(coef(EconFit_High))] = coef(EconFit_High)
-EconFitData_High = EconomyMod(min(EconExog_High$time),max(EconExog_High$time),
-	delta_t,delayyearlength,EconExog_High,EconInit_High,EconFitParm_High)
-
-dev.new()
-plot(EconActual_High[EconActual_High$variable %in% 'logEconOutput',c('time')],
-	exp(EconActual_High[EconActual_High$variable %in% 'logEconOutput',c('value')]),
-	xlab = 'time',ylab = 'value',
-	col = 'red',ylim = c(0,6e13), main = 'EconOutput -- High Income')
-lines(EconFitData_High[,'time'],EconFitData_High[,'EconOutput'],col = 'blue')
-
-dev.new()
-plot(EconActual_High[EconActual_High$variable %in% 'Capital',c('time','value')],
-	col = 'red',ylim = c(0,500000), main = 'Capital -- High Income')
-lines(EconFitData_High[,'time'],EconFitData_High[,'Capital'],col = 'blue')
-
-dev.new()
-plot(EconActual_High[EconActual_High$variable %in% 'Inequality',c('time','value')],
-	col = 'red',ylim = c(0,1), main = 'Inequality -- High Income')
-lines(EconFitData_High[,'time'],EconFitData_High[,'Inequality'],col = 'blue')

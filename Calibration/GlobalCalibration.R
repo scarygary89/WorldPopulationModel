@@ -221,8 +221,6 @@ ParValue = setNames(as.numeric(as.character(ParameterData[CalibParms,'value'])),
 ParMin = setNames(as.numeric(as.character(ParameterData[CalibParms,'min'])),CalibParms)
 ParMax = setNames(as.numeric(as.character(ParameterData[CalibParms,'max'])),CalibParms)
 
-
-
 ####################### OPTIMIZATION
 print(paste('Optimization Solver: ',OptSolver))
 ptm = proc.time() 

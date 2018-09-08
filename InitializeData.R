@@ -129,6 +129,7 @@ ParameterValue = c(
   # Food Coefficients
 		ThetaU = ParameterData['ThetaU','value'],
 		ZetaU = ParameterData['ZetaU','value'],
+		FishingTech = ParameterData['FishingTech','value'],
 		GrazeLandGrowthRate = ParameterData['GrazeLandGrowthRate','value'],
 		GrazeLandLossRate = ParameterData['GrazeLandLossRate','value'],
 		CropLandGrowthRate = ParameterData['CropLandGrowthRate','value'],
@@ -139,16 +140,13 @@ ParameterValue = c(
 		WaterProdEastCrops = ParameterData['WaterProdEastCrops','value'],
 		LandProdElastCrops = ParameterData['LandProdElastCrops','value'],
 		CropsTechMult = ParameterData['CropsTechMult','value'],
-
 		FoodNutrConvMultiplier = ParameterData['FoodNutrConvMultiplier','value'],
 		FoodNutrConv_Fish = ParameterData['FoodNutrConv_Fish','value'],
 		FoodNutrConv_Livestock = ParameterData['FoodNutrConv_Livestock','value'],
 		FoodNutrConv_Crops = ParameterData['FoodNutrConv_Crops','value'],
-		
 		FoodConsFrac_Fish = ParameterData['FoodConsFrac_Fish','value'],
 		FoodConsFrac_Livestock = ParameterData['FoodConsFrac_Livestock','value'],
 		FoodConsFrac_Crops = ParameterData['FoodConsFrac_Crops','value'],
-		
 		FishProdDelay = ParameterData['FishProdDelay','value'],
 		LivestockProdDelay = ParameterData['LivestockProdDelay','value'],
 		CropsProdDelay = ParameterData['CropsProdDelay','value'],
@@ -252,6 +250,9 @@ ParameterValue = c(
 		IneqMult_Low = ParameterData['IneqMult_Low','value'],
 		IneqMult_Mid = ParameterData['IneqMult_Mid','value'],
 		IneqMult_High = ParameterData['IneqMult_High','value'],
+		IneqInt_Low = ParameterData['IneqInt_Low','value'],
+		IneqInt_Mid = ParameterData['IneqInt_Mid','value'],
+		IneqInt_High = ParameterData['IneqInt_High','value'],
 		InitEconOutputGrowth_Low = ParameterData['InitEconOutputGrowth_Low','value'],
 		InitEconOutputGrowth_Mid = ParameterData['InitEconOutputGrowth_Mid','value'],
 		InitEconOutputGrowth_High = ParameterData['InitEconOutputGrowth_High','value'],

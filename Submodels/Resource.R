@@ -27,9 +27,9 @@ Resource = function(
 			High = GasConsIntensity_High)
 
 		# Auxiliary Variables
-		CoalCons = sum(EconOutput_r * CoalConsIntensity_r)
-		OilCons = sum(EconOutput_r * OilConsIntensity_r)
-		GasCons = sum(EconOutput_r * GasConsIntensity_r)
+		CoalCons = sum(log(EconOutput_r) * CoalConsIntensity_r)
+		OilCons = sum(log(EconOutput_r) * OilConsIntensity_r)
+		GasCons = sum(log(EconOutput_r) * GasConsIntensity_r)
 
 		# Stock and Flow Variables
 		dCoalReserves = - CoalCons

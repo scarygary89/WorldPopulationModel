@@ -1,5 +1,5 @@
 ########################                       ########################
-######################## POUPULATION SUBSYSTEM ########################
+########################   WORLD SYSTEM MODEL  ########################
 ########################                       ########################
 
 
@@ -226,6 +226,7 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								EmployedWorkRatio_ijr[['Low']],
 								RegPop_ijr[['Low']],
 								IneqMult_Low,
+								IneqInt_Low,
 								parms)  
 
 			EconOut_Mid    	= Economy(
@@ -249,6 +250,7 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								EmployedWorkRatio_ijr[['Mid']],
 								RegPop_ijr[['Mid']],
 								IneqMult_Mid,
+								IneqInt_Mid,
 								parms)
 			
 			EconOut_High   	= Economy(
@@ -272,6 +274,7 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								EmployedWorkRatio_ijr[['High']],
 								RegPop_ijr[['High']],
 								IneqMult_High,
+								IneqInt_High,
 								parms)  
 
 			EconOutput_r = 	 c( Low = EconOut_Low[['EconOutput']],
@@ -286,14 +289,13 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 				PrevFoodDemandPC_Low = stocks['FoodDemandPC_Low'] 
 				PrevFoodDemandPC_Mid = stocks['FoodDemandPC_Mid']
 				PrevFoodDemandPC_High = stocks['FoodDemandPC_High']
-				PrevEconOutput_Low = (1 - InitEconOutputGrowth_Low) * EconOut_Low[['EconOutput']]
-				PrevEconOutput_Mid = (1 - InitEconOutputGrowth_Mid) * EconOut_Mid[['EconOutput']]
-				PrevEconOutput_High = (1 - InitEconOutputGrowth_High) * EconOut_High[['EconOutput']]
-				PrevEconOutputPC_Low =  PrevEconOutput_Low / RegPop_r['Low']
-				PrevEconOutputPC_Mid =  PrevEconOutput_Mid / RegPop_r['Mid']
-				PrevEconOutputPC_High = PrevEconOutput_High / RegPop_r['High']
+				PrevEconOutput_Low = EconOut_Low[['EconOutput']] / (1 + InitEconOutputGrowth_Low) 
+				PrevEconOutput_Mid = EconOut_Mid[['EconOutput']] / (1 + InitEconOutputGrowth_Mid)
+				PrevEconOutput_High = EconOut_High[['EconOutput']] / (1 + InitEconOutputGrowth_High)
+				PrevEconOutputPC_Low =  PrevEconOutput_Low / (RegPop_r['Low'] * 1000)
+				PrevEconOutputPC_Mid =  PrevEconOutput_Mid / (RegPop_r['Mid'] * 1000)
+				PrevEconOutputPC_High = PrevEconOutput_High / (RegPop_r['High'] * 1000)
 			}
-
 			if (i >= (1 + delayyearlength / delta_t)) { 
 				PrevFoodDemandPC_Low = StockData[i - delayyearlength / delta_t,"FoodDemandPC_Low"]
 				PrevFoodDemandPC_Mid = StockData[i - delayyearlength / delta_t, "FoodDemandPC_Mid"]
@@ -356,9 +358,6 @@ WorldMod = function(t0, tf, delta_t, delayyearlength, init, parms) {
 								parms)
 
 			# Regional Health and Education System
-
-
-			
 			HealthEduOut_Low = HealthEducation(
 								stocks['HealthServices_Low'],
 								stocks['EducationServices_Low'],

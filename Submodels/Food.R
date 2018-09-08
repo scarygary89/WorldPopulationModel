@@ -86,24 +86,26 @@ Food = function(
 
         FoodDemand = sum(RegPop_r * FoodDemandPC_r)
         ChangeEconOutputPC_r = EconOutputPC_r - PrevEconOutputPC_r
-        FishProdCap     = Fisheries * ZetaU
-        LivestockProdCap= LivestockTechMult * GrazeLand ^ LandProdElastLivestock * 
-        	(Freshwater * (1 - WaterCropFrac)) ^ WaterProdElastLivestock
-        CropsProdCap    = CropsTechMult *CropLand ^ LandProdElastCrops * 
-                            (Freshwater * WaterCropFrac) ^ WaterProdEastCrops
+        logFishProdCap = log(FishingTech) + ZetaU * log(Fisheries)  
+        logLivestockProdCap = log(LivestockTechMult)  + 
+            LandProdElastLivestock * log(GrazeLand) +  
+        	WaterProdElastLivestock * log(Freshwater * (1 - WaterCropFrac)) 
+        logCropsProdCap = log(CropsTechMult)  +
+            LandProdElastCrops * log(CropLand) + 
+            WaterProdEastCrops * log(Freshwater * WaterCropFrac)  
         FoodProdCap_l = c(
-            Fish = FishProdCap,
-            Livestock = LivestockProdCap,
-            Crops = CropsProdCap)
+            Fish = exp(logFishProdCap),
+            Livestock = exp(logLivestockProdCap),
+            Crops = exp(logCropsProdCap))
         TargetFood_l = FoodConsumptionFrac_l * FoodDemand
         AgriWaterDemand = (FoodStock_l['Crops'] / 
             (CropsTechMult*CropLand^LandProdElastCrops))^(1/WaterProdEastCrops) + 
             (FoodStock_l['Livestock']/(LivestockTechMult*GrazeLand^LandProdElastLivestock)) ^ 
-            (1/WaterProdElastLivestock)  ############## change
-        FoodCons_l = pmin(TargetFood_l,FoodStock_l)
+            (1/WaterProdElastLivestock)  
+        FoodCons_l = pmax(pmin(TargetFood_l,FoodStock_l),0)
         names(FoodCons_l) = c('Fish','Livestock','Crops')
         FoodProd_l = pmax(pmin((TargetFood_l - FoodStock_l)/ProdDelay_l,FoodProdCap_l),MinFoodProd)
-        FoodWaste_l = FoodWasteFrac_l * FoodStock_l
+        FoodWaste_l = pmin(FoodWasteFrac_l * FoodStock_l,FoodStock_l - FoodCons_l)
 
         GrazeLandGain = GrazeLandGrowthRate * GrazeLand
         GrazeLandLoss = GrazeLandLossRate * GrazeLand
@@ -121,7 +123,7 @@ Food = function(
                 Poor  = PoorFrac * RegPop_r['High'])
             )
         FoodConsPC_krl = sapply(c('Fish','Livestock','Crops'), function(x) {
-            (FoodCons_l[x] * FoodAccess_krl[,,x]) / RegPop_kr },
+            (FoodCons_l[x] * FoodAccess_krl[,,x]) / (RegPop_kr * 1000) },
             simplify = 'array')
         NutritionConsPC_kr = sapply(c('Fish','Livestock','Crops'),function(x) {
             FoodConsPC_krl[,,x] ^ FoodNutrConv_l[x]},

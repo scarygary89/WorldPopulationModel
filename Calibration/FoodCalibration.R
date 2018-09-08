@@ -2,6 +2,11 @@
 ########################      FOOD SUBMODEL    ########################
 ########################                       ########################
 
+library(foreach)
+library(doParallel)
+numcore = detectCores()
+cl<-makeCluster(numcore) 
+
 ################# SUBMODEL WITH EXOGENOUS INPUTS
 
 FoodMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms) 
@@ -23,7 +28,8 @@ FoodMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms)
 			'NutritionConsPC_RichMid',
 			'NutritionConsPC_PoorMid',
 			'NutritionConsPC_RichHigh',
-			'NutritionConsPC_PoorHigh'
+			'NutritionConsPC_PoorHigh',
+			'AgriWaterDemand'
 			)
 		AuxData = matrix(NA,nrow = (length(tspan)),ncol = length(aux_names))		
 		colnames(AuxData) = aux_names
@@ -47,30 +53,29 @@ FoodMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms)
 
 		# Extract Delayed Values
 			if (i < (1 + delayyearlength / delta_t)) {
-
 				PrevFoodDemandPC_Low = stocks['FoodDemandPC_Low'] 
 				PrevFoodDemandPC_Mid = stocks['FoodDemandPC_Mid']
 				PrevFoodDemandPC_High = stocks['FoodDemandPC_High']
-				PrevEconOutput_Low = (1 - InitEconOutputGrowth_Low) * exog[i,'EconOutput']
-				PrevEconOutput_Mid = (1 - InitEconOutputGrowth_Mid) * exog[i,'EconOutput']
-				PrevEconOutput_High = (1 - InitEconOutputGrowth_High) * exog[i,'EconOutput']
-				PrevEconOutputPC_Low =  PrevEconOutput_Low / RegPop_r['Low']
-				PrevEconOutputPC_Mid =  PrevEconOutput_Mid / RegPop_r['Mid']
-				PrevEconOutputPC_High = PrevEconOutput_High / RegPop_r['High']
+				PrevEconOutput_Low = (1 - InitEconOutputGrowth_Low) * exog[i,'EconOutput_Low']
+				PrevEconOutput_Mid = (1 - InitEconOutputGrowth_Mid) * exog[i,'EconOutput_Mid']
+				PrevEconOutput_High = (1 - InitEconOutputGrowth_High) * exog[i,'EconOutput_High']
+				PrevEconOutputPC_Low =  PrevEconOutput_Low / (RegPop_r['Low'] * 1000)
+				PrevEconOutputPC_Mid =  PrevEconOutput_Mid / (RegPop_r['Mid'] * 1000)
+				PrevEconOutputPC_High = PrevEconOutput_High / (RegPop_r['High'] * 1000)
 			}
 			if (i >= (1 + delayyearlength / delta_t)) { 
-				PrevFoodDemandPC_Low = StockData[i - delayyearlength / delta_t,"FoodDemandPC_Low"]
-				PrevFoodDemandPC_Mid = StockData[i - delayyearlength / delta_t, "FoodDemandPC_Mid"]
-				PrevFoodDemandPC_High = StockData[i - delayyearlength / delta_t, "FoodDemandPC_High"]
-				PrevEconOutput_Low = exog[i - delayyearlength / delta_t, "EconOutput_Low"]
-				PrevEconOutput_Mid = exog[i - delayyearlength / delta_t, "EconOutput_Mid"]
-				PrevEconOutput_High = exog[i - delayyearlength / delta_t, "EconOutput_High"]
+				PrevFoodDemandPC_Low = StockData[(i - delayyearlength / delta_t),"FoodDemandPC_Low"]
+				PrevFoodDemandPC_Mid = StockData[(i - delayyearlength / delta_t), "FoodDemandPC_Mid"]
+				PrevFoodDemandPC_High = StockData[(i - delayyearlength / delta_t), "FoodDemandPC_High"]
+				PrevEconOutput_Low = exog[(i - delayyearlength / delta_t), "EconOutput_Low"]
+				PrevEconOutput_Mid = exog[(i - delayyearlength / delta_t), "EconOutput_Mid"]
+				PrevEconOutput_High = exog[(i - delayyearlength / delta_t), "EconOutput_High"]
 				PrevEconOutputPC_Low =  PrevEconOutput_Low / 
-									(exog[i - delayyearlength / delta_t, "LowPop"]*1000)
+									(exog[(i - delayyearlength / delta_t), "LowPop"]*1000)
 				PrevEconOutputPC_Mid =  PrevEconOutput_Mid / 
-									(exog[i - delayyearlength / delta_t, "MidPop"]*1000)
+									(exog[(i - delayyearlength / delta_t), "MidPop"]*1000)
 				PrevEconOutputPC_High =  PrevEconOutput_High / 
-									(exog[i - delayyearlength / delta_t, "HighPop"]*1000)
+									(exog[(i - delayyearlength / delta_t), "HighPop"]*1000)
 			} 
 			PrevFoodDemandPC_r = c( 	
 				Low =  PrevFoodDemandPC_Low, 
@@ -81,9 +86,9 @@ FoodMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms)
 				Mid = 	PrevEconOutputPC_Mid, 
 				High =	PrevEconOutputPC_High)		
 			EconOutputPC_r = c(
-				Low = 	exog[i,'EconOutput_Low'] / RegPop_r['Low'],
-				Mid = 	exog[i,'EconOutput_Mid'] / RegPop_r['Mid'],
-				High = 	exog[i,'EconOutput_High'] / RegPop_r['High']) 	
+				Low = 	exog[i,'EconOutput_Low'] / (RegPop_r['Low']*1000),
+				Mid = 	exog[i,'EconOutput_Mid'] / (RegPop_r['Mid']*1000),
+				High = 	exog[i,'EconOutput_High'] / (RegPop_r['High']*1000)) 	
 
 			# Global Food System 
 			FoodOut       	= Food(
@@ -101,13 +106,15 @@ FoodMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms)
 								parms)
 
 			################ STORE OUTPUT
+			# print(parms)
 
 			# AUXILIARY VARIABLES
 			aux = c(
 				FoodOut[['FoodProd_l']],
 				FoodOut[['FoodWaste_l']],
 				FoodOut[['FoodCons_l']],
-				FoodOut[['NutritionConsPC_kr']]
+				FoodOut[['NutritionConsPC_kr']],
+				FoodOut[['AgriWaterDemand']]
 			)
 
 			AuxData[i,] = aux
@@ -121,10 +128,11 @@ FoodMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms)
 				FoodOut[["dGrazeLand"]], 
 				FoodOut[["dCropLand"]]
 			) 
-			print(length(stocks))
-			# print(length(dstocks))
+
 			stocks = stocks + dstocks * delta_t
 			StockData[i+1,] = stocks
+			# print(StockData)
+			# print(AuxData)
 		}
 	Output = cbind(tspan, StockData[-(length(tspan)+1),],AuxData)
 	colnames(Output)[1] = 'time'
@@ -182,6 +190,7 @@ FoodFit = function(parvalue,parmin,parmax,yactual,optmethod,control=list(),
 FoodParms = c( 	
 	ThetaU = as.numeric(ParameterValue['ThetaU']),
 	ZetaU = as.numeric(ParameterValue['ZetaU']),
+	FishingTech = as.numeric(ParameterValue['FishingTech']),
 	GrazeLandGrowthRate = as.numeric(ParameterValue['GrazeLandGrowthRate']),
 	GrazeLandLossRate = as.numeric(ParameterValue['GrazeLandLossRate']),
 	CropLandGrowthRate = as.numeric(ParameterValue['CropLandGrowthRate']),
@@ -271,6 +280,9 @@ FoodActual = na.omit(melt(
 		FishProduction = CalibData$GlobalFishProduction,
 		LivestockProduction = CalibData$GlobalMeatProduction,
 		CropProduction = CalibData$GlobalCropProduction,
+		Fishstock = CalibData$Fishstock,
+		Livestock = CalibData$Livestock,
+		Crops = CalibData$Crops,
 		LivestockWaste = CalibData$GlobalMeatLoss,
 		CropWaste = CalibData$GlobalCropLoss,
 		FishConsumption = CalibData$FishConsumption_Low + 
@@ -287,7 +299,8 @@ FoodActual = na.omit(melt(
 		NutritionConsPC_PoorHigh = CalibData$NutritionConsumptionPC_High,
 		Fisheries = CalibData$Fisheries,
 		CropLand = CalibData$CropLand,
-		GrazeLand = CalibData$GrazeLand
+		GrazeLand = CalibData$GrazeLand,
+		AgriWaterDemand = CalibData$SmoothAgriculturalWaterConsumption
 		)),
 	id ='time'))
 FoodActual$variable = as.character(FoodActual$variable)
@@ -299,6 +312,15 @@ FoodActual$error[FoodActual$variable == 'FishProduction'] =
 FoodActual$error[FoodActual$variable == 'LivestockProduction'] =
 	mean(FoodActual$value[FoodActual$variable == 'LivestockProduction']) #* 
 	# (1 - (FoodActual$time[FoodActual$variable == 'LivestockProduction'] - 1979) ^ 2 / 1297)
+FoodActual$error[FoodActual$variable == 'Fishstock'] =
+	mean(FoodActual$value[FoodActual$variable == 'Fishstock']) #* 
+	# (1 - (FoodActual$time[FoodActual$variable == 'Fishstock'] - 1979) ^ 2 / 1297)
+FoodActual$error[FoodActual$variable == 'Livestock'] =
+	mean(FoodActual$value[FoodActual$variable == 'Livestock']) #* 
+	# (1 - (FoodActual$time[FoodActual$variable == 'Livestock'] - 1979) ^ 2 / 1297)
+FoodActual$error[FoodActual$variable == 'Crops'] =
+	mean(FoodActual$value[FoodActual$variable == 'Crops']) #* 
+	# (1 - (FoodActual$time[FoodActual$variable == 'Crops'] - 1979) ^ 2 / 1297)
 FoodActual$error[FoodActual$variable == 'CropProduction'] =
 	mean(FoodActual$value[FoodActual$variable == 'CropProduction']) #* 
 	# (1 - (FoodActual$time[FoodActual$variable == 'CropProduction'] - 1979) ^ 2 / 1297)
@@ -344,13 +366,16 @@ FoodActual$error[FoodActual$variable == 'GrazeLand'] =
 FoodActual$error[FoodActual$variable == 'Fisheries'] =
 	mean(FoodActual$value[FoodActual$variable == 'Fisheries']) #* 
 	# (1 - (FoodActual$time[FoodActual$variable == 'Fisheries'] - 1979) ^ 2 / 1297)
-
+FoodActual$error[FoodActual$variable == 'AgriWaterDemand'] =
+	mean(FoodActual$value[FoodActual$variable == 'AgriWaterDemand']) #* 
+	# (1 - (FoodActual$time[FoodActual$variable == 'AgriWaterDemand'] - 1979) ^ 2 / 1297)
 
 ################# DEFINE CALIBRATION PARAMETERS
 
 FoodCalibPars =  rbind(
 	ThetaU = as.numeric(ParameterData['ThetaU',]),
 	ZetaU = as.numeric(ParameterData['ZetaU',]),
+	FishingTech = as.numeric(ParameterData['FishingTech',]),
 	CropLandGrowthRate = as.numeric(ParameterData['CropLandGrowthRate',]),
 	# CropLandLossRate = as.numeric(ParameterData['CropLandLossRate',]),
 	GrazeLandGrowthRate = as.numeric(ParameterData['GrazeLandGrowthRate',]),
@@ -383,25 +408,16 @@ FoodParMax = FoodCalibPars[,3]
 
 ################# 2-STAGE FIT PARAMETERS
 
-N = 100
-FoodResults = list()
-
-for(i in 1:N){
-	FoodFitPseudo_Low = FoodFit(
+N = 1000
+registerDoParallel(cl)
+ptm = proc.time() 
+FoodResults = foreach(i = 1:N,.packages='FME') %dopar%
+{
+	FoodParValue = sapply(names(FoodParMin),function(x) {
+		runif(1,FoodParMin[x],FoodParMax[x])
+	})	
+	FoodModFit = FoodFit(
 		parvalue = FoodParValue,
-		parmin = FoodParMin,
-		parmax = FoodParMax,
-		yactual = FoodActual,
-		optmethod = 'Pseudo',
-		control = list(numiter = 100000),
-		delta_t = delta_t,
-		delayyearlength = delayyearlength,
-		exog = FoodExog,
-		init = FoodInit,
-		parms = FoodParms)
-
-	FoodFit = FoodFit(
-		parvalue = coef(FoodFitPseudo),
 		parmin = FoodParMin,
 		parmax = FoodParMax,
 		yactual = FoodActual,
@@ -412,9 +428,25 @@ for(i in 1:N){
 		init = FoodInit,
 		parms = FoodParms)
 
-	FoodParValue = sapply(names(FoodParMin),function(x) {
-		runif(1,FoodParMin[x],FoodParMax[x])
-	})
-	FoodResults[[i]] = FoodFit
-
+	return(FoodModFit)
 }
+ptm = proc.time()  - ptm
+print(ptm)
+stopCluster(cl)
+
+################# PLOT FITTED VALUES
+
+CalibPlotFunc(FoodResults,FoodActual,FoodParms,FoodExog,FoodInit,
+	FoodMod,delta_t,delayyearlength,'FoodSubmodel')
+
+################# REASSEMBLE GLOBAL PARAMTER VECTOR
+
+BestParmExtract = function(CalibModResults,Parms){
+    SSR = sapply(CalibModResults,function(x) x$ssr)
+    BestFit = CalibModResults[[which.min(SSR[which(SSR != 0)])]]
+    FitParm  = Parms
+    FitParm[names(coef(BestFit))] = coef(BestFit)
+    return(FitParm)
+}
+FoodFitParm = BestParmExtract(FoodResults,FoodParms)
+LocalFitParmameterValue[names(FoodFitParm)] = FoodFitParm

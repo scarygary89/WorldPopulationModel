@@ -40,8 +40,9 @@ Water = function(
     dFreshwater = WaterRepl - ClimateChangeWaterLoss - WaterCons 
 
     # Output
-    list( dFreshwater = dFreshwater)
+    list(   dFreshwater = dFreshwater,
+            MunWaterDemand = MunWaterDemand,
+            IndWaterDemand = IndWaterDemand)
 
     })
-
 }

@@ -10,12 +10,12 @@ library(Matrix)
 library(FME)
 
 print('************* INITIALIZE INPUTS *************')
-setwd('~/../Dropbox/HumanPopDynModel/Model/R/WorldPopulationModel - Difference')
+# setwd('~/../Dropbox/HumanPopDynModel/Model/R/WorldPopulationModel - Difference')
+# ASSEMBLE INPUT MATRICES AND VECTORS
+source('InitializeData.R')
 print('COMPLETED.')
 
-# ASSEMBLE INPUT MATRICES AND VECTORS
 
-source('InitializeData.R')
 
 # LOAD SUBMODELS
 print('------------- LOAD ECONOMY SUBMODEL')
@@ -47,7 +47,7 @@ printvar = function(x){
 	}
 }
 		
-source('plotter.R')
+source('Plotter.R')
 
 # DEFINE MODEL AND SET TIME STEPS
 print('************* LOAD MAIN MODEL *************')
@@ -59,6 +59,11 @@ source('WorldMod.R')
 print('COMPLETED.')
 
 ########################### Run Local Calibration
+
+# PREDEFINE INITIAL GLOBAL PARAMETER VECTOR
+LocalFitParmameterValue = ParameterValue
+LocalFitInitValue = InitValue
+
 print('*****RUN INITIAL PARAMETER ESTIMATION********')
 print('------------- CALIBRATE ECONOMY SUBMODEL')
 source('./Calibration/EconomyCalibration.R')
@@ -82,27 +87,33 @@ print('------------- CALIBRATE WATER SUBMODEL')
 source('./Calibration/WaterCalibration.R')
 print('ALL COMPONENTS LOADED.')
 
-OutputData = WorldMod(t0,tf,delta_t,delayyearlength,InitValue,ParameterValue)
-PlotFuncWithObs(OutputData)
 
-########################### Run Calibration
+OutputData = WorldMod(t0,tf,delta_t,delayyearlength,LocalFitInitValue,
+	LocalFitParmameterValue)
+# PlotFuncWithObs(OutputData)
+write.csv(OutputData,file = 'OutputFiles/OutputData.csv')
+save.image(file = 'OutputFiles/OutWorkspace.RData')
 
-print('************RUN GLOBAL CALIBRATION***********')
-# OptSolver = 'Newton'
+
+# ########################### Run Calibration
+
+# print('************RUN GLOBAL CALIBRATION***********')
+# # OptSolver = 'Newton'
 # OptSolver = 'BFGS'
-OptSolver = 'CG'
-# OptSolver = 'Pseudo'
-# OptSolver = 'Marq'
-source('./Calibration/GlobalCalibration.R')
-print('COMPLETED.')
+# # OptSolver = 'CG'
+# # OptSolver = 'Pseudo'
+# # OptSolver = 'Marq'
+# source('./Calibration/GlobalCalibration.R')
+# print('COMPLETED.')
 
-########################### Simulated Fitted Parameters
+# ########################### Simulated Fitted Parameters
 
-print('************* SIMULATE FITTED MODEL**********')
-ptm = proc.time()
-FitOutput = WorldMod(t0,tf,delta_t,delayyearlength,InitValue,FittedParameters)
-ptm = proc.time() - ptm
-print('COMPLETED.')
-FitOutput = data.frame(FitOutput)
-PlotFuncWithObs(FitOutput)
-print(ptm)
+# print('************* SIMULATE FITTED MODEL**********')
+# ptm = proc.time()
+# FitOutput = WorldMod(t0,tf,delta_t,delayyearlength,InitValue,FittedParameters)
+# ptm = proc.time() - ptm
+# print('COMPLETED.')
+# FitOutput = data.frame(FitOutput)
+# PlotFuncWithObs(FitOutput)
+# print(ptm)
+

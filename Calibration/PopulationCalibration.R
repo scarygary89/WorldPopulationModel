@@ -2,6 +2,11 @@
 ########################  POPULATION SUBMODEL  ########################
 ########################                       ########################
 
+library(foreach)
+library(doParallel)
+numcore = detectCores()
+cl<-makeCluster(numcore) 
+
 ################# SUBMODEL WITH EXOGENOUS INPUTS
 
 PopulationMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms) 
@@ -60,7 +65,7 @@ PopulationMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms)
 			'GFR_Low',
 			'GFR_Mid',
 			'GFR_High'
-			)
+		)
 		AuxData = matrix(NA,nrow = (length(tspan)),ncol = length(aux_names))		
 		colnames(AuxData) = aux_names
 		StockData = matrix(NA,nrow = (length(tspan) + 1),ncol = length(init))
@@ -341,88 +346,88 @@ PopActual$variable = as.character(PopActual$variable)
 PopActual = PopActual[,c('variable','time','value')]
 
 PopActual$error[PopActual$variable == 'Low_M1'] =
-	mean(PopActual$value[PopActual$variable == 'Low_M1']) * 
-	(1 - (PopActual$time[PopActual$variable == 'Low_M1'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'Low_M1']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'Low_M1'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'Low_M2'] =
-	mean(PopActual$value[PopActual$variable == 'Low_M2']) * 
-	(1 - (PopActual$time[PopActual$variable == 'Low_M2'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'Low_M2']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'Low_M2'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'Low_M3'] =
-	mean(PopActual$value[PopActual$variable == 'Low_M3']) * 
-	(1 - (PopActual$time[PopActual$variable == 'Low_M3'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'Low_M3']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'Low_M3'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'Low_M4'] =
-	mean(PopActual$value[PopActual$variable == 'Low_M4']) * 
-	(1 - (PopActual$time[PopActual$variable == 'Low_M4'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'Low_M4']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'Low_M4'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'Low_F1'] =
-	mean(PopActual$value[PopActual$variable == 'Low_F1']) * 
-	(1 - (PopActual$time[PopActual$variable == 'Low_F1'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'Low_F1']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'Low_F1'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'Low_F2'] =
-	mean(PopActual$value[PopActual$variable == 'Low_F2']) * 
-	(1 - (PopActual$time[PopActual$variable == 'Low_F2'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'Low_F2']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'Low_F2'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'Low_F3'] =
-	mean(PopActual$value[PopActual$variable == 'Low_F3']) * 
-	(1 - (PopActual$time[PopActual$variable == 'Low_F3'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'Low_F3']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'Low_F3'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'Low_F4'] =
-	mean(PopActual$value[PopActual$variable == 'Low_F4']) * 
-	(1 - (PopActual$time[PopActual$variable == 'Low_F4'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'Low_F4']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'Low_F4'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'GFR_Low'] =
-	mean(PopActual$value[PopActual$variable == 'GFR_Low']) * 
-	(1 - (PopActual$time[PopActual$variable == 'GFR_Low'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'GFR_Low']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'GFR_Low'] - 1979) ^ 2 / 1297)
 
 PopActual$error[PopActual$variable == 'Mid_M1'] =
-	mean(PopActual$value[PopActual$variable == 'Mid_M1']) * 
-	(1 - (PopActual$time[PopActual$variable == 'Mid_M1'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'Mid_M1']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'Mid_M1'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'Mid_M2'] =
-	mean(PopActual$value[PopActual$variable == 'Mid_M2']) * 
-	(1 - (PopActual$time[PopActual$variable == 'Mid_M2'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'Mid_M2']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'Mid_M2'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'Mid_M3'] =
-	mean(PopActual$value[PopActual$variable == 'Mid_M3']) * 
-	(1 - (PopActual$time[PopActual$variable == 'Mid_M3'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'Mid_M3']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'Mid_M3'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'Mid_M4'] =
-	mean(PopActual$value[PopActual$variable == 'Mid_M4']) * 
-	(1 - (PopActual$time[PopActual$variable == 'Mid_M4'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'Mid_M4']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'Mid_M4'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'Mid_F1'] =
-	mean(PopActual$value[PopActual$variable == 'Mid_F1']) * 
-	(1 - (PopActual$time[PopActual$variable == 'Mid_F1'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'Mid_F1']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'Mid_F1'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'Mid_F2'] =
-	mean(PopActual$value[PopActual$variable == 'Mid_F2']) * 
-	(1 - (PopActual$time[PopActual$variable == 'Mid_F2'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'Mid_F2']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'Mid_F2'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'Mid_F3'] =
-	mean(PopActual$value[PopActual$variable == 'Mid_F3']) * 
-	(1 - (PopActual$time[PopActual$variable == 'Mid_F3'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'Mid_F3']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'Mid_F3'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'Mid_F4'] =
-	mean(PopActual$value[PopActual$variable == 'Mid_F4']) * 
-	(1 - (PopActual$time[PopActual$variable == 'Mid_F4'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'Mid_F4']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'Mid_F4'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'GFR_Mid'] =
-	mean(PopActual$value[PopActual$variable == 'GFR_Mid']) * 
-	(1 - (PopActual$time[PopActual$variable == 'GFR_Mid'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'GFR_Mid']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'GFR_Mid'] - 1979) ^ 2 / 1297)
 
 PopActual$error[PopActual$variable == 'High_M1'] =
-	mean(PopActual$value[PopActual$variable == 'High_M1']) * 
-	(1 - (PopActual$time[PopActual$variable == 'High_M1'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'High_M1']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'High_M1'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'High_M2'] =
-	mean(PopActual$value[PopActual$variable == 'High_M2']) * 
-	(1 - (PopActual$time[PopActual$variable == 'High_M2'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'High_M2']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'High_M2'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'High_M3'] =
-	mean(PopActual$value[PopActual$variable == 'High_M3']) * 
-	(1 - (PopActual$time[PopActual$variable == 'High_M3'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'High_M3']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'High_M3'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'High_M4'] =
-	mean(PopActual$value[PopActual$variable == 'High_M4']) * 
-	(1 - (PopActual$time[PopActual$variable == 'High_M4'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'High_M4']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'High_M4'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'High_F1'] =
-	mean(PopActual$value[PopActual$variable == 'High_F1']) * 
-	(1 - (PopActual$time[PopActual$variable == 'High_F1'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'High_F1']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'High_F1'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'High_F2'] =
-	mean(PopActual$value[PopActual$variable == 'High_F2']) * 
-	(1 - (PopActual$time[PopActual$variable == 'High_F2'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'High_F2']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'High_F2'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'High_F3'] =
-	mean(PopActual$value[PopActual$variable == 'High_F3']) * 
-	(1 - (PopActual$time[PopActual$variable == 'High_F3'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'High_F3']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'High_F3'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'High_F4'] =
-	mean(PopActual$value[PopActual$variable == 'High_F4']) * 
-	(1 - (PopActual$time[PopActual$variable == 'High_F4'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'High_F4']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'High_F4'] - 1979) ^ 2 / 1297)
 PopActual$error[PopActual$variable == 'GFR_High'] =
-	mean(PopActual$value[PopActual$variable == 'GFR_High']) * 
-	(1 - (PopActual$time[PopActual$variable == 'GFR_High'] - 1979) ^ 2 / 1297)
+	mean(PopActual$value[PopActual$variable == 'GFR_High']) #* 
+	# (1 - (PopActual$time[PopActual$variable == 'GFR_High'] - 1979) ^ 2 / 1297)
 	
 ################# DEFINE CALIBRATION PARAMETERS
 
@@ -468,26 +473,17 @@ PopParMax = PopCalibPars[,3]
 
 
 ################# 2-STAGE FIT PARAMETERS
-
-N = 100
-PopResults = list()
-
-for(i in 1:N){
-	PopFitPseudo = PopulationFit(
-		parvalue = PopParValue,
-		parmin = PopParMin,
-		parmax = PopParMax,
-		yactual = PopActual,
-		optmethod = 'Pseudo',
-		# control = list(numiter = 100000),
-		delta_t = delta_t,
-		delayyearlength = delayyearlength,
-		exog = PopExog,
-		init = PopInit,
-		parms = PopParms)
+N = 1000
+registerDoParallel(cl)
+ptm = proc.time() 
+PopResults = foreach(i=1:N,.packages='FME') %dopar%
+{
+	PopParValue = sapply(names(PopParMin),function(x) {
+		runif(1,PopParMin[x],PopParMax[x])	
+	})
 
 	PopFit = PopulationFit(
-		parvalue = coef(PopFitPseudo),
+		parvalue = PopParValue,
 		parmin = PopParMin,
 		parmax = PopParMax,
 		yactual = PopActual,
@@ -498,152 +494,27 @@ for(i in 1:N){
 		init = PopInit,
 		parms = PopParms)
 
-
-	
-	PopParValue = sapply(names(PopParMin),function(x) {
-		runif(1,PopParMin[x],PopParMax[x])
-	})
-	PopResults[[i]] = PopFit
+	return(PopFit)
 }
+ptm = proc.time() - ptm
+print(ptm)
+stopCluster(cl)
 
 ################# PLOT FITTED VALUES
 
-PopFitParm  = PopParms
-PopFitParm[names(coef(PopFit))] = coef(PopFit)
-PopFitData = PopulationMod(min(PopExog$time),max(PopExog$time),
-	delta_t,delayyearlength,PopExog,PopInit,PopFitParm)
+PopFitParm = CalibPlotFunc(PopResults,PopActual,
+	PopParms,PopExog,PopInit,
+	PopulationMod,delta_t,delayyearlength,'PopulationSubmodel')
 
-dev.new()
-plot(PopActual[PopActual$variable %in% 'Low_M1',c('time','value')],
-	col = 'red', main = 'Low_M1 -- Low Income')
-lines(PopFitData[,'time'],PopFitData[,'Low_M1'],col = 'blue')
+################# REASSEMBLE GLOBAL PARAMTER VECTOR
 
-dev.new()
-plot(PopActual[PopActual$variable %in% 'Low_M2',c('time','value')],
-	col = 'red', main = 'Low_M2 -- Low Income')
-lines(PopFitData[,'time'],PopFitData[,'Low_M2'],col = 'blue')
+BestParmExtract = function(CalibModResults,Parms){
+	SSR = sapply(CalibModResults,function(x) x$ssr)
+	BestFit = CalibModResults[[which.min(SSR[which(SSR != 0)])]]
+	FitParm  = Parms
+	FitParm[names(coef(BestFit))] = coef(BestFit)
+	return(FitParm)
+}
+PopFitParm = BestParmExtract(PopResults,PopParms)
 
-dev.new()
-plot(PopActual[PopActual$variable %in% 'Low_M3',c('time','value')],
-	col = 'red', main = 'Low_M3 -- Low Income')
-lines(PopFitData[,'time'],PopFitData[,'Low_M3'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'Low_M4',c('time','value')],
-	col = 'red', main = 'Low_M4 -- Low Income')
-lines(PopFitData[,'time'],PopFitData[,'Low_M4'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'Low_F1',c('time','value')],
-	col = 'red', main = 'Low_F1 -- Low Income')
-lines(PopFitData[,'time'],PopFitData[,'Low_F1'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'Low_F2',c('time','value')],
-	col = 'red', main = 'Low_F2 -- Low Income')
-lines(PopFitData[,'time'],PopFitData[,'Low_F2'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'Low_F3',c('time','value')],
-	col = 'red', main = 'Low_F3 -- Low Income')
-lines(PopFitData[,'time'],PopFitData[,'Low_F3'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'Low_F4',c('time','value')],
-	col = 'red', main = 'Low_F4 -- Low Income')
-lines(PopFitData[,'time'],PopFitData[,'Low_F4'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'Mid_M1',c('time','value')],
-	col = 'red', main = 'Mid_M1 -- Mid Income')
-lines(PopFitData[,'time'],PopFitData[,'Mid_M1'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'Mid_M2',c('time','value')],
-	col = 'red', main = 'Mid_M2 -- Mid Income')
-lines(PopFitData[,'time'],PopFitData[,'Mid_M2'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'Mid_M3',c('time','value')],
-	col = 'red', main = 'Mid_M3 -- Mid Income')
-lines(PopFitData[,'time'],PopFitData[,'Mid_M3'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'Mid_M4',c('time','value')],
-	col = 'red', main = 'Mid_M4 -- Mid Income')
-lines(PopFitData[,'time'],PopFitData[,'Mid_M4'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'Mid_F1',c('time','value')],
-	col = 'red', main = 'Mid_F1 -- Mid Income')
-lines(PopFitData[,'time'],PopFitData[,'Mid_F1'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'Mid_F2',c('time','value')],
-	col = 'red', main = 'Mid_F2 -- Mid Income')
-lines(PopFitData[,'time'],PopFitData[,'Mid_F2'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'Mid_F3',c('time','value')],
-	col = 'red', main = 'Mid_F3 -- Mid Income')
-lines(PopFitData[,'time'],PopFitData[,'Mid_F3'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'Mid_F4',c('time','value')],
-	col = 'red', main = 'Mid_F4 -- Mid Income')
-lines(PopFitData[,'time'],PopFitData[,'Mid_F4'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'High_M1',c('time','value')],
-	col = 'red', main = 'High_M1 -- High Income')
-lines(PopFitData[,'time'],PopFitData[,'High_M1'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'High_M2',c('time','value')],
-	col = 'red', main = 'High_M2 -- High Income')
-lines(PopFitData[,'time'],PopFitData[,'High_M2'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'High_M3',c('time','value')],
-	col = 'red', main = 'High_M3 -- High Income')
-lines(PopFitData[,'time'],PopFitData[,'High_M3'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'High_M4',c('time','value')],
-	col = 'red', main = 'High_M4 -- High Income')
-lines(PopFitData[,'time'],PopFitData[,'High_M4'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'High_F1',c('time','value')],
-	col = 'red', main = 'High_F1 -- High Income')
-lines(PopFitData[,'time'],PopFitData[,'High_F1'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'High_F2',c('time','value')],
-	col = 'red', main = 'High_F2 -- High Income')
-lines(PopFitData[,'time'],PopFitData[,'High_F2'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'High_F3',c('time','value')],
-	col = 'red', main = 'High_F3 -- High Income')
-lines(PopFitData[,'time'],PopFitData[,'High_F3'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'High_F4',c('time','value')],
-	col = 'red', main = 'High_F4 -- High Income')
-lines(PopFitData[,'time'],PopFitData[,'High_F4'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'GFR_Low',c('time','value')],
-	col = 'red', main = 'GFR_Low -- Low Income')
-lines(PopFitData[,'time'],PopFitData[,'GFR_Low'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'GFR_Mid',c('time','value')],
-	col = 'red', main = 'GFR_Mid -- Mid Income')
-lines(PopFitData[,'time'],PopFitData[,'GFR_Mid'],col = 'blue')
-
-dev.new()
-plot(PopActual[PopActual$variable %in% 'GFR_High',c('time','value')],
-	col = 'red', main = 'GFR_High -- High Income')
-lines(PopFitData[,'time'],PopFitData[,'GFR_High'],col = 'blue')
+LocalFitParmameterValue[names(PopFitParm)] = PopFitParm
