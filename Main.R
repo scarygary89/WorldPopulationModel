@@ -46,7 +46,6 @@ printvar = function(x){
 		print(paste(deparse(substitute(x))," = ",x))
 	}
 }
-		
 source('Plotter.R')
 
 # DEFINE MODEL AND SET TIME STEPS
@@ -61,36 +60,39 @@ print('COMPLETED.')
 ########################### Run Local Calibration
 
 # PREDEFINE INITIAL GLOBAL PARAMETER VECTOR
-LocalFitParmameterValue = ParameterValue
-LocalFitInitValue = InitValue
 
-print('*****RUN INITIAL PARAMETER ESTIMATION********')
+print('*****LOAD SUBMODEL PARAMEATER ESTIMATION*****')
 print('------------- CALIBRATE ECONOMY SUBMODEL')
-source('./Calibration/EconomyCalibration.R')
+load('./Calibration/CalibrationOutput/EconomyParmsEstimate.RData')
 
 print('------------- CALIBRATE RESOURCE SUBMODEL')
-source('./Calibration/ResourceCalibration.R')
+load('./Calibration/CalibrationOutput/ResourceParmsEstimate.RData')
 
 print('------------- CALIBRATE FOOD SUBMODEL')
-source('./Calibration/FoodCalibration.R')
+load('./Calibration/CalibrationOutput/FoodParmsEstimate.RData')
 
 print('------------- CALIBRATE CLIMATE SUBMODEL')
-source('./Calibration/ClimateCalibration.R')
+load('./Calibration/CalibrationOutput/ClimateParmsEstimate.RData')
 
 print('------------- CALIBRATE POPULATION SUBMODEL')
-source('./Calibration/PopulationCalibration.R')
+load('./Calibration/CalibrationOutput/PopulationParmsEstimate.RData')
 
 print('------------- CALIBRATE HEALTH & EDUCATION SUBMODEL')
-source('./Calibration/HealthEducationCalibration.R')
+load('./Calibration/CalibrationOutput/HealthEducationParmsEstimate.RData')
 
 print('------------- CALIBRATE WATER SUBMODEL')
-source('./Calibration/WaterCalibration.R')
+load('./Calibration/CalibrationOutput/WaterParmsEstimate.RData')
 print('ALL COMPONENTS LOADED.')
+
+# COMBINE PARAMETER ESTIMATION FROM ALL SUBMODELS
+
+print('***** ASSEMBLE GLOBAL PARAMETER VALUES *****')
+source('CalibDataFormat.R')
 
 
 OutputData = WorldMod(t0,tf,delta_t,delayyearlength,LocalFitInitValue,
 	LocalFitParmameterValue)
-# PlotFuncWithObs(OutputData)
+PlotFuncWithObs(OutputData)
 write.csv(OutputData,file = 'OutputFiles/OutputData.csv')
 save.image(file = 'OutputFiles/OutWorkspace.RData')
 

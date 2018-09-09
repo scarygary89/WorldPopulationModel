@@ -6,6 +6,7 @@ library(foreach)
 library(doParallel)
 numcore = detectCores() 
 cl<-makeCluster(numcore) 
+print(cl)
 
 ################# SUBMODEL WITH EXOGENOUS INPUTS
 
@@ -245,15 +246,3 @@ stopCluster(cl)
 
 CalibPlotFunc(ClimateResults,ClimateActual,ClimateParms,ClimateExog,
     ClimateInit,ClimateMod,delta_t,delayyearlength,'ClimateSubmodel')
-
-################# REASSEMBLE GLOBAL PARAMTER VECTOR
-
-BestParmExtract = function(CalibModResults,Parms){
-    SSR = sapply(CalibModResults,function(x) x$ssr)
-    BestFit = CalibModResults[[which.min(SSR[which(SSR != 0)])]]
-    FitParm  = Parms
-    FitParm[names(coef(BestFit))] = coef(BestFit)
-    return(FitParm)
-}
-ClimateFitParm = BestParmExtract(ClimateResults,ClimateParms)
-LocalFitParmameterValue[names(ClimateFitParm)] = ClimateFitParm

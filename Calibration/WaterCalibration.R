@@ -6,6 +6,7 @@ library(foreach)
 library(doParallel)
 numcore = detectCores()
 cl<-makeCluster(numcore) 
+print(cl)
 
 ################# SUBMODEL WITH EXOGENOUS INPUTS
 
@@ -239,15 +240,3 @@ stopCluster(cl)
 
 CalibPlotFunc(WaterResults,WaterActual,WaterParms,WaterExog,
     WaterInit,WaterMod,delta_t,delayyearlength,'WaterSubmodel')
-
-################# REASSEMBLE GLOBAL PARAMTER VECTOR
-
-BestParmExtract = function(CalibModResults,Parms){
-    SSR = sapply(CalibModResults,function(x) x$ssr)
-    BestFit = CalibModResults[[which.min(SSR[which(SSR != 0)])]]
-    FitParm  = Parms
-    FitParm[names(coef(BestFit))] = coef(BestFit)
-    return(FitParm)
-}
-WaterFitParm = BestParmExtract(WaterResults,WaterParms)
-LocalFitParmameterValue[names(WaterFitParm)] = WaterFitParm

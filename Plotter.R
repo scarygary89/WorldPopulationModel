@@ -111,22 +111,28 @@ PlotFuncWithObs = function(OutputData){
 
 	pdf(file='OutputFiles/HighIncomePop-OUT.pdf')
 	print(grid.arrange(HighMalePlot,HighFemalePlot,nrow = 2,ncol = 1))
+	dev.off()
 
 	pdf(file='OutputFiles/TotPopEconHealthEdu-OUT.pdf')
 	print(grid.arrange(TotalPopPlot,EconOutPlot,HealthPlot,EducationPlot,nrow = 2,ncol = 2))
+	dev.off()
 
 	pdf(file='OutputFiles/TotPopEconHealthEdu-OUT.pdf')
 	print(grid.arrange(LandPlot,FoodPlot,FishPlot,WaterPlot,nrow = 2,ncol = 2))
+	dev.off()
 
-	dev.new()
+	pdf(file='OutputFiles/HealthAccess-OUT.pdf')
 	print(grid.arrange(FemaleHealthAccessPlot,RichHealthAccessPlot,
 		PoorHealthAccessPlot,nrow = 2,ncol = 2))
+	dev.off()
 
-	dev.new()
+	pdf(file='OutputFiles/ClimateSys-OUT.pdf')
 	print(grid.arrange(TempAnamPlot,CO2EmissionPlot,nrow = 2,ncol = 1))
+	dev.off()
 
-	dev.new()
+	pdf(file='OutputFiles/GFR-OUT.pdf')
 	print(GFRPlot)
+	dev.off()
 }
 
 CalibPlotFunc = function(CalibModResults,ObsData,Parms,Exog,Init,
@@ -148,7 +154,7 @@ CalibPlotFunc = function(CalibModResults,ObsData,Parms,Exog,Init,
 		CalibPlot = ggplot(data=actdat, aes(x = time,y=value, col = variable)) + 
 			geom_line() + geom_point(data = obsdata) + theme_bw() + 
 			labs(title = tit, y = Vars[i], x = 'Year') + expand_limits(y = 0)
-		pdf(file=paste('Calibration/CalibrationOutput/',Vars[i],tit,'.pdf',sep=''))
+		pdf(file=paste('Calibration/CalibrationOutput/Plots/',Vars[i],tit,'.pdf',sep=''))
 			# height = 10,width=10)
 		print(CalibPlot)
 		dev.off()

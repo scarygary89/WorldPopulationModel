@@ -492,22 +492,22 @@ EconResults_High = foreach(i = 1:N,.packages='FME') %dopar%
 		runif(1,EconParMin_High[x],EconParMax_High[x])
 	})	
 
-	# EconFitPseudo_High = EconomyFit(
-	# 	parvalue = EconParValue_High,
-	# 	parmin = EconParMin_High,
-	# 	parmax = EconParMax_High,
-	# 	yactual = EconActual_High,
-	# 	optmethod = 'Pseudo',
-	# 	# control = list(numiter = 100000),
-	# 	delta_t = delta_t,
-	# 	delayyearlength = delayyearlength,
-	# 	exog = EconExog_High,
-	# 	init = EconInit_High,
-	# 	parms = EconParms_High)
+	EconFitPseudo_High = EconomyFit(
+		parvalue = EconParValue_High,
+		parmin = EconParMin_High,
+		parmax = EconParMax_High,
+		yactual = EconActual_High,
+		optmethod = 'Pseudo',
+		# control = list(numiter = 100000),
+		delta_t = delta_t,
+		delayyearlength = delayyearlength,
+		exog = EconExog_High,
+		init = EconInit_High,
+		parms = EconParms_High)
 
 	EconFit_High = EconomyFit(
-		# parvalue = coef(EconFitPseudo_High),
-		parvalue = EconParValue_High,
+		parvalue = coef(EconFitPseudo_High),
+		# parvalue = EconParValue_High,
 		parmin = EconParMin_High,
 		parmax = EconParMax_High,
 		yactual = EconActual_High,
@@ -533,87 +533,4 @@ CalibPlotFunc(EconResults_Mid,EconActual_Mid,EconParms_Mid,EconExog_Mid,
 CalibPlotFunc(EconResults_High,EconActual_High,EconParms_High,EconExog_High,
 	EconInit_High,EconomyMod,delta_t,delayyearlength,'EconomySubmodel_HighIncome')
 
-
-################# REASSEMBLE GLOBAL PARAMTER VECTOR
-BestParmExtract = function(CalibModResults,Parms){
-	SSR = sapply(CalibModResults,function(x) x$ssr)
-	BestFit = CalibModResults[[which.min(SSR[which(SSR != 0)])]]
-	FitParm  = Parms
-	FitParm[names(coef(BestFit))] = coef(BestFit)
-	return(FitParm)
-}
-
-EconFitParm_Low = BestParmExtract(EconResults_Low,EconParms_Low)
-EconFitParm_Mid = BestParmExtract(EconResults_Mid,EconParms_Mid)
-EconFitParm_High = BestParmExtract(EconResults_High,EconParms_High)
-
-LocalFitParmameterValue['CoalAccess_Low'] = EconFitParm_Low['CoalAccess']
-LocalFitParmameterValue['CoalAccess_Mid'] = EconFitParm_Mid['CoalAccess']
-LocalFitParmameterValue['CoalAccess_Mid'] = EconFitParm_High['CoalAccess']
-LocalFitParmameterValue['OilAccess_Low'] = EconFitParm_Low['OilAccess']
-LocalFitParmameterValue['OilAccess_Mid'] = EconFitParm_Mid['OilAccess']
-LocalFitParmameterValue['OilAccess_Mid'] = EconFitParm_High['OilAccess']
-LocalFitParmameterValue['GasAccess_Low'] = EconFitParm_Low['GasAccess']
-LocalFitParmameterValue['GasAccess_Mid'] = EconFitParm_Mid['GasAccess']
-LocalFitParmameterValue['GasAccess_Mid'] = EconFitParm_High['GasAccess']
-LocalFitParmameterValue['TechGrowth_Low'] = EconFitParm_Low['TechGrowth']
-LocalFitParmameterValue['TechGrowth_Mid'] = EconFitParm_Mid['TechGrowth']
-LocalFitParmameterValue['TechGrowth_Mid'] = EconFitParm_High['TechGrowth']
-LocalFitParmameterValue['LaborInputElast_Low'] = EconFitParm_Low['LaborInputElast']
-LocalFitParmameterValue['LaborInputElast_Mid'] = EconFitParm_Mid['LaborInputElast']
-LocalFitParmameterValue['LaborInputElast_Mid'] = EconFitParm_High['LaborInputElast']
-LocalFitParmameterValue['CapitalInputElast_Low'] = EconFitParm_Low['CapitalInputElast']
-LocalFitParmameterValue['CapitalInputElast_Mid'] = EconFitParm_Mid['CapitalInputElast']
-LocalFitParmameterValue['CapitalInputElast_Mid'] = EconFitParm_High['CapitalInputElast']
-LocalFitParmameterValue['LowEmployedWorkRatio_M1'] = EconFitParm_Low['EmployedWorkRatio_M1']
-LocalFitParmameterValue['MidEmployedWorkRatio_M1'] = EconFitParm_Mid['EmployedWorkRatio_M1']
-LocalFitParmameterValue['HighEmployedWorkRatio_M1'] = EconFitParm_High['EmployedWorkRatio_M1']
-LocalFitParmameterValue['LowEmployedWorkRatio_M2'] = EconFitParm_Low['EmployedWorkRatio_M2']
-LocalFitParmameterValue['MidEmployedWorkRatio_M2'] = EconFitParm_Mid['EmployedWorkRatio_M2']
-LocalFitParmameterValue['HighEmployedWorkRatio_M2'] = EconFitParm_High['EmployedWorkRatio_M2']
-LocalFitParmameterValue['LowEmployedWorkRatio_M3'] = EconFitParm_Low['EmployedWorkRatio_M3']
-LocalFitParmameterValue['MidEmployedWorkRatio_M3'] = EconFitParm_Mid['EmployedWorkRatio_M3']
-LocalFitParmameterValue['HighEmployedWorkRatio_M3'] = EconFitParm_High['EmployedWorkRatio_M3']
-LocalFitParmameterValue['LowEmployedWorkRatio_M4'] = EconFitParm_Low['EmployedWorkRatio_M4']
-LocalFitParmameterValue['MidEmployedWorkRatio_M4'] = EconFitParm_Mid['EmployedWorkRatio_M4']
-LocalFitParmameterValue['HighEmployedWorkRatio_M4'] = EconFitParm_High['EmployedWorkRatio_M4']
-LocalFitParmameterValue['LowEmployedWorkRatio_F1'] = EconFitParm_Low['EmployedWorkRatio_F1']
-LocalFitParmameterValue['MidEmployedWorkRatio_F1'] = EconFitParm_Mid['EmployedWorkRatio_F1']
-LocalFitParmameterValue['HighEmployedWorkRatio_F1'] = EconFitParm_High['EmployedWorkRatio_F1']
-LocalFitParmameterValue['LowEmployedWorkRatio_F2'] = EconFitParm_Low['EmployedWorkRatio_F2']
-LocalFitParmameterValue['MidEmployedWorkRatio_F2'] = EconFitParm_Mid['EmployedWorkRatio_F2']
-LocalFitParmameterValue['HighEmployedWorkRatio_F2'] = EconFitParm_High['EmployedWorkRatio_F2']
-LocalFitParmameterValue['LowEmployedWorkRatio_F3'] = EconFitParm_Low['EmployedWorkRatio_F3']
-LocalFitParmameterValue['MidEmployedWorkRatio_F3'] = EconFitParm_Mid['EmployedWorkRatio_F3']
-LocalFitParmameterValue['HighEmployedWorkRatio_F3'] = EconFitParm_High['EmployedWorkRatio_F3']
-LocalFitParmameterValue['LowEmployedWorkRatio_F4'] = EconFitParm_Low['EmployedWorkRatio_F4']
-LocalFitParmameterValue['MidEmployedWorkRatio_F4'] = EconFitParm_Mid['EmployedWorkRatio_F4']
-LocalFitParmameterValue['HighEmployedWorkRatio_F4'] = EconFitParm_High['EmployedWorkRatio_F4']
-LocalFitParmameterValue['SavingsRate_Low'] = EconFitParm_Low['SavingsRate']
-LocalFitParmameterValue['SavingsRate_Mid'] = EconFitParm_Mid['SavingsRate']
-LocalFitParmameterValue['SavingsRate_High'] = EconFitParm_High['SavingsRate']
-LocalFitParmameterValue['DeprecRate_Low'] = EconFitParm_Low['DeprecRate']
-LocalFitParmameterValue['DeprecRate_Mid'] = EconFitParm_Mid['DeprecRate']
-LocalFitParmameterValue['DeprecRate_High'] = EconFitParm_High['DeprecRate']
-LocalFitParmameterValue['IneqMult_Low'] = EconFitParm_Low['IneqMult']
-LocalFitParmameterValue['IneqMult_Mid'] = EconFitParm_Mid['IneqMult']
-LocalFitParmameterValue['IneqMult_High'] = EconFitParm_High['IneqMult']
-LocalFitParmameterValue['IneqInt_Low'] = EconFitParm_Low['IneqInt']
-LocalFitParmameterValue['IneqInt_Mid'] = EconFitParm_Mid['IneqInt']
-LocalFitParmameterValue['IneqInt_High'] = EconFitParm_High['IneqInt']
-LocalFitParmameterValue['InitEconOutputGrowth_Low'] = EconFitParm_Low['InitEconOutputGrowth']
-LocalFitParmameterValue['InitEconOutputGrowth_Mid'] = EconFitParm_Mid['InitEconOutputGrowth']
-LocalFitParmameterValue['InitEconOutputGrowth_High'] = EconFitParm_High['InitEconOutputGrowth']
-LocalFitParmameterValue['CoalInputElast_Low'] = EconFitParm_Low['CoalInputElast']
-LocalFitParmameterValue['CoalInputElast_Mid'] = EconFitParm_Mid['CoalInputElast']
-LocalFitParmameterValue['CoalInputElast_High'] = EconFitParm_High['CoalInputElast']
-LocalFitParmameterValue['OilInputElast_Low'] = EconFitParm_Low['OilInputElast']
-LocalFitParmameterValue['OilInputElast_Mid'] = EconFitParm_Mid['OilInputElast']
-LocalFitParmameterValue['OilInputElast_High'] = EconFitParm_High['OilInputElast']
-LocalFitParmameterValue['GasInputElast_Low'] = EconFitParm_Low['GasInputElast']
-LocalFitParmameterValue['GasInputElast_Mid'] = EconFitParm_Mid['GasInputElast']
-LocalFitParmameterValue['GasInputElast_High'] = EconFitParm_High['GasInputElast']
-LocalFitInitValue['TechMult_Low'] = EconFitParm_Low['TechMult']
-LocalFitInitValue['TechMult_Mid'] = EconFitParm_Mid['TechMult']
-LocalFitInitValue['TechMult_High'] = EconFitParm_High['TechMult']
 

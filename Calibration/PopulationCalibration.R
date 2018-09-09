@@ -6,6 +6,7 @@ library(foreach)
 library(doParallel)
 numcore = detectCores()
 cl<-makeCluster(numcore) 
+print(cl)
 
 ################# SUBMODEL WITH EXOGENOUS INPUTS
 
@@ -505,16 +506,3 @@ stopCluster(cl)
 PopFitParm = CalibPlotFunc(PopResults,PopActual,
 	PopParms,PopExog,PopInit,
 	PopulationMod,delta_t,delayyearlength,'PopulationSubmodel')
-
-################# REASSEMBLE GLOBAL PARAMTER VECTOR
-
-BestParmExtract = function(CalibModResults,Parms){
-	SSR = sapply(CalibModResults,function(x) x$ssr)
-	BestFit = CalibModResults[[which.min(SSR[which(SSR != 0)])]]
-	FitParm  = Parms
-	FitParm[names(coef(BestFit))] = coef(BestFit)
-	return(FitParm)
-}
-PopFitParm = BestParmExtract(PopResults,PopParms)
-
-LocalFitParmameterValue[names(PopFitParm)] = PopFitParm

@@ -6,6 +6,7 @@ library(foreach)
 library(doParallel)
 numcore = detectCores()
 cl<-makeCluster(numcore) 
+print(cl)
 
 ################# SUBMODEL WITH EXOGENOUS INPUTS
 ResourceMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms) {
@@ -213,14 +214,3 @@ stopCluster(cl)
 CalibPlotFunc(ResourceResults,ResourceActual,ResourceParms,ResourceExog,
     ResourceInit,ResourceMod,delta_t,delayyearlength,'ResourceSubmodel')
 
-################# REASSEMBLE GLOBAL PARAMTER VECTOR
-
-BestParmExtract = function(CalibModResults,Parms){
-    SSR = sapply(CalibModResults,function(x) x$ssr)
-    BestFit = CalibModResults[[which.min(SSR[which(SSR != 0)])]]
-    FitParm  = Parms
-    FitParm[names(coef(BestFit))] = coef(BestFit)
-    return(FitParm)
-}
-ResourceFitParm = BestParmExtract(ResourceResults,ResourceParms)
-LocalFitParmameterValue[names(ResourceFitParm)] = ResourceFitParm

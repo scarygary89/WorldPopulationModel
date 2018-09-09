@@ -6,6 +6,7 @@ library(foreach)
 library(doParallel)
 numcore = detectCores()
 cl<-makeCluster(numcore) 
+print(cl)
 
 ################# SUBMODEL WITH EXOGENOUS INPUTS
 
@@ -438,15 +439,3 @@ stopCluster(cl)
 
 CalibPlotFunc(FoodResults,FoodActual,FoodParms,FoodExog,FoodInit,
 	FoodMod,delta_t,delayyearlength,'FoodSubmodel')
-
-################# REASSEMBLE GLOBAL PARAMTER VECTOR
-
-BestParmExtract = function(CalibModResults,Parms){
-    SSR = sapply(CalibModResults,function(x) x$ssr)
-    BestFit = CalibModResults[[which.min(SSR[which(SSR != 0)])]]
-    FitParm  = Parms
-    FitParm[names(coef(BestFit))] = coef(BestFit)
-    return(FitParm)
-}
-FoodFitParm = BestParmExtract(FoodResults,FoodParms)
-LocalFitParmameterValue[names(FoodFitParm)] = FoodFitParm
