@@ -37,5 +37,7 @@ source('./Calibration/PopulationCalibration.R')
 
 print('***********  SAVE RESULTS *****************')
 save(list = c(
-	'PopResults'),
+	'PopResults',
+	'PopParStart',
+	'PopulationFitData'),
 	file = 'Calibration/CalibrationOutput/PopulationParmsEstimate.RData')

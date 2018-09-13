@@ -199,18 +199,18 @@ ClimateCalibPars =  rbind(
 ClimateParValue = ClimateCalibPars[,1]
 ClimateParMin =  ClimateCalibPars[,2]
 ClimateParMax = ClimateCalibPars[,3]
+ClimateParRange = data.frame(min = ClimateParMin,max = ClimateParMax)
 
 ################# 2-STAGE FIT PARAMETERS
 
 N = 1000
+ClimateParStart = Latinhyper(ClimateParRange,N)
 registerDoParallel(cl)
 ptm = proc.time() 
 ClimateResults = foreach(i=1:N,.packages='FME') %dopar%
 {
-    ClimateParValue = sapply(names(ClimateParMin),function(x) {
-        runif(1,ClimateParMin[x],ClimateParMax[x])
-    })  
-
+    ClimateParValue = ClimateParStart[i,]
+    
     ClimateFitPseudo = ClimateFit(
         parvalue = ClimateParValue,
         parmin = ClimateParMin,
@@ -244,5 +244,7 @@ stopCluster(cl)
 
 ################# PLOT FITTED VALUES
 
-CalibPlotFunc(ClimateResults,ClimateActual,ClimateParms,ClimateExog,
+ClimateFitData = CalibPlotFunc(ClimateResults,ClimateActual,ClimateParms,ClimateExog,
     ClimateInit,ClimateMod,delta_t,delayyearlength,'ClimateSubmodel')
+
+SSRCoefPlot(ClimateResults,ClimateParStart,'ClimateSubmodel')

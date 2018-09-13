@@ -39,5 +39,11 @@ print('***********  SAVE RESULTS *****************')
 save(list = c(
 	'HealthEducationResults_Low',
 	'HealthEducationResults_Mid',
-	'HealthEducationResults_High'),	
+	'HealthEducationResults_High',
+	'HealthEducationParStart_Low',
+	'HealthEducationParStart_Mid',
+	'HealthEducationParStart_High',
+	'HealthEducationFitData_Low',
+	'HealthEducationFitData_Mid',
+	'HealthEducationFitData_High'),	
 	file = 'Calibration/CalibrationOutput/HealthEducationParmsEstimate.RData')

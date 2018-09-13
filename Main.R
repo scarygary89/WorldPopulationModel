@@ -10,7 +10,7 @@ library(Matrix)
 library(FME)
 
 print('************* INITIALIZE INPUTS *************')
-# setwd('~/../Dropbox/HumanPopDynModel/Model/R/WorldPopulationModel - Difference')
+setwd('~/../Dropbox/HumanPopDynModel/Model/R/WorldPopulationModel - Difference')
 # ASSEMBLE INPUT MATRICES AND VECTORS
 source('InitializeData.R')
 print('COMPLETED.')
@@ -57,34 +57,37 @@ delayyearlength = 1
 source('WorldMod.R')
 print('COMPLETED.')
 
-########################### Run Local Calibration
+########################### Load Results from Local Calibration
 
-# PREDEFINE INITIAL GLOBAL PARAMETER VECTOR
+# LOAD R IMAGE OBJECTS
 
 print('*****LOAD SUBMODEL PARAMEATER ESTIMATION*****')
-print('------------- CALIBRATE ECONOMY SUBMODEL')
+print('------------- LOAD ECONOMY SUBMODEL VARIABLES')
 load('./Calibration/CalibrationOutput/EconomyParmsEstimate.RData')
 
-print('------------- CALIBRATE RESOURCE SUBMODEL')
+print('------------- LOAD RESOURCE SUBMODEL VARIABLES')
 load('./Calibration/CalibrationOutput/ResourceParmsEstimate.RData')
 
-print('------------- CALIBRATE FOOD SUBMODEL')
+print('------------- LOAD FOOD SUBMODEL VARIABLES')
 load('./Calibration/CalibrationOutput/FoodParmsEstimate.RData')
 
-print('------------- CALIBRATE CLIMATE SUBMODEL')
+print('------------- LOAD CLIMATE SUBMODEL VARIABLES')
 load('./Calibration/CalibrationOutput/ClimateParmsEstimate.RData')
 
-print('------------- CALIBRATE POPULATION SUBMODEL')
+print('------------- LOAD POPULATION SUBMODEL VARIABLES')
 load('./Calibration/CalibrationOutput/PopulationParmsEstimate.RData')
 
-print('------------- CALIBRATE HEALTH & EDUCATION SUBMODEL')
+print('------------- LOAD HEALTH & VARIABLES EDUCATION SUBMODEL')
 load('./Calibration/CalibrationOutput/HealthEducationParmsEstimate.RData')
 
-print('------------- CALIBRATE WATER SUBMODEL')
+print('------------- LOAD WATER SUBMODEL VARIABLES')
 load('./Calibration/CalibrationOutput/WaterParmsEstimate.RData')
 print('ALL COMPONENTS LOADED.')
 
 # COMBINE PARAMETER ESTIMATION FROM ALL SUBMODELS
+
+LocalFitParmameterValue = ParameterValue
+LocalFitInitValue = InitValue
 
 print('***** ASSEMBLE GLOBAL PARAMETER VALUES *****')
 source('CalibDataFormat.R')

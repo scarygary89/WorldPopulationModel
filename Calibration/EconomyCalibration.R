@@ -371,6 +371,7 @@ EconCalibPars_Low =  rbind(
 EconParValue_Low = EconCalibPars_Low[,1]
 EconParMin_Low =  EconCalibPars_Low[,2]
 EconParMax_Low = EconCalibPars_Low[,3]
+EconParRange_Low = data.frame(min = EconParMin_Low,max = EconParMax_Low)
 
 EconCalibPars_Mid =  rbind(
 	TechMult = as.numeric(InitialData['TechMult_Mid',]),
@@ -388,6 +389,7 @@ EconCalibPars_Mid =  rbind(
 EconParValue_Mid = EconCalibPars_Mid[,1]
 EconParMin_Mid =  EconCalibPars_Mid[,2]
 EconParMax_Mid = EconCalibPars_Mid[,3]
+EconParRange_Mid = data.frame(min = EconParMin_Mid,max = EconParMax_Mid)
 
 EconCalibPars_High =  rbind(
 	TechMult = as.numeric(InitialData['TechMult_High',]),
@@ -405,17 +407,19 @@ EconCalibPars_High =  rbind(
 EconParValue_High = EconCalibPars_High[,1]
 EconParMin_High =  EconCalibPars_High[,2]
 EconParMax_High = EconCalibPars_High[,3]
+EconParRange_High = data.frame(min = EconParMin_High,max = EconParMax_High)
 
 ################# 2-STAGE FIT PARAMETERS
 
 N = 1000
+EconParStart_Low = Latinhyper(EconParRange_Low,N)
+EconParStart_Mid = Latinhyper(EconParRange_Mid,N)
+EconParStart_High = Latinhyper(EconParRange_High,N)
 registerDoParallel(cl)
 ptm = proc.time() 
 EconResults_Low = foreach(i=1:N,.packages='FME') %dopar%
 {
-	EconParValue_Low = sapply(names(EconParMin_Low),function(x) {
-		runif(1,EconParMin_Low[x],EconParMax_Low[x])
-	})	
+	EconParValue_Low = EconParStart_Low[i,]
 
 	EconFitPseudo_Low = EconomyFit(
 		parvalue = EconParValue_Low,
@@ -450,10 +454,7 @@ print(ptm)
 ptm = proc.time() 
 EconResults_Mid = foreach(i=1:N,.packages='FME') %dopar%
 {
-
-	EconParValue_Mid = sapply(names(EconParMin_Mid),function(x) {
-		runif(1,EconParMin_Mid[x],EconParMax_Mid[x])
-	})
+	EconParValue_Mid = EconParStart_Mid[i,]
 
 	EconFitPseudo_Mid = EconomyFit(
 		parvalue = EconParValue_Mid,
@@ -488,9 +489,7 @@ print(ptm)
 ptm = proc.time() 	
 EconResults_High = foreach(i = 1:N,.packages='FME') %dopar%
 {
-	EconParValue_High = sapply(names(EconParMin_High),function(x) {
-		runif(1,EconParMin_High[x],EconParMax_High[x])
-	})	
+	EconParValue_High = EconParStart_High[i,]	
 
 	EconFitPseudo_High = EconomyFit(
 		parvalue = EconParValue_High,
@@ -526,11 +525,16 @@ stopCluster(cl)
 
 ################# PLOT FITTED VALUES
 
-CalibPlotFunc(EconResults_Low,EconActual_Low,EconParms_Low,EconExog_Low,EconInit_Low,
-	EconomyMod,delta_t,delayyearlength,'EconomySubmodel_LowIncome')
-CalibPlotFunc(EconResults_Mid,EconActual_Mid,EconParms_Mid,EconExog_Mid,
-	EconInit_Mid,EconomyMod,delta_t,delayyearlength,'EconomySubmodel_MiddleIncome')
-CalibPlotFunc(EconResults_High,EconActual_High,EconParms_High,EconExog_High,
-	EconInit_High,EconomyMod,delta_t,delayyearlength,'EconomySubmodel_HighIncome')
+EconFitData_Low = CalibPlotFunc(EconResults_Low,EconActual_Low,EconParms_Low,
+	EconExog_Low,EconInit_Low,EconomyMod,delta_t,delayyearlength,
+	'EconomySubmodel_LowIncome')
+EconFitData_Mid = CalibPlotFunc(EconResults_Mid,EconActual_Mid,EconParms_Mid,
+	EconExog_Mid,EconInit_Mid,EconomyMod,delta_t,delayyearlength,
+	'EconomySubmodel_MiddleIncome')
+EconFitData_High = CalibPlotFunc(EconResults_High,EconActual_High,EconParms_High,
+	EconExog_High,EconInit_High,EconomyMod,delta_t,delayyearlength,
+	'EconomySubmodel_HighIncome')
 
-
+SSRCoefPlot(EconResults_Low,EconParStart_Low,'EconomySubmodel_LowIncome')
+SSRCoefPlot(EconResults_Mid,EconParStart_Mid,'EconomySubmodel_MidIncome')
+SSRCoefPlot(EconResults_High,EconParStart_High,'EconomySubmodel_HighIncome')

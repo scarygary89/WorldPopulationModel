@@ -37,5 +37,7 @@ source('./Calibration/ResourceCalibration.R')
 
 print('***********  SAVE RESULTS *****************')
 save(list = c(
-	'ResourceResults'),
+	'ResourceResults',
+	'ResourceParStart',
+	'ResourceFitData'),
 	file = 'Calibration/CalibrationOutput/ResourceParmsEstimate.RData')

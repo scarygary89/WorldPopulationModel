@@ -37,5 +37,7 @@ source('./Calibration/WaterCalibration.R')
 
 print('***********  SAVE RESULTS *****************')
 save(list = c(
-	'WaterResults'),
+	'WaterResults',
+	'WaterParStart',
+	'WaterFitData'),
 	file = 'Calibration/CalibrationOutput/WaterParmsEstimate.RData')

@@ -341,93 +341,93 @@ PopActual = na.omit(melt(
 		GFR_Low = CalibData$GFR_Low,
 		GFR_Mid = CalibData$GFR_Mid,
 		GFR_High = CalibData$GFR_High
-		)),
+	)),
 	id ='time'))
 PopActual$variable = as.character(PopActual$variable)
 PopActual = PopActual[,c('variable','time','value')]
 
-PopActual$error[PopActual$variable == 'Low_M1'] =
-	mean(PopActual$value[PopActual$variable == 'Low_M1']) #* 
+PopActual$error[PopActual$variable == 'Low_M1'] = 1
+	# mean(PopActual$value[PopActual$variable == 'Low_M1']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'Low_M1'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'Low_M2'] =
-	mean(PopActual$value[PopActual$variable == 'Low_M2']) #* 
+PopActual$error[PopActual$variable == 'Low_M2'] = 1
+	# mean(PopActual$value[PopActual$variable == 'Low_M2']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'Low_M2'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'Low_M3'] =
-	mean(PopActual$value[PopActual$variable == 'Low_M3']) #* 
+PopActual$error[PopActual$variable == 'Low_M3'] = 1
+	# mean(PopActual$value[PopActual$variable == 'Low_M3']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'Low_M3'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'Low_M4'] =
-	mean(PopActual$value[PopActual$variable == 'Low_M4']) #* 
+PopActual$error[PopActual$variable == 'Low_M4'] = 1
+	# mean(PopActual$value[PopActual$variable == 'Low_M4']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'Low_M4'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'Low_F1'] =
-	mean(PopActual$value[PopActual$variable == 'Low_F1']) #* 
+PopActual$error[PopActual$variable == 'Low_F1'] = 1
+	# mean(PopActual$value[PopActual$variable == 'Low_F1']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'Low_F1'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'Low_F2'] =
-	mean(PopActual$value[PopActual$variable == 'Low_F2']) #* 
+PopActual$error[PopActual$variable == 'Low_F2'] = 1
+	# mean(PopActual$value[PopActual$variable == 'Low_F2']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'Low_F2'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'Low_F3'] =
-	mean(PopActual$value[PopActual$variable == 'Low_F3']) #* 
+PopActual$error[PopActual$variable == 'Low_F3'] = 1
+	# mean(PopActual$value[PopActual$variable == 'Low_F3']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'Low_F3'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'Low_F4'] =
-	mean(PopActual$value[PopActual$variable == 'Low_F4']) #* 
+PopActual$error[PopActual$variable == 'Low_F4'] = 1
+	# mean(PopActual$value[PopActual$variable == 'Low_F4']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'Low_F4'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'GFR_Low'] =
-	mean(PopActual$value[PopActual$variable == 'GFR_Low']) #* 
+PopActual$error[PopActual$variable == 'GFR_Low'] = 1
+	# mean(PopActual$value[PopActual$variable == 'GFR_Low']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'GFR_Low'] - 1979) ^ 2 / 1297)
 
-PopActual$error[PopActual$variable == 'Mid_M1'] =
-	mean(PopActual$value[PopActual$variable == 'Mid_M1']) #* 
+PopActual$error[PopActual$variable == 'Mid_M1'] = 1
+	# mean(PopActual$value[PopActual$variable == 'Mid_M1']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'Mid_M1'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'Mid_M2'] =
-	mean(PopActual$value[PopActual$variable == 'Mid_M2']) #* 
+PopActual$error[PopActual$variable == 'Mid_M2'] = 1
+	# mean(PopActual$value[PopActual$variable == 'Mid_M2']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'Mid_M2'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'Mid_M3'] =
-	mean(PopActual$value[PopActual$variable == 'Mid_M3']) #* 
+PopActual$error[PopActual$variable == 'Mid_M3'] = 1
+	# mean(PopActual$value[PopActual$variable == 'Mid_M3']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'Mid_M3'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'Mid_M4'] =
-	mean(PopActual$value[PopActual$variable == 'Mid_M4']) #* 
+PopActual$error[PopActual$variable == 'Mid_M4'] = 1
+	# mean(PopActual$value[PopActual$variable == 'Mid_M4']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'Mid_M4'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'Mid_F1'] =
-	mean(PopActual$value[PopActual$variable == 'Mid_F1']) #* 
+PopActual$error[PopActual$variable == 'Mid_F1'] = 1
+	# mean(PopActual$value[PopActual$variable == 'Mid_F1']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'Mid_F1'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'Mid_F2'] =
-	mean(PopActual$value[PopActual$variable == 'Mid_F2']) #* 
+PopActual$error[PopActual$variable == 'Mid_F2'] = 1
+	# mean(PopActual$value[PopActual$variable == 'Mid_F2']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'Mid_F2'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'Mid_F3'] =
-	mean(PopActual$value[PopActual$variable == 'Mid_F3']) #* 
+PopActual$error[PopActual$variable == 'Mid_F3'] = 1
+	# mean(PopActual$value[PopActual$variable == 'Mid_F3']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'Mid_F3'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'Mid_F4'] =
-	mean(PopActual$value[PopActual$variable == 'Mid_F4']) #* 
+PopActual$error[PopActual$variable == 'Mid_F4'] = 1
+	# mean(PopActual$value[PopActual$variable == 'Mid_F4']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'Mid_F4'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'GFR_Mid'] =
-	mean(PopActual$value[PopActual$variable == 'GFR_Mid']) #* 
+PopActual$error[PopActual$variable == 'GFR_Mid'] = 1
+	# mean(PopActual$value[PopActual$variable == 'GFR_Mid']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'GFR_Mid'] - 1979) ^ 2 / 1297)
 
-PopActual$error[PopActual$variable == 'High_M1'] =
-	mean(PopActual$value[PopActual$variable == 'High_M1']) #* 
+PopActual$error[PopActual$variable == 'High_M1'] = 1
+	# mean(PopActual$value[PopActual$variable == 'High_M1']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'High_M1'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'High_M2'] =
-	mean(PopActual$value[PopActual$variable == 'High_M2']) #* 
+PopActual$error[PopActual$variable == 'High_M2'] = 1
+	# mean(PopActual$value[PopActual$variable == 'High_M2']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'High_M2'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'High_M3'] =
-	mean(PopActual$value[PopActual$variable == 'High_M3']) #* 
+PopActual$error[PopActual$variable == 'High_M3'] = 1
+	# mean(PopActual$value[PopActual$variable == 'High_M3']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'High_M3'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'High_M4'] =
-	mean(PopActual$value[PopActual$variable == 'High_M4']) #* 
+PopActual$error[PopActual$variable == 'High_M4'] = 1
+	# mean(PopActual$value[PopActual$variable == 'High_M4']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'High_M4'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'High_F1'] =
-	mean(PopActual$value[PopActual$variable == 'High_F1']) #* 
+PopActual$error[PopActual$variable == 'High_F1'] = 1
+	# mean(PopActual$value[PopActual$variable == 'High_F1']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'High_F1'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'High_F2'] =
-	mean(PopActual$value[PopActual$variable == 'High_F2']) #* 
+PopActual$error[PopActual$variable == 'High_F2'] = 1
+	# mean(PopActual$value[PopActual$variable == 'High_F2']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'High_F2'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'High_F3'] =
-	mean(PopActual$value[PopActual$variable == 'High_F3']) #* 
+PopActual$error[PopActual$variable == 'High_F3'] = 1
+	# mean(PopActual$value[PopActual$variable == 'High_F3']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'High_F3'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'High_F4'] =
-	mean(PopActual$value[PopActual$variable == 'High_F4']) #* 
+PopActual$error[PopActual$variable == 'High_F4'] = 1
+	# mean(PopActual$value[PopActual$variable == 'High_F4']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'High_F4'] - 1979) ^ 2 / 1297)
-PopActual$error[PopActual$variable == 'GFR_High'] =
-	mean(PopActual$value[PopActual$variable == 'GFR_High']) #* 
+PopActual$error[PopActual$variable == 'GFR_High'] = 1
+	# mean(PopActual$value[PopActual$variable == 'GFR_High']) #* 
 	# (1 - (PopActual$time[PopActual$variable == 'GFR_High'] - 1979) ^ 2 / 1297)
 	
 ################# DEFINE CALIBRATION PARAMETERS
@@ -471,22 +471,43 @@ PopCalibPars =  rbind(
 PopParValue = PopCalibPars[,1]
 PopParMin =  PopCalibPars[,2]
 PopParMax = PopCalibPars[,3]
-
+PopParRange = data.frame(min = PopParMin,max = PopParMax)
 
 ################# 2-STAGE FIT PARAMETERS
-N = 1000
+N = 1E7
 registerDoParallel(cl)
 ptm = proc.time() 
-PopResults = foreach(i=1:N,.packages='FME') %dopar%
+PopParStart = Latinhyper(PopParRange,N)
+PopGlobalSearch = foreach(i=1:N,.packages='FME') %dopar%
 {
-	PopParValue = sapply(names(PopParMin),function(x) {
-		runif(1,PopParMin[x],PopParMax[x])	
-	})
+# Random search
+	PopParValue = PopParStart[i,]
+	PopCost = PopulationCost(PopParValue,t0,tf,delta_t,delayyearlength,
+	PopExog,PopInit,PopParms,PopActual)
+	return(PopCost)
+}	
+ptm = proc.time() - ptm
+print(ptm)
+
+PopSearchCost = sapply(PopGlobalSearch,function(x) x$model)
+PopBestParStart = PopParStart[which.min(PopSearchCost[which(PopSearchCost != 0)]),]
+CostPlot(PopGlobalSearch,PopParStart,'PopulationSubmodel')
+rm('PopGlobalSearch','PopParStart')
+M = 100
+LocalSearchRad = .2
+PopLocalParMin = PopBestParStart - abs(PopBestParStart * LocalSearchRad)
+PopLocalParMax = PopBestParStart + abs(PopBestParStart * LocalSearchRad)
+PopLocalParRange = data.frame(min = PopLocalParMin,max = PopLocalParMax)
+ptm = proc.time() 
+PopLocalParStart = Latinhyper(PopLocalParRange,M)
+PopResults = foreach(i = 1:M,.packages='FME') %dopar%
+{
+	PopParValue = PopLocalParStart[i,]
 
 	PopFit = PopulationFit(
 		parvalue = PopParValue,
-		parmin = PopParMin,
-		parmax = PopParMax,
+		parmin = PopLocalParMin,
+		parmax = PopLocalParMax,
 		yactual = PopActual,
 		optmethod = 'Marq',
 		delta_t = delta_t,
@@ -494,15 +515,18 @@ PopResults = foreach(i=1:N,.packages='FME') %dopar%
 		exog = PopExog,
 		init = PopInit,
 		parms = PopParms)
-
+	
 	return(PopFit)
 }
 ptm = proc.time() - ptm
-print(ptm)
+print(ptm)	
 stopCluster(cl)
 
 ################# PLOT FITTED VALUES
 
-PopFitParm = CalibPlotFunc(PopResults,PopActual,
-	PopParms,PopExog,PopInit,
-	PopulationMod,delta_t,delayyearlength,'PopulationSubmodel')
+PopulationFitData = CalibPlotFunc(PopResults,PopActual,
+	PopParms,PopExog,PopInit,PopulationMod,delta_t,delayyearlength,
+	'PopulationSubmodel2')
+
+SSRCoefPlot(PopResults,PopLocalParStart,'PopulationSubmodel')
+

@@ -42,9 +42,6 @@ WaterFitParm = BestParmExtract(WaterResults)
 
 ################# ASSEMBLE GLOBAL PARAMETER INPUT #################
 
-LocalFitParmameterValue = ParameterValue
-LocalFitInitValue = InitValue
-
 # Economy Submodel
 LocalFitParmameterValue['TechGrowth_Low'] = EconFitParm_Low['TechGrowth']
 LocalFitParmameterValue['TechGrowth_Mid'] = EconFitParm_Mid['TechGrowth']

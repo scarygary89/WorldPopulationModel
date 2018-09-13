@@ -136,7 +136,7 @@ PlotFuncWithObs = function(OutputData){
 }
 
 CalibPlotFunc = function(CalibModResults,ObsData,Parms,Exog,Init,
-	CalibMod,delta_t,delayyearlength,tit){
+	CalibMod,delta_t,delayyearlength,tit) {
 	SSR = sapply(CalibModResults,function(x) x$ssr)
 	BestFit = CalibModResults[[which.min(SSR[which(SSR != 0)])]]
 	FitParm  = Parms
@@ -159,5 +159,45 @@ CalibPlotFunc = function(CalibModResults,ObsData,Parms,Exog,Init,
 		print(CalibPlot)
 		dev.off()
 	}
+	return(FitData)
 } 
 
+SSRCoefPlot = function(CalibModResults,ParStart,tit) {
+	coefvalues = sapply(CalibModResults, function(x) coef(x))
+	SSR = sapply(CalibModResults,function(x) x$ssr)
+	for(i in 1:dim(coefvalues)[1]) {
+		plotdat = data.frame(cbind(
+			as.numeric(coefvalues[i,]),
+			as.numeric(SSR),
+			as.numeric(ParStart[,i])))
+		names(plotdat) = c('FitCoefValue','SSR','StartCoefValue')
+		plotdat$logSSR = log(plotdat$SSR)
+		plotdat = plotdat[which(plotdat[,'logSSR'] != Inf),]
+		SSRPlot = ggplot(data=plotdat, aes(x = StartCoefValue,
+			y=FitCoefValue, col = logSSR)) + geom_point() + 
+			labs(title = paste(rownames(coefvalues)[i],tit)) + theme_bw()
+		pdf(file=paste('Calibration/CalibrationOutput/SSRPlots/',rownames(coefvalues)[i],
+			tit,'.pdf',sep=''))
+		print(SSRPlot)
+		dev.off()
+	}
+}
+
+CostPlot = function(PopGlobalSearch,ParStart,tit) {
+	Cost = sapply(PopGlobalSearch,function(x) x$model)
+	for(i in 1:dim(ParStart)[2]) {
+		plotdat = data.frame(cbind(
+			as.numeric(ParStart[,i]),
+			as.numeric(Cost)))
+		names(plotdat) = c('CoefValue','Cost')
+		plotdat$logCost = log(plotdat$Cost)
+		plotdat = plotdat[which(plotdat[,'logCost'] != Inf),]
+		CostPlot = ggplot(data=plotdat, aes(x = CoefValue,
+			y=logCost, col = logCost)) + geom_point() + 
+			labs(title = paste(colnames(ParStart)[i],tit)) + theme_bw()
+		pdf(file=paste('Calibration/CalibrationOutput/CostPlots/',colnames(ParStart)[i],
+			tit,'.pdf',sep=''))
+		print(CostPlot)
+		dev.off()
+	}
+}

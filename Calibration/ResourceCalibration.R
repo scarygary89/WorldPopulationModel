@@ -165,19 +165,18 @@ ResourceCalibPars =  rbind(
 ResourceParValue = ResourceCalibPars[,1]
 ResourceParMin =  ResourceCalibPars[,2]
 ResourceParMax = ResourceCalibPars[,3]
-
+ResourceParRange = data.frame(min = ResourceParMin,max = ResourceParMax)
 
 ################# 2-STAGE FIT PARAMETERS
 
 N = 1000
+ResourceParStart = Latinhyper(ResourceParRange,N)
 registerDoParallel(cl)
 ptm = proc.time() 
 ResourceResults = foreach(i=1:N,.packages='FME') %dopar%
 {
-    ResourceParValue = sapply(names(ResourceParMin),function(x) {
-        runif(1,ResourceParMin[x],ResourceParMax[x])
-    })  
-
+    ResourceParValue = ResourceParStart[i,]
+    
     ResourceFitPseudo = ResourceFit(
         parvalue = ResourceParValue,
         parmin = ResourceParMin,
@@ -211,6 +210,8 @@ stopCluster(cl)
 
 ################# PLOT FITTED VALUES
 
-CalibPlotFunc(ResourceResults,ResourceActual,ResourceParms,ResourceExog,
-    ResourceInit,ResourceMod,delta_t,delayyearlength,'ResourceSubmodel')
+ResourceFitData = CalibPlotFunc(ResourceResults,ResourceActual,
+	ResourceParms,ResourceExog,ResourceInit,ResourceMod,delta_t,
+	delayyearlength,'ResourceSubmodel')
 
+SSRCoefPlot(ResourceResults,ResourceParStart,'ResourceSubmodel')

@@ -344,6 +344,9 @@ HealthEducationCalibPars_Low =  rbind(
 HealthEducationParValue_Low = HealthEducationCalibPars_Low[,1]
 HealthEducationParMin_Low =  HealthEducationCalibPars_Low[,2]
 HealthEducationParMax_Low = HealthEducationCalibPars_Low[,3]
+HealthEducationParRange_Low = data.frame(
+	min = HealthEducationParMin_Low,
+	max = HealthEducationParMax_Low)
 
 HealthEducationCalibPars_Mid =  rbind(
 	ZetaE = as.numeric(ParameterData['ZetaE_Mid',]),
@@ -364,6 +367,9 @@ HealthEducationCalibPars_Mid =  rbind(
 HealthEducationParValue_Mid = HealthEducationCalibPars_Mid[,1]
 HealthEducationParMin_Mid =  HealthEducationCalibPars_Mid[,2]
 HealthEducationParMax_Mid = HealthEducationCalibPars_Mid[,3]
+HealthEducationParRange_Mid = data.frame(
+	min = HealthEducationParMin_Mid,
+	max = HealthEducationParMax_Mid)
 
 HealthEducationCalibPars_High =  rbind(
 	ZetaE = as.numeric(ParameterData['ZetaE_High',]),
@@ -384,19 +390,23 @@ HealthEducationCalibPars_High =  rbind(
 HealthEducationParValue_High = HealthEducationCalibPars_High[,1]
 HealthEducationParMin_High =  HealthEducationCalibPars_High[,2]
 HealthEducationParMax_High = HealthEducationCalibPars_High[,3]
+HealthEducationParRange_High = data.frame(
+	min = HealthEducationParMin_High,
+	max = HealthEducationParMax_High)
 
 
 ################# 2-STAGE FIT PARAMETERS
 
 N = 1000
+HealthEducationParStart_Low = Latinhyper(HealthEducationParRange_Low,N)
+HealthEducationParStart_Mid = Latinhyper(HealthEducationParRange_Mid,N)
+HealthEducationParStart_High = Latinhyper(HealthEducationParRange_High,N)
 registerDoParallel(cl)
 ptm = proc.time() 
 HealthEducationResults_Low = foreach(i = 1:N,.packages='FME') %dopar%
 {
-	HealthEducationParValue_Low = sapply(names(HealthEducationParMin_Low),
-	function(x) {
-		runif(1,HealthEducationParMin_Low[x],HealthEducationParMax_Low[x])
-	})	
+	HealthEducationParValue_Low = HealthEducationParStart_Low[i,]
+	
 	HealthEducationFitPseudo_Low = HealthEducationFit(
 		parvalue = HealthEducationParValue_Low,
 		parmin = HealthEducationParMin_Low,
@@ -430,10 +440,8 @@ print(ptm)
 ptm = proc.time() 
 HealthEducationResults_Mid = foreach(i = 1:N,.packages='FME') %dopar%
 {
-	HealthEducationParValue_Mid = sapply(names(HealthEducationParMin_Mid),
-	function(x) {
-		runif(1,HealthEducationParMin_Mid[x],HealthEducationParMax_Mid[x])
-	})	
+	HealthEducationParValue_Mid = HealthEducationParStart_Mid[i,]
+
 	HealthEducationFitPseudo_Mid = HealthEducationFit(
 		parvalue = HealthEducationParValue_Mid,
 		parmin = HealthEducationParMin_Mid,
@@ -467,10 +475,8 @@ print(ptm)
 ptm = proc.time() 
 HealthEducationResults_High = foreach(i = 1:N,.packages='FME') %dopar%
 {
-	HealthEducationParValue_High = sapply(names(HealthEducationParMin_High),
-	function(x) {
-		runif(1,HealthEducationParMin_High[x],HealthEducationParMax_High[x])
-	})	
+	HealthEducationParValue_High = HealthEducationParStart_High[i,]
+
 	HealthEducationFitPseudo_High = HealthEducationFit(
 		parvalue = HealthEducationParValue_High,
 		parmin = HealthEducationParMin_High,
@@ -504,14 +510,21 @@ stopCluster(cl)
 
 ################# PLOT FITTED VALUES
 
-HealthEducationFitParm_Low = CalibPlotFunc(HealthEducationResults_Low,HealthEducationActual_Low,
-	HealthEducationParms_Low,HealthEducationExog_Low,HealthEducationInit_Low,
-	HealthEducationMod,delta_t,delayyearlength,'Low Income')
+HealthEducationFitData_Low = CalibPlotFunc(HealthEducationResults_Low,
+	HealthEducationActual_Low,HealthEducationParms_Low,HealthEducationExog_Low,
+	HealthEducationInit_Low,HealthEducationMod,delta_t,delayyearlength,
+	'HealthEducationSubmodel_LowIncome')
 
-HealthEducationFitParm_Mid = CalibPlotFunc(HealthEducationResults_Mid,HealthEducationActual_Mid,
-	HealthEducationParms_Mid,HealthEducationExog_Mid,HealthEducationInit_Mid,
-	HealthEducationMod,delta_t,delayyearlength,'Middle Income')
+HealthEducationFitData_Mid = CalibPlotFunc(HealthEducationResults_Mid,
+	HealthEducationActual_Mid,HealthEducationParms_Mid,HealthEducationExog_Mid,
+	HealthEducationInit_Mid,HealthEducationMod,delta_t,delayyearlength,
+	'HealthEducationSubmodel_MidIncome')
 
-HealthEducationFitParm_High = CalibPlotFunc(HealthEducationResults_High,HealthEducationActual_High,
-	HealthEducationParms_High,HealthEducationExog_High,HealthEducationInit_High,
-	HealthEducationMod,delta_t,delayyearlength,'High Income')
+HealthEducationFitData_High = CalibPlotFunc(HealthEducationResults_High,
+	HealthEducationActual_High,HealthEducationParms_High,HealthEducationExog_High,
+	HealthEducationInit_High,HealthEducationMod,delta_t,delayyearlength,
+	'HealthEducationSubmodel_HighIncome')
+
+SSRCoefPlot(HealthEducationResults_Low,HealthEducationParStart_Low,'HealthEducationSubmodel_LowIncome')
+SSRCoefPlot(HealthEducationResults_Mid,HealthEducationParStart_Mid,'HealthEducationSubmodel_MidIncome')
+SSRCoefPlot(HealthEducationResults_High,HealthEducationParStart_High,'HealthEducationSubmodel_HighIncome')

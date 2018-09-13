@@ -405,22 +405,43 @@ FoodCalibPars =  rbind(
 FoodParValue = FoodCalibPars[,1]
 FoodParMin =  FoodCalibPars[,2]
 FoodParMax = FoodCalibPars[,3]
-
+FoodParRange = data.frame(min = FoodParMin,max = FoodParMax)
 
 ################# 2-STAGE FIT PARAMETERS
-
-N = 1000
+N = 1E7
 registerDoParallel(cl)
 ptm = proc.time() 
-FoodResults = foreach(i = 1:N,.packages='FME') %dopar%
+FoodParStart = Latinhyper(FoodParRange,N)
+FoodGlobalSearch = foreach(i=1:N,.packages='FME') %dopar%
 {
-	FoodParValue = sapply(names(FoodParMin),function(x) {
-		runif(1,FoodParMin[x],FoodParMax[x])
-	})	
-	FoodModFit = FoodFit(
+# Random search
+	FoodParValue = FoodParStart[i,]
+	FoodModCost = FoodCost(FoodParValue,t0,tf,delta_t,delayyearlength,
+	FoodExog,FoodInit,FoodParms,FoodActual)
+	return(FoodModCost)
+}	
+ptm = proc.time() - ptm
+print(ptm)
+
+FoodSearchCost = sapply(FoodGlobalSearch,function(x) x$model)
+FoodBestParStart = FoodParStart[which.min(FoodSearchCost[which(FoodSearchCost != 0)]),]
+CostPlot(FoodGlobalSearch,FoodParStart,'FoodSubmodel')
+rm('FoodGlobalSearch','FoodParStart')
+M = 100
+LocalSearchRad = .2
+FoodLocalParMin = FoodBestParStart - abs(FoodBestParStart * LocalSearchRad)
+FoodLocalParMax = FoodBestParStart + abs(FoodBestParStart * LocalSearchRad)
+FoodLocalParRange = data.frame(min = FoodLocalParMin,max = FoodLocalParMax)
+ptm = proc.time() 
+FoodLocalParStart = Latinhyper(FoodLocalParRange,M)
+FoodResults = foreach(i = 1:M,.packages='FME') %dopar%
+{
+	FoodParValue = FoodLocalParStart[i,]
+
+	FoodFit = FoodFit(
 		parvalue = FoodParValue,
-		parmin = FoodParMin,
-		parmax = FoodParMax,
+		parmin = FoodLocalParMin,
+		parmax = FoodLocalParMax,
 		yactual = FoodActual,
 		optmethod = 'Marq',
 		delta_t = delta_t,
@@ -428,14 +449,17 @@ FoodResults = foreach(i = 1:N,.packages='FME') %dopar%
 		exog = FoodExog,
 		init = FoodInit,
 		parms = FoodParms)
-
-	return(FoodModFit)
+	
+	return(FoodFit)
 }
-ptm = proc.time()  - ptm
-print(ptm)
+ptm = proc.time() - ptm
+print(ptm)	
 stopCluster(cl)
 
 ################# PLOT FITTED VALUES
 
-CalibPlotFunc(FoodResults,FoodActual,FoodParms,FoodExog,FoodInit,
+FoodFitData = CalibPlotFunc(FoodResults,FoodActual,FoodParms,FoodExog,FoodInit,
 	FoodMod,delta_t,delayyearlength,'FoodSubmodel')
+
+SSRCoefPlot(FoodResults,FoodParStart,'FoodSubmodel')
+

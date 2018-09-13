@@ -39,5 +39,11 @@ print('***********  SAVE RESULTS *****************')
 save(list = c(
 	'EconResults_Low',
 	'EconResults_Mid',
-	'EconResults_High'),
+	'EconResults_High',
+	'EconParStart_Low',
+	'EconParStart_Mid',
+	'EconParStart_High',
+	'EconFitData_Low',
+	'EconFitData_Mid',
+	'EconFitData_High'),
 	file = 'Calibration/CalibrationOutput/EconomyParmsEstimate.RData')

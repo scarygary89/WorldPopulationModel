@@ -193,18 +193,18 @@ WaterCalibPars =  rbind(
 WaterParValue = WaterCalibPars[,1]
 WaterParMin =  WaterCalibPars[,2]
 WaterParMax = WaterCalibPars[,3]
+WaterParRange = data.frame(min = WaterParMin,max = WaterParMax)
 
 ################# 2-STAGE FIT PARAMETERS
 
 N = 1000
+WaterParStart = Latinhyper(WaterParRange,N)
 registerDoParallel(cl)
 ptm = proc.time() 
 WaterResults = foreach(i=1:N,.packages='FME') %dopar%
 {
-    WaterParValue = sapply(names(WaterParMin),function(x) {
-        runif(1,WaterParMin[x],WaterParMax[x])
-    })  
-
+    WaterParValue = WaterParStart[i,]
+    
     WaterFitPseudo = WaterFit(
         parvalue = WaterParValue,
         parmin = WaterParMin,
@@ -238,5 +238,8 @@ stopCluster(cl)
 
 ################# PLOT FITTED VALUES
 
-CalibPlotFunc(WaterResults,WaterActual,WaterParms,WaterExog,
-    WaterInit,WaterMod,delta_t,delayyearlength,'WaterSubmodel')
+WaterFitData = CalibPlotFunc(WaterResults,WaterActual,WaterParms,
+    WaterExog,WaterInit,WaterMod,delta_t,delayyearlength,
+    'WaterSubmodel')
+
+SSRCoefPlot(WaterResults,WaterParStart,'WaterSubmodel')
