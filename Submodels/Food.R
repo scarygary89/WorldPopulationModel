@@ -98,15 +98,12 @@ Food = function(
             Livestock = exp(logLivestockProdCap),
             Crops = exp(logCropsProdCap))
         TargetFood_l = FoodConsumptionFrac_l * FoodDemand
-        AgriWaterDemand = (FoodStock_l['Crops'] / 
-            (CropsTechMult*CropLand^LandProdElastCrops))^(1/WaterProdEastCrops) + 
-            (FoodStock_l['Livestock']/(LivestockTechMult*GrazeLand^LandProdElastLivestock)) ^ 
-            (1/WaterProdElastLivestock)  
+        AgriWaterDemand = FoodStock_l['Crops'] * CropsWaterConsRate + 
+            FoodStock_l['Livestock'] * LivestockWaterConsRate
         FoodCons_l = pmax(pmin(TargetFood_l,FoodStock_l),0)
         names(FoodCons_l) = c('Fish','Livestock','Crops')
         FoodProd_l = pmax(pmin((TargetFood_l - FoodStock_l)/ProdDelay_l,FoodProdCap_l),MinFoodProd)
         FoodWaste_l = pmin(FoodWasteFrac_l * FoodStock_l,FoodStock_l - FoodCons_l)
-
         GrazeLandGain = GrazeLandGrowthRate * GrazeLand
         GrazeLandLoss = GrazeLandLossRate * GrazeLand
         CropLandGain = CropLandGrowthRate * CropLand

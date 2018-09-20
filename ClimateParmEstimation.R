@@ -38,6 +38,5 @@ source('./Calibration/ClimateCalibration.R')
 print('***********  SAVE RESULTS *****************')
 save(list = c(
 	'ClimateResults',
-	'ClimateParStart',
 	'ClimateFitData'),
 	file = 'Calibration/CalibrationOutput/ClimateParmsEstimate.RData')

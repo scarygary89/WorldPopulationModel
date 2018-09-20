@@ -15,9 +15,16 @@ load(file ='./Calibration/CalibrationOutput/WaterParmsEstimate.RData')
 
 # Extract Best Fit Parameter Function
 BestParmExtract = function(CalibModResults){
-	SSR = sapply(CalibModResults,function(x) x$ssr)
-	BestFit = CalibModResults[[which.min(SSR[which(SSR != 0)])]]
-	FitParm = coef(BestFit)
+	if(class(CalibModResults) == 'ga' | class(CalibModResults) == 'gaisl')
+	{
+		FitParm = CalibModResults@solution[1,]
+	}
+	else
+	{
+		SSR = sapply(CalibModResults,function(x) x$ssr)
+		BestFit = CalibModResults[[which.min(SSR[which(SSR != 0)])]]
+		FitParm = coef(BestFit)
+	}
 	return(FitParm)
 }
 

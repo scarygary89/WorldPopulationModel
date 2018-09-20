@@ -124,6 +124,7 @@ ParameterValue = c(
 		BetaH = ParameterData['BetaH','value'],
 
 		FemaleBirthRatio = ParameterData['FemaleBirthRatio','value'],
+		NutritionReq = ParameterData['NutritionReq','value'],
 		PoorFrac = ParameterData['PoorFrac','value'],
 
   # Food Coefficients
@@ -176,6 +177,8 @@ ParameterValue = c(
 		CropsWasteFrac = ParameterData['CropsWasteFrac','value'],
 		WaterCropFrac = ParameterData['WaterCropFrac','value'],
 		MinFoodProd = ParameterData['MinFoodProd','value'],
+		CropsWaterConsRate =ParameterData['CropsWaterConsRate','value'],
+		LivestockWaterConsRate =ParameterData['LivestockWaterConsRate','value'],
 
     # Climate Coefficients
 		Lambda = ParameterData['Lambda','value'],
@@ -185,6 +188,10 @@ ParameterValue = c(
 		PsiE2_Low = ParameterData['PsiE2_Low','value'],
 		PsiE2_Mid = ParameterData['PsiE2_Mid','value'],		
 		PsiE2_High = ParameterData['PsiE2_High','value'],
+		PsiE3_Low = ParameterData['PsiE3_Low','value'],
+		PsiE3_Mid = ParameterData['PsiE3_Mid','value'],		
+		PsiE3_High = ParameterData['PsiE3_High','value'],
+		CO2EmissionConcConv = ParameterData['CO2EmissionConcConv','value'],
 		Gamma = ParameterData['Gamma','value'],
 		RefCO2Conc = InitialData['CO2Conc','value'],
 		OtherRadForce = ParameterData['OtherRadForce','value'],

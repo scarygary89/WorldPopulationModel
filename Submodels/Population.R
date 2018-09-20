@@ -83,10 +83,11 @@ Population = function(
 		GFR           = AlphaGFR  - BetaH * FemaleHealthAccess - BetaE * FemaleEduAttain
 
 		DeathFood_ijk   = sapply(c('Rich','Poor'), 
-							function(x) OmegaF_ijk[,x] * NutritionConsPC_ijk[,x] )
+							function(x) OmegaF_ijk[,x] * (NutritionReq -  NutritionConsPC_ijk[,x]) / 
+							NutritionReq)
 		colnames(DeathFood_ijk) = c('Rich','Poor')
 		DeathHealth_ijk = sapply(c('Rich','Poor'), 
-							function(x) OmegaH_ijk[,x] * GeneralHealthAccess_ijk[,x] )
+							function(x) OmegaH_ijk[,x] * (1 - GeneralHealthAccess_ijk[,x]))
 		colnames(DeathHealth_ijk) = c('Rich','Poor')
 		MortRate_ijk    = sapply(c('Rich','Poor'),
 							function(x) MinDeath_ijk[,x] + DeathFood_ijk[,x] + DeathHealth_ijk[,x] )

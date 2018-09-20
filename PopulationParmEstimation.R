@@ -8,6 +8,7 @@ library(gridExtra)
 library(scales)
 library(Matrix)
 library(FME)
+library(GA)
 
 print('************* INITIALIZE INPUTS *************')
 # setwd('~/../Dropbox/HumanPopDynModel/Model/R/WorldPopulationModel - Difference')
@@ -38,6 +39,5 @@ source('./Calibration/PopulationCalibration.R')
 print('***********  SAVE RESULTS *****************')
 save(list = c(
 	'PopResults',
-	'PopParStart',
 	'PopulationFitData'),
-	file = 'Calibration/CalibrationOutput/PopulationParmsEstimate.RData')
+	file = 'Calibration/CalibrationOutput/PopulationParmsEstimate2.RData')

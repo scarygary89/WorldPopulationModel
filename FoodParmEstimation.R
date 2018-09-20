@@ -38,6 +38,5 @@ source('./Calibration/FoodCalibration.R')
 print('***********  SAVE RESULTS *****************')
 save(list =c(
 	'FoodResults',
-	'FoodParStart',
 	'FoodFitData'),
 	file = 'Calibration/CalibrationOutput/FoodParmsEstimate.RData')

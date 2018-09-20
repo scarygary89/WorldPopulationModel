@@ -8,6 +8,7 @@ library(gridExtra)
 library(scales)
 library(Matrix)
 library(FME)
+library(GA)
 
 print('************* INITIALIZE INPUTS *************')
 setwd('~/../Dropbox/HumanPopDynModel/Model/R/WorldPopulationModel - Difference')

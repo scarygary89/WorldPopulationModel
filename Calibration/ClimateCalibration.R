@@ -4,6 +4,7 @@
 
 library(foreach)
 library(doParallel)
+library(GA)
 numcore = detectCores() 
 cl<-makeCluster(numcore) 
 print(cl)
@@ -16,9 +17,9 @@ ClimateMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms) {
 		tspan = seq(from=t0, to=tf, by=delta_t)
 		aux_names = c(
 			'TempAnamoly',
-			'CO2EmissionPC_Low',
-			'CO2EmissionPC_Mid',
-			'CO2EmissionPC_High'
+			'CO2Emission_Low',
+			'CO2Emission_Mid',
+			'CO2Emission_High'
 			)
 		AuxData = matrix(NA,
 			nrow = (length(tspan)),
@@ -56,7 +57,7 @@ ClimateMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms) {
 			# AUXILIARY VARIABLES
 			aux = c(
 				ClimateOut[['TempAnamoly']],
-				ClimateOut[['CO2EmissionPC']]
+				ClimateOut[['CO2Emission_r']]
 			)
 			AuxData[i,] = aux
 
@@ -121,13 +122,16 @@ ClimateFit = function(parvalue,parmin,parmax,yactual,optmethod,control=list(),
 
 ClimateParms = c(  
 	Lambda = as.numeric(ParameterValue['Lambda']),
-	RefTemp = as.numeric(ParameterValue['RefTemp']),
 	PsiE1_Low = as.numeric(ParameterValue['PsiE1_Low']),
 	PsiE1_Mid = as.numeric(ParameterValue['PsiE1_Mid']),
 	PsiE1_High = as.numeric(ParameterValue['PsiE1_High']),
 	PsiE2_Low = as.numeric(ParameterValue['PsiE2_Low']),
 	PsiE2_Mid = as.numeric(ParameterValue['PsiE2_Mid']),
 	PsiE2_High = as.numeric(ParameterValue['PsiE2_High']),
+    PsiE3_Low = as.numeric(ParameterValue['PsiE3_Low']),
+    PsiE3_Mid = as.numeric(ParameterValue['PsiE3_Mid']),
+    PsiE3_High = as.numeric(ParameterValue['PsiE3_High']),
+    CO2EmissionConcConv = as.numeric(ParameterValue['CO2EmissionConcConv']),
 	Gamma = as.numeric(ParameterValue['Gamma']),
 	RefCO2Conc = as.numeric(ParameterValue['RefCO2Conc']),
 	OtherRadForce = as.numeric(ParameterValue['OtherRadForce'])
@@ -158,9 +162,9 @@ ClimateActual = na.omit(melt(
         time = CalibData$time,
         CO2Conc = CalibData$CO2Conc,
         TempAnamoly = CalibData$TempAnamoly,
-        CO2EmissionPC_Low = CalibData$CO2EmissionPC_Low,
-        CO2EmissionPC_Mid = CalibData$CO2EmissionPC_Mid,
-        CO2EmissionPC_High = CalibData$CO2EmissionPC_High)),
+        CO2Emission_Low = CalibData$CO2Emission_Low,
+        CO2Emission_Mid = CalibData$CO2Emission_Mid,
+        CO2Emission_High = CalibData$CO2Emission_High)),
     id ='time'))
 ClimateActual$variable = as.character(ClimateActual$variable)
 ClimateActual = ClimateActual[,c('variable','time','value')]
@@ -170,27 +174,30 @@ ClimateActual$error[ClimateActual$variable == 'CO2Conc'] =
 ClimateActual$error[ClimateActual$variable == 'TempAnamoly'] = 
     mean(ClimateActual$value[ClimateActual$variable == 'TempAnamoly']) #/ 
     # (ClimateActual$time[ClimateActual$variable == 'TempAnamoly'] - 1979) ^ 2
-ClimateActual$error[ClimateActual$variable == 'CO2EmissionPC_Low'] = 
-    mean(ClimateActual$value[ClimateActual$variable == 'CO2EmissionPC_Low']) #/ 
-    # (ClimateActual$time[ClimateActual$variable == 'CO2EmissionPC_Low'] - 1979) ^ 2
-ClimateActual$error[ClimateActual$variable == 'CO2EmissionPC_Mid'] = 
-    mean(ClimateActual$value[ClimateActual$variable == 'CO2EmissionPC_Mid']) #/ 
-    # (ClimateActual$time[ClimateActual$variable == 'CO2EmissionPC_Mid'] - 1979) ^ 2
-    ClimateActual$error[ClimateActual$variable == 'CO2EmissionPC_High'] = 
-    mean(ClimateActual$value[ClimateActual$variable == 'CO2EmissionPC_High']) #/ 
-    # (ClimateActual$time[ClimateActual$variable == 'CO2EmissionPC_High'] - 1979) ^ 2
+ClimateActual$error[ClimateActual$variable == 'CO2Emission_Low'] = 
+    mean(ClimateActual$value[ClimateActual$variable == 'CO2Emission_Low']) #/ 
+    # (ClimateActual$time[ClimateActual$variable == 'CO2Emission_Low'] - 1979) ^ 2
+ClimateActual$error[ClimateActual$variable == 'CO2Emission_Mid'] = 
+    mean(ClimateActual$value[ClimateActual$variable == 'CO2Emission_Mid']) #/ 
+    # (ClimateActual$time[ClimateActual$variable == 'CO2Emission_Mid'] - 1979) ^ 2
+    ClimateActual$error[ClimateActual$variable == 'CO2Emission_High'] = 
+    mean(ClimateActual$value[ClimateActual$variable == 'CO2Emission_High']) #/ 
+    # (ClimateActual$time[ClimateActual$variable == 'CO2Emission_High'] - 1979) ^ 2
 
 ################# DEFINE CALIBRATION PARAMETERS
 
 ClimateCalibPars =  rbind(
 	Lambda = as.numeric(ParameterData['Lambda',]),
-	# RefTemp = as.numeric(ParameterData['RefTemp',]),
 	PsiE1_Low = as.numeric(ParameterData['PsiE1_Low',]),
 	PsiE1_Mid = as.numeric(ParameterData['PsiE1_Mid',]),
 	PsiE1_High = as.numeric(ParameterData['PsiE1_High',]),
 	PsiE2_Low = as.numeric(ParameterData['PsiE2_Low',]),
 	PsiE2_Mid = as.numeric(ParameterData['PsiE2_Mid',]),
 	PsiE2_High = as.numeric(ParameterData['PsiE2_High',]),
+    PsiE3_Low = as.numeric(ParameterData['PsiE3_Low',]),
+    PsiE3_Mid = as.numeric(ParameterData['PsiE3_Mid',]),
+    PsiE3_High = as.numeric(ParameterData['PsiE3_High',]),
+    CO2EmissionConcConv = as.numeric(ParameterData['CO2EmissionConcConv',]),
 	Gamma = as.numeric(ParameterData['Gamma',]),
 	# RefCO2Conc = as.numeric(ParameterData['RefCO2Conc',]),
 	OtherRadForce = as.numeric(ParameterData['OtherRadForce',])
@@ -199,52 +206,41 @@ ClimateCalibPars =  rbind(
 ClimateParValue = ClimateCalibPars[,1]
 ClimateParMin =  ClimateCalibPars[,2]
 ClimateParMax = ClimateCalibPars[,3]
-ClimateParRange = data.frame(min = ClimateParMin,max = ClimateParMax)
-
-################# 2-STAGE FIT PARAMETERS
-
-N = 1000
-ClimateParStart = Latinhyper(ClimateParRange,N)
+ClimateFitness = function(p) 
+{
+    names(p) = names(ClimateParValue)
+    ClimateCost = -ClimateCost(
+        p=p,
+        t0 = t0,
+        tf = tf,
+        delta_t = delta_t,
+        delayyearlength = delayyearlength,
+        init = ClimateInit,
+        parms = ClimateParms,
+        exog = ClimateExog,
+        yactual = ClimateActual
+    )$model
+    return(ClimateCost)
+}
+################# Genetic Algo
 registerDoParallel(cl)
 ptm = proc.time() 
-ClimateResults = foreach(i=1:N,.packages='FME') %dopar%
-{
-    ClimateParValue = ClimateParStart[i,]
-    
-    ClimateFitPseudo = ClimateFit(
-        parvalue = ClimateParValue,
-        parmin = ClimateParMin,
-        parmax = ClimateParMax,
-        yactual = ClimateActual,
-        optmethod = 'Pseudo',
-        # control = list(numiter = 100000),
-        delta_t = delta_t,
-        delayyearlength = delayyearlength,
-        exog = ClimateExog,
-        init = ClimateInit,
-        parms = ClimateParms)
-
-    ClimateFitMod = ClimateFit(
-        parvalue = coef(ClimateFitPseudo),
-        parmin = ClimateParMin,
-        parmax = ClimateParMax,
-        yactual = ClimateActual,
-        optmethod = 'Marq',
-        delta_t = delta_t,
-        delayyearlength = delayyearlength,
-        exog = ClimateExog,
-        init = ClimateInit,
-        parms = ClimateParms)
-    
-    return(ClimateFitMod)
-}
+ClimateResults = gaisl( 
+    type = 'real-valued',
+    fitness = ClimateFitness,
+    lower = ClimateParMin,
+    upper = ClimateParMax,
+    suggestions = ClimateParValue,
+    numIslands = numcore,
+    popSize = 1000,
+    run = 400,
+    crossover = gareal_blxCrossover, 
+    maxiter = 10000)
 ptm = proc.time() - ptm
-print(ptm)
+print(ptm)  
 stopCluster(cl)
 
 ################# PLOT FITTED VALUES
 
 ClimateFitData = CalibPlotFunc(ClimateResults,ClimateActual,ClimateParms,ClimateExog,
     ClimateInit,ClimateMod,delta_t,delayyearlength,'ClimateSubmodel')
-
-SSRCoefPlot(ClimateResults,ClimateParStart,'ClimateSubmodel')

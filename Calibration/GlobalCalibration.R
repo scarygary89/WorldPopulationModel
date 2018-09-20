@@ -48,9 +48,9 @@ GlobalActual = na.omit(melt(
 		# Climate Submodel
         CO2Conc = CalibData$CO2Conc,
         TempAnamoly = CalibData$TempAnamoly,
-        CO2EmissionPC_Low = CalibData$CO2EmissionPC_Low,
-        CO2EmissionPC_Mid = CalibData$CO2EmissionPC_Mid,
-        CO2EmissionPC_High = CalibData$CO2EmissionPC_High,
+        CO2Emission_Low = CalibData$CO2Emission_Low,
+        CO2Emission_Mid = CalibData$CO2Emission_Mid,
+        CO2Emission_High = CalibData$CO2Emission_High,
 
 		# Food Submodel
         FishProduction = CalibData$GlobalFishProduction,
@@ -453,6 +453,9 @@ CalibPars =  rbind(
 	PsiE2_Low = as.numeric(ParameterData['PsiE2_Low',]),
 	PsiE2_Mid = as.numeric(ParameterData['PsiE2_Mid',]),
 	PsiE2_High = as.numeric(ParameterData['PsiE2_High',]),
+	PsiE3_Low = as.numeric(ParameterData['PsiE3_Low',]),
+	PsiE3_Mid = as.numeric(ParameterData['PsiE3_Mid',]),
+	PsiE3_High = as.numeric(ParameterData['PsiE3_High',]),
 	Gamma = as.numeric(ParameterData['Gamma',]),
 	# RefCO2Conc = as.numeric(ParameterData['RefCO2Conc',]),
 	OtherRadForce = as.numeric(ParameterData['OtherRadForce',]),

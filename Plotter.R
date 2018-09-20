@@ -97,7 +97,7 @@ PlotFuncWithObs = function(OutputData){
 
 	
 	CO2EmissionPlot = MultiTimePlot(OutputData[,'time'],
-		OutputData[,c('CO2EmissionPC_Low','CO2EmissionPC_Mid','CO2EmissionPC_High')],
+		OutputData[,c('CO2Emission_Low','CO2Emission_Mid','CO2Emission_High')],
 		yobs,"Year", "PPM",
 		"CO2 Emissions per capita")
 	
@@ -137,10 +137,18 @@ PlotFuncWithObs = function(OutputData){
 
 CalibPlotFunc = function(CalibModResults,ObsData,Parms,Exog,Init,
 	CalibMod,delta_t,delayyearlength,tit) {
-	SSR = sapply(CalibModResults,function(x) x$ssr)
-	BestFit = CalibModResults[[which.min(SSR[which(SSR != 0)])]]
+	if (class(CalibModResults) == 'ga'|class(CalibModResults) == 'gaisl')
+	{
+		BestParms = CalibModResults@solution[1,] 
+	}
+	else 
+	{
+		SSR = sapply(CalibModResults,function(x) x$ssr)
+		BestFit = CalibModResults[[which.min(SSR[which(SSR != 0)])]]
+		BestParms = coef(BestFit)
+	}
 	FitParm  = Parms
-	FitParm[names(coef(BestFit))] = coef(BestFit)
+	FitParm[names(BestParms)] = BestParms
 	FitData = CalibMod(min(Exog$time),max(Exog$time),delta_t,
 		delayyearlength,Exog,Init,FitParm)
 	FitData = data.frame(FitData)
@@ -161,6 +169,8 @@ CalibPlotFunc = function(CalibModResults,ObsData,Parms,Exog,Init,
 	}
 	return(FitData)
 } 
+
+
 
 SSRCoefPlot = function(CalibModResults,ParStart,tit) {
 	coefvalues = sapply(CalibModResults, function(x) coef(x))

@@ -4,6 +4,7 @@
 
 library(foreach)
 library(doParallel)
+library(GA)
 numcore = detectCores()
 cl<-makeCluster(numcore) 
 print(cl)
@@ -241,7 +242,9 @@ FoodParms = c(
 	InitEconOutputGrowth_Low = as.numeric(ParameterValue['InitEconOutputGrowth_Low']), 
 	InitEconOutputGrowth_Mid = as.numeric(ParameterValue['InitEconOutputGrowth_Mid']),
 	InitEconOutputGrowth_High = as.numeric(ParameterValue['InitEconOutputGrowth_High']),
-	PoorFrac = as.numeric(ParameterValue['PoorFrac'])
+	PoorFrac = as.numeric(ParameterValue['PoorFrac']),
+	CropsWaterConsRate = as.numeric(ParameterValue['CropsWaterConsRate']),
+	LivestockWaterConsRate = as.numeric(ParameterValue['LivestockWaterConsRate'])
 )
 
 ################# DEFINE INITIAL CONDITIONS
@@ -400,58 +403,43 @@ FoodCalibPars =  rbind(
 	LivestockWasteFrac = as.numeric(ParameterData['LivestockWasteFrac',]),
 	CropsWasteFrac = as.numeric(ParameterData['CropsWasteFrac',]),
 	WaterCropFrac = as.numeric(ParameterData['WaterCropFrac',]),
-	MinFoodProd = as.numeric(ParameterData['MinFoodProd',])
+	MinFoodProd = as.numeric(ParameterData['MinFoodProd',]),
+	CropsWaterConsRate = as.numeric(ParameterData['CropsWaterConsRate',]),
+	LivestockWaterConsRate = as.numeric(ParameterData['LivestockWaterConsRate',])
 )
 FoodParValue = FoodCalibPars[,1]
 FoodParMin =  FoodCalibPars[,2]
 FoodParMax = FoodCalibPars[,3]
-FoodParRange = data.frame(min = FoodParMin,max = FoodParMax)
-
-################# 2-STAGE FIT PARAMETERS
-N = 1E7
-registerDoParallel(cl)
-ptm = proc.time() 
-FoodParStart = Latinhyper(FoodParRange,N)
-FoodGlobalSearch = foreach(i=1:N,.packages='FME') %dopar%
+FoodFitness = function(p) 
 {
-# Random search
-	FoodParValue = FoodParStart[i,]
-	FoodModCost = FoodCost(FoodParValue,t0,tf,delta_t,delayyearlength,
-	FoodExog,FoodInit,FoodParms,FoodActual)
-	return(FoodModCost)
-}	
-ptm = proc.time() - ptm
-print(ptm)
-
-FoodSearchCost = sapply(FoodGlobalSearch,function(x) x$model)
-FoodBestParStart = FoodParStart[which.min(FoodSearchCost[which(FoodSearchCost != 0)]),]
-CostPlot(FoodGlobalSearch,FoodParStart,'FoodSubmodel')
-rm('FoodGlobalSearch','FoodParStart')
-M = 100
-LocalSearchRad = .2
-FoodLocalParMin = FoodBestParStart - abs(FoodBestParStart * LocalSearchRad)
-FoodLocalParMax = FoodBestParStart + abs(FoodBestParStart * LocalSearchRad)
-FoodLocalParRange = data.frame(min = FoodLocalParMin,max = FoodLocalParMax)
-ptm = proc.time() 
-FoodLocalParStart = Latinhyper(FoodLocalParRange,M)
-FoodResults = foreach(i = 1:M,.packages='FME') %dopar%
-{
-	FoodParValue = FoodLocalParStart[i,]
-
-	FoodFit = FoodFit(
-		parvalue = FoodParValue,
-		parmin = FoodLocalParMin,
-		parmax = FoodLocalParMax,
-		yactual = FoodActual,
-		optmethod = 'Marq',
+	names(p) = names(FoodParValue)
+	FoodCost = -FoodCost(
+		p=p,
+		t0 = t0,
+		tf = tf,
 		delta_t = delta_t,
 		delayyearlength = delayyearlength,
-		exog = FoodExog,
 		init = FoodInit,
-		parms = FoodParms)
-	
-	return(FoodFit)
+		parms = FoodParms,
+		exog = FoodExog,
+		yactual = FoodActual
+	)$model
+	return(FoodCost)
 }
+################# Genetic Algo
+registerDoParallel(cl)
+ptm = proc.time() 
+FoodResults = gaisl( 
+	type = 'real-valued',
+	fitness = FoodFitness,
+	lower = FoodParMin,
+	upper = FoodParMax,
+	suggestions = FoodParValue,
+	numIslands = numcore,
+    popSize = 1000,
+    run = 400,
+    crossover = gareal_blxCrossover, 
+    maxiter = 10000)
 ptm = proc.time() - ptm
 print(ptm)	
 stopCluster(cl)
@@ -461,5 +449,4 @@ stopCluster(cl)
 FoodFitData = CalibPlotFunc(FoodResults,FoodActual,FoodParms,FoodExog,FoodInit,
 	FoodMod,delta_t,delayyearlength,'FoodSubmodel')
 
-SSRCoefPlot(FoodResults,FoodParStart,'FoodSubmodel')
 
