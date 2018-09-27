@@ -87,7 +87,7 @@ print('ALL COMPONENTS LOADED.')
 
 # COMBINE PARAMETER ESTIMATION FROM ALL SUBMODELS
 
-LocalFitParmameterValue = ParameterValue
+LocalFitParameterValue = ParameterValue
 LocalFitInitValue = InitValue
 
 print('***** ASSEMBLE GLOBAL PARAMETER VALUES *****')
@@ -95,7 +95,7 @@ source('CalibDataFormat.R')
 
 
 OutputData = WorldMod(t0,tf,delta_t,delayyearlength,LocalFitInitValue,
-	LocalFitParmameterValue)
+	LocalFitParameterValue)
 PlotFuncWithObs(OutputData)
 write.csv(OutputData,file = 'OutputFiles/OutputData.csv')
 save.image(file = 'OutputFiles/OutWorkspace.RData')

@@ -10,8 +10,8 @@ print(cl)
 
 ################# SUBMODEL WITH EXOGENOUS INPUTS
 
-HealthEducationMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms) {
-	# write.csv(unlist(parms),file='CurrentParms.csv')	
+HealthEducationMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms) 
+{
 	with(as.list(c(parms)), {	
 		tspan = seq(from=t0, to=tf, by=delta_t)
 		aux_names = c(

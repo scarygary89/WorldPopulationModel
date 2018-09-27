@@ -16,9 +16,6 @@ FoodMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms)
 	with(as.list(c(parms)), {	
 		tspan = seq(from=t0, to=tf, by=delta_t)
 		aux_names = c(
-			'FishProduction',
-			'LivestockProduction',
-			'CropProduction',
 			'FishWaste',
 			'LivestockWaste',
 			'CropWaste',
@@ -40,10 +37,10 @@ FoodMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms)
 		stocks = init
 		StockData[1,] = stocks
 		for(i in 1:length(tspan)) {
-			FoodStock_l = c(
-				Fishstock = as.numeric(stocks['Fishstock']),
-				Livestock = as.numeric(stocks['Livestock']),
-				Crops = as.numeric(stocks['Crops']))
+			FoodProd_l = c(
+				Fish = as.numeric(stocks['FishProduction']),
+				Livestock = as.numeric(stocks['LivestockProduction']),
+				Crops = as.numeric(stocks['CropProduction']))
 			FoodDemandPC_r = c( 
 				Low = as.numeric(stocks['FoodDemandPC_Low']),
 				Mid = as.numeric(stocks['FoodDemandPC_Mid']),
@@ -94,7 +91,7 @@ FoodMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms)
 
 			# Global Food System 
 			FoodOut       	= Food(
-								FoodStock_l,
+								FoodProd_l,
 								stocks['Fisheries'],
 								FoodDemandPC_r,
 								stocks['GrazeLand'],
@@ -112,7 +109,6 @@ FoodMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms)
 
 			# AUXILIARY VARIABLES
 			aux = c(
-				FoodOut[['FoodProd_l']],
 				FoodOut[['FoodWaste_l']],
 				FoodOut[['FoodCons_l']],
 				FoodOut[['NutritionConsPC_kr']],
@@ -125,7 +121,7 @@ FoodMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms)
 			dstocks = c(
 			# Food Stocks (Global)
 				FoodOut[["dFisheries"]], 
-				FoodOut[["dFoodStock_l"]],
+				FoodOut[["dFoodProd_l"]],
 				FoodOut[["dFoodDemandPC_r"]],
 				FoodOut[["dGrazeLand"]], 
 				FoodOut[["dCropLand"]]
@@ -133,7 +129,7 @@ FoodMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms)
 
 			stocks = stocks + dstocks * delta_t
 			StockData[i+1,] = stocks
-			# print(StockData)
+			# print(stocks)
 			# print(AuxData)
 		}
 	Output = cbind(tspan, StockData[-(length(tspan)+1),],AuxData)
@@ -213,6 +209,9 @@ FoodParms = c(
 	FishProdDelay = as.numeric(ParameterValue['FishProdDelay']),
 	LivestockProdDelay = as.numeric(ParameterValue['LivestockProdDelay']),
 	CropsProdDelay = as.numeric(ParameterValue['CropsProdDelay']),
+	FishAdjDelay = as.numeric(ParameterValue['FishAdjDelay']),
+	LivestockAdjDelay = as.numeric(ParameterValue['LivestockAdjDelay']),
+	CropsAdjDelay = as.numeric(ParameterValue['CropsAdjDelay']),
 	FoodIncomeElasticity_Low = as.numeric(ParameterValue['FoodIncomeElasticity_Low']),
 	FoodIncomeElasticity_Mid = as.numeric(ParameterValue['FoodIncomeElasticity_Mid']),
 	FoodIncomeElasticity_High = as.numeric(ParameterValue['FoodIncomeElasticity_High']),
@@ -251,9 +250,9 @@ FoodParms = c(
 
 FoodInit = c( 	
 	Fisheries = as.numeric(InitValue['Fisheries']),
-	Fishstock = as.numeric(InitValue['Fishstock']),
-	Livestock = as.numeric(InitValue['Livestock']),
-	Crops = as.numeric(InitValue['Crops']),
+	FishProduction = as.numeric(InitValue['FishProduction']),
+	LivestockProduction = as.numeric(InitValue['LivestockProduction']),
+	CropProduction = as.numeric(InitValue['CropProduction']),
 	FoodDemandPC_Low = as.numeric(InitValue['FoodDemandPC_Low']),
 	FoodDemandPC_Mid = as.numeric(InitValue['FoodDemandPC_Mid']),
 	FoodDemandPC_High = as.numeric(InitValue['FoodDemandPC_High']),
@@ -284,9 +283,6 @@ FoodActual = na.omit(melt(
 		FishProduction = CalibData$GlobalFishProduction,
 		LivestockProduction = CalibData$GlobalMeatProduction,
 		CropProduction = CalibData$GlobalCropProduction,
-		Fishstock = CalibData$Fishstock,
-		Livestock = CalibData$Livestock,
-		Crops = CalibData$Crops,
 		LivestockWaste = CalibData$GlobalMeatLoss,
 		CropWaste = CalibData$GlobalCropLoss,
 		FishConsumption = CalibData$FishConsumption_Low + 
@@ -316,15 +312,6 @@ FoodActual$error[FoodActual$variable == 'FishProduction'] =
 FoodActual$error[FoodActual$variable == 'LivestockProduction'] =
 	mean(FoodActual$value[FoodActual$variable == 'LivestockProduction']) #* 
 	# (1 - (FoodActual$time[FoodActual$variable == 'LivestockProduction'] - 1979) ^ 2 / 1297)
-FoodActual$error[FoodActual$variable == 'Fishstock'] =
-	mean(FoodActual$value[FoodActual$variable == 'Fishstock']) #* 
-	# (1 - (FoodActual$time[FoodActual$variable == 'Fishstock'] - 1979) ^ 2 / 1297)
-FoodActual$error[FoodActual$variable == 'Livestock'] =
-	mean(FoodActual$value[FoodActual$variable == 'Livestock']) #* 
-	# (1 - (FoodActual$time[FoodActual$variable == 'Livestock'] - 1979) ^ 2 / 1297)
-FoodActual$error[FoodActual$variable == 'Crops'] =
-	mean(FoodActual$value[FoodActual$variable == 'Crops']) #* 
-	# (1 - (FoodActual$time[FoodActual$variable == 'Crops'] - 1979) ^ 2 / 1297)
 FoodActual$error[FoodActual$variable == 'CropProduction'] =
 	mean(FoodActual$value[FoodActual$variable == 'CropProduction']) #* 
 	# (1 - (FoodActual$time[FoodActual$variable == 'CropProduction'] - 1979) ^ 2 / 1297)
@@ -397,13 +384,15 @@ FoodCalibPars =  rbind(
 	FishProdDelay = as.numeric(ParameterData['FishProdDelay',]),
 	LivestockProdDelay = as.numeric(ParameterData['LivestockProdDelay',]),
 	CropsProdDelay = as.numeric(ParameterData['CropsProdDelay',]),
+	FishAdjDelay = as.numeric(ParameterData['FishAdjDelay',]),
+	LivestockAdjDelay = as.numeric(ParameterData['LivestockAdjDelay',]),
+	CropsAdjDelay = as.numeric(ParameterData['CropsAdjDelay',]),
 	FoodIncomeElasticity_Low = as.numeric(ParameterData['FoodIncomeElasticity_Low',]),
 	FoodIncomeElasticity_Mid = as.numeric(ParameterData['FoodIncomeElasticity_Mid',]),
 	FoodIncomeElasticity_High = as.numeric(ParameterData['FoodIncomeElasticity_High',]),
 	LivestockWasteFrac = as.numeric(ParameterData['LivestockWasteFrac',]),
 	CropsWasteFrac = as.numeric(ParameterData['CropsWasteFrac',]),
 	WaterCropFrac = as.numeric(ParameterData['WaterCropFrac',]),
-	MinFoodProd = as.numeric(ParameterData['MinFoodProd',]),
 	CropsWaterConsRate = as.numeric(ParameterData['CropsWaterConsRate',]),
 	LivestockWaterConsRate = as.numeric(ParameterData['LivestockWaterConsRate',])
 )

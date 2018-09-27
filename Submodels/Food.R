@@ -4,7 +4,7 @@
 
 
 Food = function(
-    FoodStock_l,
+    FoodProd_l,
     Fisheries,
     FoodDemandPC_r,
     GrazeLand,    
@@ -32,6 +32,10 @@ Food = function(
             Fish = FishProdDelay,
             Livestock = LivestockProdDelay,
             Crops = CropsProdDelay)
+        AdjDelay_l = c(
+            Fish = FishAdjDelay,
+            Livestock = LivestockAdjDelay,
+            Crops = CropsAdjDelay)
         FoodWasteFrac_l = c(
             Fish = FishWasteFrac,
             Livestock = LivestockWasteFrac,
@@ -98,12 +102,12 @@ Food = function(
             Livestock = exp(logLivestockProdCap),
             Crops = exp(logCropsProdCap))
         TargetFood_l = FoodConsumptionFrac_l * FoodDemand
-        AgriWaterDemand = FoodStock_l['Crops'] * CropsWaterConsRate + 
-            FoodStock_l['Livestock'] * LivestockWaterConsRate
-        FoodCons_l = pmax(pmin(TargetFood_l,FoodStock_l),0)
+        AgriWaterDemand = FoodProd_l['Crops'] * CropsWaterConsRate + 
+            FoodProd_l['Livestock'] * LivestockWaterConsRate
+        FoodAdj_l = pmin((TargetFood_l - FoodProd_l)/ProdDelay_l,(FoodProdCap_l-FoodProd_l)/AdjDelay_l)
+        FoodWaste_l = pmin(FoodWasteFrac_l * FoodProd_l,FoodProd_l)
+        FoodCons_l = FoodProd_l - FoodWaste_l
         names(FoodCons_l) = c('Fish','Livestock','Crops')
-        FoodProd_l = pmax(pmin((TargetFood_l - FoodStock_l)/ProdDelay_l,FoodProdCap_l),MinFoodProd)
-        FoodWaste_l = pmin(FoodWasteFrac_l * FoodStock_l,FoodStock_l - FoodCons_l)
         GrazeLandGain = GrazeLandGrowthRate * GrazeLand
         GrazeLandLoss = GrazeLandLossRate * GrazeLand
         CropLandGain = CropLandGrowthRate * CropLand
@@ -122,17 +126,19 @@ Food = function(
         FoodConsPC_krl = sapply(c('Fish','Livestock','Crops'), function(x) {
             (FoodCons_l[x] * FoodAccess_krl[,,x]) / (RegPop_kr * 1000) },
             simplify = 'array')
-        NutritionConsPC_kr = sapply(c('Fish','Livestock','Crops'),function(x) {
-            FoodConsPC_krl[,,x] ^ FoodNutrConv_l[x]},
+        NutritionConsPC_krl = sapply(c('Fish','Livestock','Crops'),function(x) {
+            log(FoodConsPC_krl[,,x]) * FoodNutrConv_l[x]},
             simplify = 'array') 
-        NutritionConsPC_kr = FoodNutrConvMultiplier * NutritionConsPC_kr[,,'Fish'] * 
-                                NutritionConsPC_kr[,,'Livestock'] *  NutritionConsPC_kr[,,'Crops']
+        NutritionConsPC_kr = FoodNutrConvMultiplier + 
+                                NutritionConsPC_krl[,,'Fish'] + 
+                                NutritionConsPC_krl[,,'Livestock'] +  
+                                NutritionConsPC_krl[,,'Crops']
         FishRepl = ThetaU * Fisheries 
         FishExtract = FoodProd_l['Fish'] 
 
         # Stock and Flow Variables
         dFisheries      = FishRepl - FishExtract  
-        dFoodStock_l    = FoodProd_l - FoodCons_l - FoodWaste_l 
+        dFoodProd_l     = FoodAdj_l 
         dFoodDemandPC_r   = FoodIncomeElasticity_r * (ChangeEconOutputPC_r/PrevEconOutputPC_r) * 
                                 PrevFoodDemandPC_r 
         dGrazeLand      = GrazeLandGain - GrazeLandLoss
@@ -140,12 +146,11 @@ Food = function(
 
         # Output
         list( dFisheries = dFisheries,
-              dFoodStock_l = dFoodStock_l,
+              dFoodProd_l = dFoodProd_l,
               dFoodDemandPC_r = dFoodDemandPC_r,
               dGrazeLand = dGrazeLand,
               dCropLand = dCropLand,
               NutritionConsPC_kr = NutritionConsPC_kr,
-              FoodProd_l  = FoodProd_l,
               FoodWaste_l = FoodWaste_l,
               FoodCons_l = FoodCons_l,
               AgriWaterDemand = AgriWaterDemand)

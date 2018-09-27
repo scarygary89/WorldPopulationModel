@@ -10,9 +10,9 @@ OilReserves,2655498,NA,NA,resource
 GasReserves,6922247,NA,NA,resource
 CO2Conc,338.8,NA,NA,climate
 Fisheries,2.92E+09,NA,NA,food
-Fishstock,50347682,NA,NA,food
-Livestock,1.34E+08,NA,NA,food
-Crops,1.12E+09,NA,NA,food
+FishProduction,70776686,NA,NA,food
+LivestockProduction,135649083,NA,NA,food
+CropProduction,2030145301,NA,NA,food
 FoodDemandPC_Low,1,NA,NA,food
 FoodDemandPC_Mid,1,NA,NA,food
 FoodDemandPC_High,1,NA,NA,food

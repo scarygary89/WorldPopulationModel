@@ -198,15 +198,6 @@ GlobalActual$error[GlobalActual$variable == 'FishProduction'] =
 GlobalActual$error[GlobalActual$variable == 'LivestockProduction'] =
 	mean(GlobalActual$value[GlobalActual$variable == 'LivestockProduction']) #* 
 	# (1 - (GlobalActual$time[GlobalActual$variable == 'LivestockProduction'] - 1979) ^ 2 / 1297)
-GlobalActual$error[GlobalActual$variable == 'Fishstock'] =
-	mean(GlobalActual$value[GlobalActual$variable == 'Fishstock']) #* 
-	# (1 - (GlobalActual$time[GlobalActual$variable == 'Fishstock'] - 1979) ^ 2 / 1297)
-GlobalActual$error[GlobalActual$variable == 'Livestock'] =
-	mean(GlobalActual$value[GlobalActual$variable == 'Livestock']) #* 
-	# (1 - (GlobalActual$time[GlobalActual$variable == 'Livestock'] - 1979) ^ 2 / 1297)
-GlobalActual$error[GlobalActual$variable == 'Crops'] =
-	mean(GlobalActual$value[GlobalActual$variable == 'Crops']) #* 
-	# (1 - (GlobalActual$time[GlobalActual$variable == 'Crops'] - 1979) ^ 2 / 1297)
 GlobalActual$error[GlobalActual$variable == 'CropProduction'] =
 	mean(GlobalActual$value[GlobalActual$variable == 'CropProduction']) #* 
 	# (1 - (GlobalActual$time[GlobalActual$variable == 'CropProduction'] - 1979) ^ 2 / 1297)
