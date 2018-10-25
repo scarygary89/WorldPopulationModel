@@ -1,3 +1,4 @@
+library(reshape)
 
 
 # IMPORT DATA
@@ -5,328 +6,38 @@
 InitialData = read.csv(  file = './DataInput/InitialValueInput.csv',sep =',',row.names = 1,
 						header = T, fileEncoding="UTF-8-BOM")
 
-
 ParameterData = read.csv(  file = './DataInput/ParameterInput.csv',sep =',',row.names = 1,
-						header = T, fileEncoding="UTF-8-BOM",)
+						header = T, fileEncoding="UTF-8-BOM")
 
-LowPop_RM1 = InitialData['LowPop_RM1','value']
-LowPop_RM2 = InitialData['LowPop_RM2','value']
-LowPop_RM3 = InitialData['LowPop_RM3','value']
-LowPop_RM4 = InitialData['LowPop_RM4','value']
-LowPop_RF1 = InitialData['LowPop_RF1','value']
-LowPop_RF2 = InitialData['LowPop_RF2','value']
-LowPop_RF3 = InitialData['LowPop_RF3','value']
-LowPop_RF4 = InitialData['LowPop_RF4','value']         
-LowPop_PM1 = InitialData['LowPop_PM1','value']
-LowPop_PM2 = InitialData['LowPop_PM2','value']
-LowPop_PM3 = InitialData['LowPop_PM3','value']
-LowPop_PM4 = InitialData['LowPop_PM4','value']
-LowPop_PF1 = InitialData['LowPop_PF1','value']
-LowPop_PF2 = InitialData['LowPop_PF2','value']
-LowPop_PF3 = InitialData['LowPop_PF3','value']
-LowPop_PF4 = InitialData['LowPop_PF4','value']
-
-MidPop_RM1 = InitialData['MidPop_RM1','value']
-MidPop_RM2 = InitialData['MidPop_RM2','value']
-MidPop_RM3 = InitialData['MidPop_RM3','value']
-MidPop_RM4 = InitialData['MidPop_RM4','value']
-MidPop_RF1 = InitialData['MidPop_RF1','value']
-MidPop_RF2 = InitialData['MidPop_RF2','value']
-MidPop_RF3 = InitialData['MidPop_RF3','value']
-MidPop_RF4 = InitialData['MidPop_RF4','value']         
-MidPop_PM1 = InitialData['MidPop_PM1','value']
-MidPop_PM2 = InitialData['MidPop_PM2','value']
-MidPop_PM3 = InitialData['MidPop_PM3','value']
-MidPop_PM4 = InitialData['MidPop_PM4','value']
-MidPop_PF1 = InitialData['MidPop_PF1','value']
-MidPop_PF2 = InitialData['MidPop_PF2','value']
-MidPop_PF3 = InitialData['MidPop_PF3','value']
-MidPop_PF4 = InitialData['MidPop_PF4','value']
-
-HighPop_RM1 = InitialData['HighPop_RM1','value']
-HighPop_RM2 = InitialData['HighPop_RM2','value']
-HighPop_RM3 = InitialData['HighPop_RM3','value']
-HighPop_RM4 = InitialData['HighPop_RM4','value']
-HighPop_RF1 = InitialData['HighPop_RF1','value']
-HighPop_RF2 = InitialData['HighPop_RF2','value']
-HighPop_RF3 = InitialData['HighPop_RF3','value']
-HighPop_RF4 = InitialData['HighPop_RF4','value']         
-HighPop_PM1 = InitialData['HighPop_PM1','value']
-HighPop_PM2 = InitialData['HighPop_PM2','value']
-HighPop_PM3 = InitialData['HighPop_PM3','value']
-HighPop_PM4 = InitialData['HighPop_PM4','value']
-HighPop_PF1 = InitialData['HighPop_PF1','value']
-HighPop_PF2 = InitialData['HighPop_PF2','value']
-HighPop_PF3 = InitialData['HighPop_PF3','value']
-HighPop_PF4 = InitialData['HighPop_PF4','value']
-
-InitLowTotPop = sum(
-		LowPop_RM1,
-		LowPop_RM2,
-		LowPop_RM3,
-		LowPop_RM4,
-		LowPop_RF1,
-		LowPop_RF2,
-		LowPop_RF3,
-		LowPop_RF4, 
-		LowPop_PM1,
-		LowPop_PM2,
-		LowPop_PM3,
-		LowPop_PM4,
-		LowPop_PF1,
-		LowPop_PF2,
-		LowPop_PF3,
-		LowPop_PF4)
-
-InitMidTotPop = sum(
-		MidPop_RM1,
-		MidPop_RM2,
-		MidPop_RM3,
-		MidPop_RM4,
-		MidPop_RF1,
-		MidPop_RF2,
-		MidPop_RF3,
-		MidPop_RF4, 
-		MidPop_PM1,
-		MidPop_PM2,
-		MidPop_PM3,
-		MidPop_PM4,
-		MidPop_PF1,
-		MidPop_PF2,
-		MidPop_PF3,
-		MidPop_PF4)
-
-InitHighTotPop = sum(
-		HighPop_RM1,
-		HighPop_RM2,
-		HighPop_RM3,
-		HighPop_RM4,
-		HighPop_RF1,
-		HighPop_RF2,
-		HighPop_RF3,
-		HighPop_RF4, 
-		HighPop_PM1,
-		HighPop_PM2,
-		HighPop_PM3,
-		HighPop_PM4,
-		HighPop_PF1,
-		HighPop_PF2,
-		HighPop_PF3,
-		HighPop_PF4)
+CalibData = read.csv(  file = './DataInput/CalibrationInput.csv',sep =',',
+						header = T, fileEncoding="UTF-8-BOM")
 
 
-CapitalInputElast_Low = ParameterData['CapitalInputElast_Low','value']
-CapitalInputElast_Mid = ParameterData['CapitalInputElast_Mid','value']
-CapitalInputElast_High = ParameterData['CapitalInputElast_High','value']
-
-LaborInputElast_Low = ParameterData['LaborInputElast_Low','value']
-LaborInputElast_Mid = ParameterData['LaborInputElast_Mid','value']
-LaborInputElast_High = ParameterData['LaborInputElast_High','value']
-
-LowEmployedWorkRatio_RM1 = ParameterData['LowEmployedWorkRatio_RM1','value']
-LowEmployedWorkRatio_RM2 = ParameterData['LowEmployedWorkRatio_RM2','value']
-LowEmployedWorkRatio_RM3 = ParameterData['LowEmployedWorkRatio_RM3','value']
-LowEmployedWorkRatio_RM4 = ParameterData['LowEmployedWorkRatio_RM4','value']
-LowEmployedWorkRatio_RF1 = ParameterData['LowEmployedWorkRatio_RF1','value']
-LowEmployedWorkRatio_RF2 = ParameterData['LowEmployedWorkRatio_RF2','value']
-LowEmployedWorkRatio_RF3 = ParameterData['LowEmployedWorkRatio_RF3','value']
-LowEmployedWorkRatio_RF4 = ParameterData['LowEmployedWorkRatio_RF4','value']             
-LowEmployedWorkRatio_PM1 = ParameterData['LowEmployedWorkRatio_PM1','value']
-LowEmployedWorkRatio_PM2 = ParameterData['LowEmployedWorkRatio_PM2','value']
-LowEmployedWorkRatio_PM3 = ParameterData['LowEmployedWorkRatio_PM3','value']
-LowEmployedWorkRatio_PM4 = ParameterData['LowEmployedWorkRatio_PM4','value']
-LowEmployedWorkRatio_PF1 = ParameterData['LowEmployedWorkRatio_PF1','value']
-LowEmployedWorkRatio_PF2 = ParameterData['LowEmployedWorkRatio_PF2','value']
-LowEmployedWorkRatio_PF3 = ParameterData['LowEmployedWorkRatio_PF3','value']
-LowEmployedWorkRatio_PF4 = ParameterData['LowEmployedWorkRatio_PF4','value']
-
-MidEmployedWorkRatio_RM1 = ParameterData['MidEmployedWorkRatio_RM1','value']
-MidEmployedWorkRatio_RM2 = ParameterData['MidEmployedWorkRatio_RM2','value']
-MidEmployedWorkRatio_RM3 = ParameterData['MidEmployedWorkRatio_RM3','value']
-MidEmployedWorkRatio_RM4 = ParameterData['MidEmployedWorkRatio_RM4','value']
-MidEmployedWorkRatio_RF1 = ParameterData['MidEmployedWorkRatio_RF1','value']
-MidEmployedWorkRatio_RF2 = ParameterData['MidEmployedWorkRatio_RF2','value']
-MidEmployedWorkRatio_RF3 = ParameterData['MidEmployedWorkRatio_RF3','value']
-MidEmployedWorkRatio_RF4 = ParameterData['MidEmployedWorkRatio_RF4','value']             
-MidEmployedWorkRatio_PM1 = ParameterData['MidEmployedWorkRatio_PM1','value']
-MidEmployedWorkRatio_PM2 = ParameterData['MidEmployedWorkRatio_PM2','value']
-MidEmployedWorkRatio_PM3 = ParameterData['MidEmployedWorkRatio_PM3','value']
-MidEmployedWorkRatio_PM4 = ParameterData['MidEmployedWorkRatio_PM4','value']
-MidEmployedWorkRatio_PF1 = ParameterData['MidEmployedWorkRatio_PF1','value']
-MidEmployedWorkRatio_PF2 = ParameterData['MidEmployedWorkRatio_PF2','value']
-MidEmployedWorkRatio_PF3 = ParameterData['MidEmployedWorkRatio_PF3','value']
-MidEmployedWorkRatio_PF4 = ParameterData['MidEmployedWorkRatio_PF4','value']
-
-HighEmployedWorkRatio_RM1 = ParameterData['HighEmployedWorkRatio_RM1','value']
-HighEmployedWorkRatio_RM2 = ParameterData['HighEmployedWorkRatio_RM2','value']
-HighEmployedWorkRatio_RM3 = ParameterData['HighEmployedWorkRatio_RM3','value']
-HighEmployedWorkRatio_RM4 = ParameterData['HighEmployedWorkRatio_RM4','value']
-HighEmployedWorkRatio_RF1 = ParameterData['HighEmployedWorkRatio_RF1','value']
-HighEmployedWorkRatio_RF2 = ParameterData['HighEmployedWorkRatio_RF2','value']
-HighEmployedWorkRatio_RF3 = ParameterData['HighEmployedWorkRatio_RF3','value']
-HighEmployedWorkRatio_RF4 = ParameterData['HighEmployedWorkRatio_RF4','value']             
-HighEmployedWorkRatio_PM1 = ParameterData['HighEmployedWorkRatio_PM1','value']
-HighEmployedWorkRatio_PM2 = ParameterData['HighEmployedWorkRatio_PM2','value']
-HighEmployedWorkRatio_PM3 = ParameterData['HighEmployedWorkRatio_PM3','value']
-HighEmployedWorkRatio_PM4 = ParameterData['HighEmployedWorkRatio_PM4','value']
-HighEmployedWorkRatio_PF1 = ParameterData['HighEmployedWorkRatio_PF1','value']
-HighEmployedWorkRatio_PF2 = ParameterData['HighEmployedWorkRatio_PF2','value']
-HighEmployedWorkRatio_PF3 = ParameterData['HighEmployedWorkRatio_PF3','value']
-HighEmployedWorkRatio_PF4 = ParameterData['HighEmployedWorkRatio_PF4','value']
-
-LowEmployedWorkRatio_ijk = c(
-	LowEmployedWorkRatio_RM1,
-	LowEmployedWorkRatio_RM2,
-	LowEmployedWorkRatio_RM3,
-	LowEmployedWorkRatio_RM4,
-	LowEmployedWorkRatio_RF1,
-	LowEmployedWorkRatio_RF2,
-	LowEmployedWorkRatio_RF3,
-	LowEmployedWorkRatio_RF4,
-	LowEmployedWorkRatio_PM1,
-	LowEmployedWorkRatio_PM2,
-	LowEmployedWorkRatio_PM3,
-	LowEmployedWorkRatio_PM4,
-	LowEmployedWorkRatio_PF1,
-	LowEmployedWorkRatio_PF2,
-	LowEmployedWorkRatio_PF3,
-	LowEmployedWorkRatio_PF4)
-
-MidEmployedWorkRatio_ijk = c(
-	MidEmployedWorkRatio_RM1,
-	MidEmployedWorkRatio_RM2,
-	MidEmployedWorkRatio_RM3,
-	MidEmployedWorkRatio_RM4,
-	MidEmployedWorkRatio_RF1,
-	MidEmployedWorkRatio_RF2,
-	MidEmployedWorkRatio_RF3,
-	MidEmployedWorkRatio_RF4,
-	MidEmployedWorkRatio_PM1,
-	MidEmployedWorkRatio_PM2,
-	MidEmployedWorkRatio_PM3,
-	MidEmployedWorkRatio_PM4,
-	MidEmployedWorkRatio_PF1,
-	MidEmployedWorkRatio_PF2,
-	MidEmployedWorkRatio_PF3,
-	MidEmployedWorkRatio_PF4)
-
-HighEmployedWorkRatio_ijk = c(
-	HighEmployedWorkRatio_RM1,
-	HighEmployedWorkRatio_RM2,
-	HighEmployedWorkRatio_RM3,
-	HighEmployedWorkRatio_RM4,
-	HighEmployedWorkRatio_RF1,
-	HighEmployedWorkRatio_RF2,
-	HighEmployedWorkRatio_RF3,
-	HighEmployedWorkRatio_RF4,
-	HighEmployedWorkRatio_PM1,
-	HighEmployedWorkRatio_PM2,
-	HighEmployedWorkRatio_PM3,
-	HighEmployedWorkRatio_PM4,
-	HighEmployedWorkRatio_PF1,
-	HighEmployedWorkRatio_PF2,
-	HighEmployedWorkRatio_PF3,
-	HighEmployedWorkRatio_PF4)
-
-
-InitCapital_Low = InitialData['Capital_Low','value']
-InitCapital_Mid = InitialData['Capital_Mid','value']
-InitCapital_High = InitialData['Capital_High','value']
-
-InitLabor_Low = sum(
-	c(	LowPop_RM1,
-		LowPop_RM2,
-		LowPop_RM3,
-		LowPop_RM4,
-		LowPop_RF1,
-		LowPop_RF2,
-		LowPop_RF3,
-		LowPop_RF4, 
-		LowPop_PM1,
-		LowPop_PM2,
-		LowPop_PM3,
-		LowPop_PM4,
-		LowPop_PF1,
-		LowPop_PF2,
-		LowPop_PF3,
-		LowPop_PF4) * LowEmployedWorkRatio_ijk)
-
-InitLabor_Mid = sum(
-	c(	MidPop_RM1,
-		MidPop_RM2,
-		MidPop_RM3,
-		MidPop_RM4,
-		MidPop_RF1,
-		MidPop_RF2,
-		MidPop_RF3,
-		MidPop_RF4, 
-		MidPop_PM1,
-		MidPop_PM2,
-		MidPop_PM3,
-		MidPop_PM4,
-		MidPop_PF1,
-		MidPop_PF2,
-		MidPop_PF3,
-		MidPop_PF4) * MidEmployedWorkRatio_ijk)
-
-InitLabor_High = sum(
-	c(	HighPop_RM1,
-		HighPop_RM2,
-		HighPop_RM3,
-		HighPop_RM4,
-		HighPop_RF1,
-		HighPop_RF2,
-		HighPop_RF3,
-		HighPop_RF4, 
-		HighPop_PM1,
-		HighPop_PM2,
-		HighPop_PM3,
-		HighPop_PM4,
-		HighPop_PF1,
-		HighPop_PF2,
-		HighPop_PF3,
-		HighPop_PF4) * HighEmployedWorkRatio_ijk)
-
-TechMult_Low = ParameterData['TechMult_Low','value']
-TechMult_Mid = ParameterData['TechMult_Mid','value']
-TechMult_High = ParameterData['TechMult_High','value']
-
-InitEconOutput_Low = TechMult_Low*InitLabor_Low^LaborInputElast_Low * 
-				InitCapital_Low^CapitalInputElast_Low 
-
-InitEconOutput_Mid = TechMult_Mid*InitLabor_Mid^LaborInputElast_Mid * 
-				InitCapital_Mid^CapitalInputElast_Mid 
-
-InitEconOutput_High = TechMult_High*InitLabor_High^LaborInputElast_High * 
-				InitCapital_High^CapitalInputElast_High 
-
-InitCO2Concentration = InitialData['CO2Conc','value']
-InitTemp = InitialData['GlobalTemp','value']
 
 ################# STOCK DATA #################
 
 InitValue = c( 
   # Economic Stocks (Regional)
-		Capital_Low = InitCapital_Low,
-		Capital_Mid = InitCapital_Mid,
-		Capital_High = InitCapital_High,
-		EconOutput_Low = InitEconOutput_Low,
-		EconOutput_Mid = InitEconOutput_Mid,
-		EconOutput_High = InitEconOutput_High,
+		Capital_Low = InitialData['Capital_Low','value'],
+		Capital_Mid = InitialData['Capital_Mid','value'],
+		Capital_High = InitialData['Capital_High','value'],
+		TechMult_Low = InitialData['TechMult_Low','value'],
+		TechMult_Mid = InitialData['TechMult_Mid','value'],
+		TechMult_High = InitialData['TechMult_High','value'],
 
   # Resource Stocks (Global)		
-		RenewableResources = InitialData['RenewableResources','value'],
-		NonrenewableResources = InitialData['NonrenewableResources','value'],
+		CoalReserves = InitialData['CoalReserves','value'],
+		OilReserves = InitialData['OilReserves','value'],
+		GasReserves = InitialData['GasReserves','value'],
 
   # Climate Stocks (Global)
-		CO2Conc = InitCO2Concentration,
-		GlobalTemp = InitTemp,
+		CO2Conc = InitialData['CO2Conc','value'],
 
   # Food Stocks (Global)
 		Fisheries = InitialData['Fisheries','value'],  
-		Fishstock = InitialData['Fishstock','value'],   
-		Livestock = InitialData['Livestock','value'],        
-		Crops = InitialData['Crops','value'],
+		FishProduction = InitialData['FishProduction','value'],   
+		LivestockProduction = InitialData['LivestockProduction','value'],        
+		CropProduction = InitialData['CropProduction','value'],
 		FoodDemandPC_Low = InitialData['FoodDemandPC_Low','value'],
 		FoodDemandPC_Mid = InitialData['FoodDemandPC_Mid','value'],
 		FoodDemandPC_High = InitialData['FoodDemandPC_High','value'],
@@ -342,60 +53,30 @@ InitValue = c(
         HealthServices_High = InitialData['HealthServices_High','value'],
 
   # Population Stocks (Regions)        
-		Low_RM1 = LowPop_RM1,
-		Low_RM2 = LowPop_RM2,
-		Low_RM3 = LowPop_RM3,
-		Low_RM4 = LowPop_RM4,
-		Low_RF1 = LowPop_RF1,
-		Low_RF2 = LowPop_RF2,
-		Low_RF3 = LowPop_RF3,
-		Low_RF4 = LowPop_RF4,
-		Low_PM1 = LowPop_PM1,
-		Low_PM2 = LowPop_PM2,
-		Low_PM3 = LowPop_PM3,
-		Low_PM4 = LowPop_PM4,
-		Low_PF1 = LowPop_PF1,
-		Low_PF2 = LowPop_PF2,
-		Low_PF3 = LowPop_PF3,
-		Low_PF4 = LowPop_PF4,
-
-		Mid_RM1 = MidPop_RM1,
-		Mid_RM2 = MidPop_RM2,
-		Mid_RM3 = MidPop_RM3,
-		Mid_RM4 = MidPop_RM4,
-		Mid_RF1 = MidPop_RF1,
-		Mid_RF2 = MidPop_RF2,
-		Mid_RF3 = MidPop_RF3,
-		Mid_RF4 = MidPop_RF4,
-		Mid_PM1 = MidPop_PM1,
-		Mid_PM2 = MidPop_PM2,
-		Mid_PM3 = MidPop_PM3,
-		Mid_PM4 = MidPop_PM4,
-		Mid_PF1 = MidPop_PF1,
-		Mid_PF2 = MidPop_PF2,
-		Mid_PF3 = MidPop_PF3,
-		Mid_PF4 = MidPop_PF4,
-
-		High_RM1 = HighPop_RM1,
-		High_RM2 = HighPop_RM2,
-		High_RM3 = HighPop_RM3,
-		High_RM4 = HighPop_RM4,
-		High_RF1 = HighPop_RF1,
-		High_RF2 = HighPop_RF2,
-		High_RF3 = HighPop_RF3,
-		High_RF4 = HighPop_RF4,
-		High_PM1 = HighPop_PM1,
-		High_PM2 = HighPop_PM2,
-		High_PM3 = HighPop_PM3,
-		High_PM4 = HighPop_PM4,
-		High_PF1 = HighPop_PF1,
-		High_PF2 = HighPop_PF2,
-		High_PF3 = HighPop_PF3,
-		High_PF4 = HighPop_PF4,
-
-		LowPop = InitLowTotPop,
-		MidPop = InitMidTotPop,
-		HighPop = InitHighTotPop,
+		Low_M1 = InitialData['LowPop_M1','value'],
+		Low_M2 = InitialData['LowPop_M2','value'],
+		Low_M3 = InitialData['LowPop_M3','value'],
+		Low_M4 = InitialData['LowPop_M4','value'],
+		Low_F1 = InitialData['LowPop_F1','value'],
+		Low_F2 = InitialData['LowPop_F2','value'],
+		Low_F3 = InitialData['LowPop_F3','value'],
+		Low_F4 = InitialData['LowPop_F4','value'],
+		Mid_M1 = InitialData['MidPop_M1','value'],
+		Mid_M2 = InitialData['MidPop_M2','value'],
+		Mid_M3 = InitialData['MidPop_M3','value'],
+		Mid_M4 = InitialData['MidPop_M4','value'],
+		Mid_F1 = InitialData['MidPop_F1','value'],
+		Mid_F2 = InitialData['MidPop_F2','value'],
+		Mid_F3 = InitialData['MidPop_F3','value'],
+		Mid_F4 = InitialData['MidPop_F4','value'],      
+		High_M1 = InitialData['HighPop_M1','value'],
+		High_M2 = InitialData['HighPop_M2','value'],
+		High_M3 = InitialData['HighPop_M3','value'],
+		High_M4 = InitialData['HighPop_M4','value'],
+		High_F1 = InitialData['HighPop_F1','value'],
+		High_F2 = InitialData['HighPop_F2','value'],
+		High_F3 = InitialData['HighPop_F3','value'],
+		High_F4 = InitialData['HighPop_F4','value'],         
 
   # Water Stocks (Global)
 		Freshwater = InitialData['Freshwater','value'])
@@ -403,41 +84,118 @@ InitValue = c(
 
 ################# PARAMETER DATA #################
 
-ParameterValue = list(
+ParameterValue = c(
   # Population Coefficients
-		MinDeath = ParameterData['MinDeath','value'],
-		TNMFR = ParameterData['TNMFR','value'],
-		AlphaC = ParameterData['AlphaC','value'],
-		BetaEC = ParameterData['BetaEC','value'],
-		BetaHC = ParameterData['BetaHC','value'],
-		AlphaM = ParameterData['AlphaM','value'],
-		BetaEM = ParameterData['BetaEM','value'],
-		TotalFecundity = ParameterData['TotalFecundity','value'],
-		Beta1 = ParameterData['Beta1','value'],
+		MinDeath_RichM1Low = ParameterData['MinDeath_RichM1Low','value'],
+		MinDeath_PoorM1Low = ParameterData['MinDeath_PoorM1Low','value'],
+		MinDeath_M2Low = ParameterData['MinDeath_M2Low','value'],
+        MinDeath_M3Low = ParameterData['MinDeath_M3Low','value'],
+		MinDeath_M4Low = ParameterData['MinDeath_M4Low','value'],
+		MinDeath_RichF1Low = ParameterData['MinDeath_RichF1Low','value'],
+		MinDeath_PoorF1Low = ParameterData['MinDeath_PoorF1Low','value'],
+		MinDeath_F2Low = ParameterData['MinDeath_F2Low','value'],
+        MinDeath_F3Low = ParameterData['MinDeath_F3Low','value'],
+        MinDeath_F4Low = ParameterData['MinDeath_F4Low','value'],
+		OmegaF_RichM1Low = ParameterData['OmegaF_RichM1Low','value'],
+		OmegaF_PoorM1Low = ParameterData['OmegaF_PoorM1Low','value'],
+		OmegaF_M2Low = ParameterData['OmegaF_M2Low','value'],
+		OmegaF_M3Low = ParameterData['OmegaF_M3Low','value'],
+		OmegaF_M4Low = ParameterData['OmegaF_M4Low','value'],
+		OmegaF_RichF1Low = ParameterData['OmegaF_RichF1Low','value'],
+		OmegaF_PoorF1Low = ParameterData['OmegaF_PoorF1Low','value'],		
+		OmegaF_F2Low = ParameterData['OmegaF_F2Low','value'],
+		OmegaF_F3Low = ParameterData['OmegaF_F3Low','value'],
+		OmegaF_F4Low = ParameterData['OmegaF_F4Low','value'],
+		OmegaH_RichM1Low = ParameterData['OmegaH_RichM1Low','value'],
+		OmegaH_PoorM1Low = ParameterData['OmegaH_PoorM1Low','value'],
+		OmegaH_M2Low = ParameterData['OmegaH_M2Low','value'],
+		OmegaH_M3Low = ParameterData['OmegaH_M3Low','value'],
+		OmegaH_M4Low = ParameterData['OmegaH_M4Low','value'],
+		OmegaH_RichF1Low = ParameterData['OmegaH_RichF1Low','value'],
+		OmegaH_PoorF1Low = ParameterData['OmegaH_PoorF1Low','value'],
+		OmegaH_F2Low = ParameterData['OmegaH_F2Low','value'],
+		OmegaH_F3Low = ParameterData['OmegaH_F3Low','value'],
+		OmegaH_F4Low = ParameterData['OmegaH_F4Low','value'],	
+		AlphaGFR_Low = ParameterData['AlphaGFR_Low','value'],
+		BetaE_Low = ParameterData['BetaE_Low','value'],
+		BetaH_Low = ParameterData['BetaH_Low','value'],
+
+		MinDeath_RichM1Mid = ParameterData['MinDeath_RichM1Mid','value'],
+		MinDeath_PoorM1Mid = ParameterData['MinDeath_PoorM1Mid','value'],
+		MinDeath_M2Mid = ParameterData['MinDeath_M2Mid','value'],
+        MinDeath_M3Mid = ParameterData['MinDeath_M3Mid','value'],
+		MinDeath_M4Mid = ParameterData['MinDeath_M4Mid','value'],
+		MinDeath_RichF1Mid = ParameterData['MinDeath_RichF1Mid','value'],
+		MinDeath_PoorF1Mid = ParameterData['MinDeath_PoorF1Mid','value'],
+		MinDeath_F2Mid = ParameterData['MinDeath_F2Mid','value'],
+        MinDeath_F3Mid = ParameterData['MinDeath_F3Mid','value'],
+        MinDeath_F4Mid = ParameterData['MinDeath_F4Mid','value'],
+		OmegaF_RichM1Mid = ParameterData['OmegaF_RichM1Mid','value'],
+		OmegaF_PoorM1Mid = ParameterData['OmegaF_PoorM1Mid','value'],
+		OmegaF_M2Mid = ParameterData['OmegaF_M2Mid','value'],
+		OmegaF_M3Mid = ParameterData['OmegaF_M3Mid','value'],
+		OmegaF_M4Mid = ParameterData['OmegaF_M4Mid','value'],
+		OmegaF_RichF1Mid = ParameterData['OmegaF_RichF1Mid','value'],
+		OmegaF_PoorF1Mid = ParameterData['OmegaF_PoorF1Mid','value'],		
+		OmegaF_F2Mid = ParameterData['OmegaF_F2Mid','value'],
+		OmegaF_F3Mid = ParameterData['OmegaF_F3Mid','value'],
+		OmegaF_F4Mid = ParameterData['OmegaF_F4Mid','value'],
+		OmegaH_RichM1Mid = ParameterData['OmegaH_RichM1Mid','value'],
+		OmegaH_PoorM1Mid = ParameterData['OmegaH_PoorM1Mid','value'],
+		OmegaH_M2Mid = ParameterData['OmegaH_M2Mid','value'],
+		OmegaH_M3Mid = ParameterData['OmegaH_M3Mid','value'],
+		OmegaH_M4Mid = ParameterData['OmegaH_M4Mid','value'],
+		OmegaH_RichF1Mid = ParameterData['OmegaH_RichF1Mid','value'],
+		OmegaH_PoorF1Mid = ParameterData['OmegaH_PoorF1Mid','value'],
+		OmegaH_F2Mid = ParameterData['OmegaH_F2Mid','value'],
+		OmegaH_F3Mid = ParameterData['OmegaH_F3Mid','value'],
+		OmegaH_F4Mid = ParameterData['OmegaH_F4Mid','value'],		
+		AlphaGFR_Mid = ParameterData['AlphaGFR_Mid','value'],
+		BetaE_Mid = ParameterData['BetaE_Mid','value'],
+		BetaH_Mid = ParameterData['BetaH_Mid','value'],
+
+		MinDeath_RichM1High = ParameterData['MinDeath_RichM1High','value'],
+		MinDeath_PoorM1High = ParameterData['MinDeath_PoorM1High','value'],
+		MinDeath_M2High = ParameterData['MinDeath_M2High','value'],
+        MinDeath_M3High = ParameterData['MinDeath_M3High','value'],
+		MinDeath_M4High = ParameterData['MinDeath_M4High','value'],
+		MinDeath_RichF1High = ParameterData['MinDeath_RichF1High','value'],
+		MinDeath_PoorF1High = ParameterData['MinDeath_PoorF1High','value'],
+		MinDeath_F2High = ParameterData['MinDeath_F2High','value'],
+        MinDeath_F3High = ParameterData['MinDeath_F3High','value'],
+        MinDeath_F4High = ParameterData['MinDeath_F4High','value'],
+		OmegaF_RichM1High = ParameterData['OmegaF_RichM1High','value'],
+		OmegaF_PoorM1High = ParameterData['OmegaF_PoorM1High','value'],
+		OmegaF_M2High = ParameterData['OmegaF_M2High','value'],
+		OmegaF_M3High = ParameterData['OmegaF_M3High','value'],
+		OmegaF_M4High = ParameterData['OmegaF_M4High','value'],
+		OmegaF_RichF1High = ParameterData['OmegaF_RichF1High','value'],
+		OmegaF_PoorF1High = ParameterData['OmegaF_PoorF1High','value'],		
+		OmegaF_F2High = ParameterData['OmegaF_F2High','value'],
+		OmegaF_F3High = ParameterData['OmegaF_F3High','value'],
+		OmegaF_F4High = ParameterData['OmegaF_F4High','value'],
+		OmegaH_RichM1High = ParameterData['OmegaH_RichM1High','value'],
+		OmegaH_PoorM1High = ParameterData['OmegaH_PoorM1High','value'],
+		OmegaH_M2High = ParameterData['OmegaH_M2High','value'],
+		OmegaH_M3High = ParameterData['OmegaH_M3High','value'],
+		OmegaH_M4High = ParameterData['OmegaH_M4High','value'],
+		OmegaH_RichF1High = ParameterData['OmegaH_RichF1High','value'],
+		OmegaH_PoorF1High = ParameterData['OmegaH_PoorF1High','value'],
+		OmegaH_F2High = ParameterData['OmegaH_F2High','value'],
+		OmegaH_F3High = ParameterData['OmegaH_F3High','value'],
+		OmegaH_F4High = ParameterData['OmegaH_F4High','value'],	
+		AlphaGFR_High = ParameterData['AlphaGFR_High','value'],
+		BetaE_High = ParameterData['BetaE_High','value'],
+		BetaH_High = ParameterData['BetaH_High','value'],
+
 		FemaleBirthRatio = ParameterData['FemaleBirthRatio','value'],
-
-		OmegaF_M1 = ParameterData['OmegaF_M1','value'],
-		OmegaF_M2 = ParameterData['OmegaF_M2','value'],
-		OmegaF_M3 = ParameterData['OmegaF_M3','value'],
-		OmegaF_M4 = ParameterData['OmegaF_M4','value'],
-		OmegaF_F1 = ParameterData['OmegaF_F1','value'],
-		OmegaF_F2 = ParameterData['OmegaF_F2','value'],
-		OmegaF_F3 = ParameterData['OmegaF_F3','value'],
-		OmegaF_F4 = ParameterData['OmegaF_F4','value'],
-
-		OmegaH_M1 = ParameterData['OmegaH_M1','value'],
-		OmegaH_M2 = ParameterData['OmegaH_M2','value'],
-		OmegaH_M3 = ParameterData['OmegaH_M3','value'],
-		OmegaH_M4 = ParameterData['OmegaH_M4','value'],
-		OmegaH_F1 = ParameterData['OmegaH_F1','value'],
-		OmegaH_F2 = ParameterData['OmegaH_F2','value'],
-		OmegaH_F3 = ParameterData['OmegaH_F3','value'],
-		OmegaH_F4 = ParameterData['OmegaH_F4','value'],	
 		NutritionReq = ParameterData['NutritionReq','value'],
+		PoorFrac = ParameterData['PoorFrac','value'],
 
   # Food Coefficients
 		ThetaU = ParameterData['ThetaU','value'],
 		ZetaU = ParameterData['ZetaU','value'],
+		FishingTech = ParameterData['FishingTech','value'],
 		GrazeLandGrowthRate = ParameterData['GrazeLandGrowthRate','value'],
 		GrazeLandLossRate = ParameterData['GrazeLandLossRate','value'],
 		CropLandGrowthRate = ParameterData['CropLandGrowthRate','value'],
@@ -448,111 +206,115 @@ ParameterValue = list(
 		WaterProdEastCrops = ParameterData['WaterProdEastCrops','value'],
 		LandProdElastCrops = ParameterData['LandProdElastCrops','value'],
 		CropsTechMult = ParameterData['CropsTechMult','value'],
-
+		FoodNutrConvMultiplier = ParameterData['FoodNutrConvMultiplier','value'],
 		FoodNutrConv_Fish = ParameterData['FoodNutrConv_Fish','value'],
 		FoodNutrConv_Livestock = ParameterData['FoodNutrConv_Livestock','value'],
 		FoodNutrConv_Crops = ParameterData['FoodNutrConv_Crops','value'],
-		
-		FishConsFrac_Fish = ParameterData['FishConsFrac_Fish','value'],
-		FishConsFrac_Livestock = ParameterData['FishConsFrac_Livestock','value'],
-		FishConsFrac_Crops = ParameterData['FishConsFrac_Crops','value'],
+		FoodConsFrac_Fish = ParameterData['FoodConsFrac_Fish','value'],
+		FoodConsFrac_Livestock = ParameterData['FoodConsFrac_Livestock','value'],
+		FoodConsFrac_Crops = ParameterData['FoodConsFrac_Crops','value'],
 		FishProdDelay = ParameterData['FishProdDelay','value'],
-		
 		LivestockProdDelay = ParameterData['LivestockProdDelay','value'],
 		CropsProdDelay = ParameterData['CropsProdDelay','value'],
+		FishAdjDelay = ParameterData['FishAdjDelay','value'],
+		LivestockAdjDelay = ParameterData['LivestockAdjDelay','value'],
+		CropsAdjDelay = ParameterData['CropsAdjDelay','value'],
 		FoodIncomeElasticity_Low = ParameterData['FoodIncomeElasticity_Low','value'],
 		FoodIncomeElasticity_Mid = ParameterData['FoodIncomeElasticity_Mid','value'],
 		FoodIncomeElasticity_High = ParameterData['FoodIncomeElasticity_High','value'],
-		FoodAccess_RichLow = ParameterData['FoodAccess_RichLow','value'],
-		FoodAccess_RichMid = ParameterData['FoodAccess_RichMid','value'],
-		FoodAccess_RichHigh = ParameterData['FoodAccess_RichHigh','value'],
-		FoodAccess_PoorLow = ParameterData['FoodAccess_PoorLow','value'],
-		FoodAccess_PoorMid = ParameterData['FoodAccess_PoorMid','value'],
-		FoodAccess_PoorHigh = ParameterData['FoodAccess_PoorHigh','value'],
+		FishAccess_RichLow = ParameterData['FishAccess_RichLow','value'],
+		FishAccess_RichMid = ParameterData['FishAccess_RichMid','value'],
+		FishAccess_RichHigh = ParameterData['FishAccess_RichHigh','value'],
+		FishAccess_PoorLow = ParameterData['FishAccess_PoorLow','value'],
+		FishAccess_PoorMid = ParameterData['FishAccess_PoorMid','value'],
+		FishAccess_PoorHigh = ParameterData['FishAccess_PoorHigh','value'],
+		LivestockAccess_RichLow = ParameterData['LivestockAccess_RichLow','value'],
+		LivestockAccess_RichMid = ParameterData['LivestockAccess_RichMid','value'],
+		LivestockAccess_RichHigh = ParameterData['LivestockAccess_RichHigh','value'],
+		LivestockAccess_PoorLow = ParameterData['LivestockAccess_PoorLow','value'],
+		LivestockAccess_PoorMid = ParameterData['LivestockAccess_PoorMid','value'],
+		LivestockAccess_PoorHigh = ParameterData['LivestockAccess_PoorHigh','value'],
+		CropsAccess_RichLow = ParameterData['CropsAccess_RichLow','value'],
+		CropsAccess_RichMid = ParameterData['CropsAccess_RichMid','value'],
+		CropsAccess_RichHigh = ParameterData['CropsAccess_RichHigh','value'],
+		CropsAccess_PoorLow = ParameterData['CropsAccess_PoorLow','value'],
+		CropsAccess_PoorMid = ParameterData['CropsAccess_PoorMid','value'],
+		CropsAccess_PoorHigh = ParameterData['CropsAccess_PoorHigh','value'],
 		FishWasteFrac = ParameterData['FishWasteFrac','value'],
 		LivestockWasteFrac = ParameterData['LivestockWasteFrac','value'],
 		CropsWasteFrac = ParameterData['CropsWasteFrac','value'],
+		WaterCropFrac = ParameterData['WaterCropFrac','value'],
+		CropsWaterConsRate =ParameterData['CropsWaterConsRate','value'],
+		LivestockWaterConsRate =ParameterData['LivestockWaterConsRate','value'],
 
     # Climate Coefficients
 		Lambda = ParameterData['Lambda','value'],
-		RefTemp = InitTemp,
-		PsiE_Low = ParameterData['PsiE_Low','value'],
-		PsiE_Mid = ParameterData['PsiE_Mid','value'],		
-		PsiE_High = ParameterData['PsiE_High','value'],
+		PsiE1_Low = ParameterData['PsiE1_Low','value'],
+		PsiE1_Mid = ParameterData['PsiE1_Mid','value'],		
+		PsiE1_High = ParameterData['PsiE1_High','value'],
+		PsiE2_Low = ParameterData['PsiE2_Low','value'],
+		PsiE2_Mid = ParameterData['PsiE2_Mid','value'],		
+		PsiE2_High = ParameterData['PsiE2_High','value'],
+		PsiE3_Low = ParameterData['PsiE3_Low','value'],
+		PsiE3_Mid = ParameterData['PsiE3_Mid','value'],		
+		PsiE3_High = ParameterData['PsiE3_High','value'],
+		CO2EmissionConcConv = ParameterData['CO2EmissionConcConv','value'],
 		Gamma = ParameterData['Gamma','value'],
-		RefCO2Conc = InitCO2Concentration,
+		RefCO2Conc = InitialData['CO2Conc','value'],
 		OtherRadForce = ParameterData['OtherRadForce','value'],
 
     # Economy Coefficients
-		RenewableCapitalReturn_Low = ParameterData['RenewableCapitalReturn_Low','value'],
-		RenewableCapitalReturn_Mid = ParameterData['RenewableCapitalReturn_Mid','value'],
-		RenewableCapitalReturn_High = ParameterData['RenewableCapitalReturn_High','value'],
-		NonrenewableCapitalReturn_Low = ParameterData['NonrenewableCapitalReturn_Low','value'],
-		NonrenewableCapitalReturn_Mid = ParameterData['NonrenewableCapitalReturn_Mid','value'],
-		NonrenewableCapitalReturn_High = ParameterData['NonrenewableCapitalReturn_High','value'],
-		CapitalInputElast_Low = CapitalInputElast_Low,
-		CapitalInputElast_Mid = CapitalInputElast_Mid,
-		CapitalInputElast_High = CapitalInputElast_High,
-		LaborInputElast_Low = LaborInputElast_Low,
-		LaborInputElast_Mid = LaborInputElast_Mid,
-		LaborInputElast_High = LaborInputElast_High,
-		TechMult_Low = TechMult_Low,
-		TechMult_Mid = TechMult_Mid,
-		TechMult_High = TechMult_High,
-		RenewableAccess_Low = ParameterData['RenewableAccess_Low','value'],
-		RenewableAccess_Mid = ParameterData['RenewableAccess_Mid','value'],
-		RenewableAccess_High = ParameterData['RenewableAccess_High','value'],
-		NonrenewableAccess_Low = ParameterData['NonrenewableAccess_Low','value'],
-		NonrenewableAccess_Mid = ParameterData['NonrenewableAccess_Mid','value'],
-		NonrenewableAccess_High = ParameterData['NonrenewableAccess_High','value'],
-		LowEmployedWorkRatio_RM1 = LowEmployedWorkRatio_RM1, 
-		LowEmployedWorkRatio_RM2 = LowEmployedWorkRatio_RM2, 
-		LowEmployedWorkRatio_RM3 = LowEmployedWorkRatio_RM3, 
-		LowEmployedWorkRatio_RM4 = LowEmployedWorkRatio_RM4, 
-		LowEmployedWorkRatio_RF1 = LowEmployedWorkRatio_RF1, 
-		LowEmployedWorkRatio_RF2 = LowEmployedWorkRatio_RF2, 
-		LowEmployedWorkRatio_RF3 = LowEmployedWorkRatio_RF3, 
-		LowEmployedWorkRatio_RF4 = LowEmployedWorkRatio_RF4,            
-		LowEmployedWorkRatio_PM1 = LowEmployedWorkRatio_PM1, 
-		LowEmployedWorkRatio_PM2 = LowEmployedWorkRatio_PM2, 
-		LowEmployedWorkRatio_PM3 = LowEmployedWorkRatio_PM3, 
-		LowEmployedWorkRatio_PM4 = LowEmployedWorkRatio_PM4, 
-		LowEmployedWorkRatio_PF1 = LowEmployedWorkRatio_PF1, 
-		LowEmployedWorkRatio_PF2 = LowEmployedWorkRatio_PF2, 
-		LowEmployedWorkRatio_PF3 = LowEmployedWorkRatio_PF3, 
-		LowEmployedWorkRatio_PF4 = LowEmployedWorkRatio_PF4, 	
-		MidEmployedWorkRatio_RM1 = MidEmployedWorkRatio_RM1, 
-		MidEmployedWorkRatio_RM2 = MidEmployedWorkRatio_RM2, 
-		MidEmployedWorkRatio_RM3 = MidEmployedWorkRatio_RM3, 
-		MidEmployedWorkRatio_RM4 = MidEmployedWorkRatio_RM4, 
-		MidEmployedWorkRatio_RF1 = MidEmployedWorkRatio_RF1, 
-		MidEmployedWorkRatio_RF2 = MidEmployedWorkRatio_RF2, 
-		MidEmployedWorkRatio_RF3 = MidEmployedWorkRatio_RF3, 
-		MidEmployedWorkRatio_RF4 = MidEmployedWorkRatio_RF4,            
-		MidEmployedWorkRatio_PM1 = MidEmployedWorkRatio_PM1, 
-		MidEmployedWorkRatio_PM2 = MidEmployedWorkRatio_PM2, 
-		MidEmployedWorkRatio_PM3 = MidEmployedWorkRatio_PM3, 
-		MidEmployedWorkRatio_PM4 = MidEmployedWorkRatio_PM4, 
-		MidEmployedWorkRatio_PF1 = MidEmployedWorkRatio_PF1, 
-		MidEmployedWorkRatio_PF2 = MidEmployedWorkRatio_PF2, 
-		MidEmployedWorkRatio_PF3 = MidEmployedWorkRatio_PF3, 
-		MidEmployedWorkRatio_PF4 = MidEmployedWorkRatio_PF4,
-		HighEmployedWorkRatio_RM1 = HighEmployedWorkRatio_RM1, 
-		HighEmployedWorkRatio_RM2 = HighEmployedWorkRatio_RM2, 
-		HighEmployedWorkRatio_RM3 = HighEmployedWorkRatio_RM3, 
-		HighEmployedWorkRatio_RM4 = HighEmployedWorkRatio_RM4, 
-		HighEmployedWorkRatio_RF1 = HighEmployedWorkRatio_RF1, 
-		HighEmployedWorkRatio_RF2 = HighEmployedWorkRatio_RF2, 
-		HighEmployedWorkRatio_RF3 = HighEmployedWorkRatio_RF3, 
-		HighEmployedWorkRatio_RF4 = HighEmployedWorkRatio_RF4,            
-		HighEmployedWorkRatio_PM1 = HighEmployedWorkRatio_PM1, 
-		HighEmployedWorkRatio_PM2 = HighEmployedWorkRatio_PM2, 
-		HighEmployedWorkRatio_PM3 = HighEmployedWorkRatio_PM3, 
-		HighEmployedWorkRatio_PM4 = HighEmployedWorkRatio_PM4, 
-		HighEmployedWorkRatio_PF1 = HighEmployedWorkRatio_PF1, 
-		HighEmployedWorkRatio_PF2 = HighEmployedWorkRatio_PF2, 
-		HighEmployedWorkRatio_PF3 = HighEmployedWorkRatio_PF3, 
-		HighEmployedWorkRatio_PF4 = HighEmployedWorkRatio_PF4,
+		CoalInputElast_Low = ParameterData['CoalInputElast_Low','value'],
+		CoalInputElast_Mid = ParameterData['CoalInputElast_Mid','value'],
+		CoalInputElast_High = ParameterData['CoalInputElast_High','value'],
+		OilInputElast_Low = ParameterData['OilInputElast_Low','value'],
+		OilInputElast_Mid = ParameterData['OilInputElast_Mid','value'],
+		OilInputElast_High = ParameterData['OilInputElast_High','value'],
+		GasInputElast_Low = ParameterData['GasInputElast_Low','value'],
+		GasInputElast_Mid = ParameterData['GasInputElast_Mid','value'],
+		GasInputElast_High = ParameterData['GasInputElast_High','value'],
+		CapitalInputElast_Low = ParameterData['CapitalInputElast_Low','value'],
+		CapitalInputElast_Mid = ParameterData['CapitalInputElast_Mid','value'],
+		CapitalInputElast_High = ParameterData['CapitalInputElast_High','value'],
+		LaborInputElast_Low = ParameterData['LaborInputElast_Low','value'],
+		LaborInputElast_Mid = ParameterData['LaborInputElast_Mid','value'],
+		LaborInputElast_High = ParameterData['LaborInputElast_High','value'],
+		TechGrowth_Low = ParameterData['TechGrowth_Low','value'],
+		TechGrowth_Mid = ParameterData['TechGrowth_Mid','value'],
+		TechGrowth_High = ParameterData['TechGrowth_High','value'],
+		CoalAccess_Low = ParameterData['CoalAccess_Low','value'],
+		CoalAccess_Mid = ParameterData['CoalAccess_Mid','value'],
+		CoalAccess_High = ParameterData['CoalAccess_High','value'],
+		OilAccess_Low = ParameterData['OilAccess_Low','value'],
+		OilAccess_Mid = ParameterData['OilAccess_Mid','value'],
+		OilAccess_High = ParameterData['OilAccess_High','value'],
+		GasAccess_Low = ParameterData['GasAccess_Low','value'],
+		GasAccess_Mid = ParameterData['GasAccess_Mid','value'],
+		GasAccess_High = ParameterData['GasAccess_High','value'],
+		LowEmployedWorkRatio_M1 = ParameterData['LowEmployedWorkRatio_M1','value'], 
+		LowEmployedWorkRatio_M2 = ParameterData['LowEmployedWorkRatio_M2','value'], 
+		LowEmployedWorkRatio_M3 = ParameterData['LowEmployedWorkRatio_M3','value'], 
+		LowEmployedWorkRatio_M4 = ParameterData['LowEmployedWorkRatio_M4','value'], 
+		LowEmployedWorkRatio_F1 = ParameterData['LowEmployedWorkRatio_F1','value'], 
+		LowEmployedWorkRatio_F2 = ParameterData['LowEmployedWorkRatio_F2','value'], 
+		LowEmployedWorkRatio_F3 = ParameterData['LowEmployedWorkRatio_F3','value'], 
+		LowEmployedWorkRatio_F4 = ParameterData['LowEmployedWorkRatio_F4','value'],            
+		MidEmployedWorkRatio_M1 = ParameterData['MidEmployedWorkRatio_M1','value'], 
+		MidEmployedWorkRatio_M2 = ParameterData['MidEmployedWorkRatio_M2','value'], 
+		MidEmployedWorkRatio_M3 = ParameterData['MidEmployedWorkRatio_M3','value'], 
+		MidEmployedWorkRatio_M4 = ParameterData['MidEmployedWorkRatio_M4','value'], 
+		MidEmployedWorkRatio_F1 = ParameterData['MidEmployedWorkRatio_F1','value'], 
+		MidEmployedWorkRatio_F2 = ParameterData['MidEmployedWorkRatio_F2','value'], 
+		MidEmployedWorkRatio_F3 = ParameterData['MidEmployedWorkRatio_F3','value'], 
+		MidEmployedWorkRatio_F4 = ParameterData['MidEmployedWorkRatio_F4','value'],            
+		HighEmployedWorkRatio_M1 = ParameterData['HighEmployedWorkRatio_M1','value'], 
+		HighEmployedWorkRatio_M2 = ParameterData['HighEmployedWorkRatio_M2','value'], 
+		HighEmployedWorkRatio_M3 = ParameterData['HighEmployedWorkRatio_M3','value'], 
+		HighEmployedWorkRatio_M4 = ParameterData['HighEmployedWorkRatio_M4','value'], 
+		HighEmployedWorkRatio_F1 = ParameterData['HighEmployedWorkRatio_F1','value'], 
+		HighEmployedWorkRatio_F2 = ParameterData['HighEmployedWorkRatio_F2','value'], 
+		HighEmployedWorkRatio_F3 = ParameterData['HighEmployedWorkRatio_F3','value'], 
+		HighEmployedWorkRatio_F4 = ParameterData['HighEmployedWorkRatio_F4','value'],            
 		SavingsRate_Low = ParameterData['SavingsRate_Low','value'],
 		SavingsRate_Mid = ParameterData['SavingsRate_Mid','value'],
 		SavingsRate_High = ParameterData['SavingsRate_High','value'],
@@ -562,36 +324,39 @@ ParameterValue = list(
 		IneqMult_Low = ParameterData['IneqMult_Low','value'],
 		IneqMult_Mid = ParameterData['IneqMult_Mid','value'],
 		IneqMult_High = ParameterData['IneqMult_High','value'],
-		InitEconGrowthRate_Low = ParameterData['InitEconGrowthRate_Low','value'],
-		InitEconGrowthRate_Mid = ParameterData['InitEconGrowthRate_Mid','value'],
-		InitEconGrowthRate_High = ParameterData['InitEconGrowthRate_High','value'],
+		IneqInt_Low = ParameterData['IneqInt_Low','value'],
+		IneqInt_Mid = ParameterData['IneqInt_Mid','value'],
+		IneqInt_High = ParameterData['IneqInt_High','value'],
+		InitEconOutputGrowth_Low = ParameterData['InitEconOutputGrowth_Low','value'],
+		InitEconOutputGrowth_Mid = ParameterData['InitEconOutputGrowth_Mid','value'],
+		InitEconOutputGrowth_High = ParameterData['InitEconOutputGrowth_High','value'],
 
 	# Resource Coefficients	
-		ReplRateRenewable = ParameterData['ReplRateRenewable','value'],
-		RenewableConsIntensity_Low = ParameterData['RenewableConsIntensity_Low','value'],
-		RenewableConsIntensity_Mid = ParameterData['RenewableConsIntensity_Mid','value'],
-		RenewableConsIntensity_High = ParameterData['RenewableConsIntensity_High','value'],
-		NonrenewableConsIntensity_Low = ParameterData['NonrenewableConsIntensity_Low','value'],		
-		NonrenewableConsIntensity_Mid = ParameterData['NonrenewableConsIntensity_Mid','value'],
-		NonrenewableConsIntensity_High = ParameterData['NonrenewableConsIntensity_High','value'],
+		CoalConsIntensity_Low = ParameterData['CoalConsIntensity_Low','value'],
+		CoalConsIntensity_Mid = ParameterData['CoalConsIntensity_Mid','value'],
+		CoalConsIntensity_High = ParameterData['CoalConsIntensity_High','value'],
+		OilConsIntensity_Low = ParameterData['OilConsIntensity_Low','value'],		
+		OilConsIntensity_Mid = ParameterData['OilConsIntensity_Mid','value'],
+		OilConsIntensity_High = ParameterData['OilConsIntensity_High','value'],
+		GasConsIntensity_Low = ParameterData['GasConsIntensity_Low','value'],		
+		GasConsIntensity_Mid = ParameterData['GasConsIntensity_Mid','value'],
+		GasConsIntensity_High = ParameterData['GasConsIntensity_High','value'],
 
     # Water Coefficients
 		DeltaW = ParameterData['DeltaW','value'],
-		WaterReplRate = ParameterData['WaterReplRate','value'],
-		ZetaI_Low = ParameterData['ZetaI_Low','value'],
-		ZetaI_Mid = ParameterData['ZetaI_Mid','value'],
-		ZetaI_High = ParameterData['ZetaI_High','value'],
+		WaterReplMax = ParameterData['WaterReplMax','value'],
+		ZetaI1_Low = ParameterData['ZetaI1_Low','value'],
+		ZetaI1_Mid = ParameterData['ZetaI1_Mid','value'],
+		ZetaI1_High = ParameterData['ZetaI1_High','value'],
+		ZetaI2_Low = ParameterData['ZetaI2_Low','value'],
+		ZetaI2_Mid = ParameterData['ZetaI2_Mid','value'],
+		ZetaI2_High = ParameterData['ZetaI2_High','value'],
 		WaterDemandPC_Low = ParameterData['WaterDemandPC_Low','value'],
 		WaterDemandPC_Mid = ParameterData['WaterDemandPC_Mid','value'],
 		WaterDemandPC_High = ParameterData['WaterDemandPC_High','value'],
-
+		WaterReplDelay = ParameterData['WaterReplDelay','value'],
+		
     # Health and Education Coefficients
-		EducationInvestFrac_Low = ParameterData['EducationInvestFrac_Low','value'],
-		EducationInvestFrac_Mid = ParameterData['EducationInvestFrac_Mid','value'],
-		EducationInvestFrac_High = ParameterData['EducationInvestFrac_High','value'],
-		HealthInvestFrac_Low = ParameterData['HealthInvestFrac_Low','value'],
-		HealthInvestFrac_Mid = ParameterData['HealthInvestFrac_Mid','value'],
-		HealthInvestFrac_High = ParameterData['HealthInvestFrac_High','value'],
 		ZetaE_Low = ParameterData['ZetaE_Low','value'],
 		ZetaE_Mid = ParameterData['ZetaE_Mid','value'],
 		ZetaE_High = ParameterData['ZetaE_High','value'],
@@ -604,21 +369,40 @@ ParameterValue = list(
 		LambdaH_Low = ParameterData['LambdaH_Low','value'],
 		LambdaH_Mid = ParameterData['LambdaH_Mid','value'],
 		LambdaH_High = ParameterData['LambdaH_High','value'],
-		ChiEF_RichLow = ParameterData['ChiEF_RichLow','value'],
-		ChiEF_RichMid = ParameterData['ChiEF_RichMid','value'],
-		ChiEF_RichHigh = ParameterData['ChiEF_RichHigh','value'], 
-		ChiEF_PoorLow = ParameterData['ChiEF_PoorLow','value'],
-		ChiEF_PoorMid = ParameterData['ChiEF_PoorMid','value'],
-		ChiEF_PoorHigh = ParameterData['ChiEF_PoorHigh','value'],
-		ChiHF_RichLow = ParameterData['ChiHF_RichLow','value'],
-		ChiHF_RichMid = ParameterData['ChiHF_RichMid','value'],
-		ChiHF_RichHigh = ParameterData['ChiHF_RichHigh','value'], 
-		ChiHF_PoorLow = ParameterData['ChiHF_PoorLow','value'],
-		ChiHF_PoorMid = ParameterData['ChiHF_PoorMid','value'],
-		ChiHF_PoorHigh = ParameterData['ChiHF_PoorHigh','value'],
-		ChiHA_RichLow = ParameterData['ChiHA_RichLow','value'],
-		ChiHA_RichMid = ParameterData['ChiHA_RichMid','value'],
-		ChiHA_RichHigh = ParameterData['ChiHA_RichHigh','value'], 
-		ChiHA_PoorLow = ParameterData['ChiHA_PoorLow','value'],
-		ChiHA_PoorMid = ParameterData['ChiHA_PoorMid','value'],
-		ChiHA_PoorHigh = ParameterData['ChiHA_PoorHigh','value'])
+		ChiEF1_Low = ParameterData['ChiEF1_Low','value'],
+		ChiEF1_Mid = ParameterData['ChiEF1_Mid','value'],
+		ChiEF1_High = ParameterData['ChiEF1_High','value'], 
+		ChiHF1_Low = ParameterData['ChiHF1_Low','value'],
+		ChiHF1_Mid = ParameterData['ChiHF1_Mid','value'],
+		ChiHF1_High = ParameterData['ChiHF1_High','value'], 
+		ChiHA1_RichLow = ParameterData['ChiHA1_RichLow','value'],
+		ChiHA1_RichMid = ParameterData['ChiHA1_RichMid','value'],
+		ChiHA1_RichHigh = ParameterData['ChiHA1_RichHigh','value'], 
+		ChiHA1_PoorLow = ParameterData['ChiHA1_PoorLow','value'],
+		ChiHA1_PoorMid = ParameterData['ChiHA1_PoorMid','value'],
+		ChiHA1_PoorHigh = ParameterData['ChiHA1_PoorHigh','value'],
+		ChiEF2_Low = ParameterData['ChiEF2_Low','value'],
+		ChiEF2_Mid = ParameterData['ChiEF2_Mid','value'],
+		ChiEF2_High = ParameterData['ChiEF2_High','value'], 
+		ChiHF2_Low = ParameterData['ChiHF2_Low','value'],
+		ChiHF2_Mid = ParameterData['ChiHF2_Mid','value'],
+		ChiHF2_High = ParameterData['ChiHF2_High','value'], 
+		ChiHA2_RichLow = ParameterData['ChiHA2_RichLow','value'],
+		ChiHA2_RichMid = ParameterData['ChiHA2_RichMid','value'],
+		ChiHA2_RichHigh = ParameterData['ChiHA2_RichHigh','value'], 
+		ChiHA2_PoorLow = ParameterData['ChiHA2_PoorLow','value'],
+		ChiHA2_PoorMid = ParameterData['ChiHA2_PoorMid','value'],
+		ChiHA2_PoorHigh = ParameterData['ChiHA2_PoorHigh','value'],
+		ChiHA3_RichLow = ParameterData['ChiHA3_RichLow','value'],
+		ChiHA3_RichMid = ParameterData['ChiHA3_RichMid','value'],
+		ChiHA3_RichHigh = ParameterData['ChiHA3_RichHigh','value'], 
+		ChiHA3_PoorLow = ParameterData['ChiHA3_PoorLow','value'],
+		ChiHA3_PoorMid = ParameterData['ChiHA3_PoorMid','value'],
+		ChiHA3_PoorHigh = ParameterData['ChiHA3_PoorHigh','value'])
+
+# Process Calibration Data
+
+yobs = na.omit(melt(CalibData,id='time'))
+yobs$variable = as.character(yobs$variable)
+yobs = yobs[,c('variable','time','value')]
+
