@@ -17,8 +17,12 @@ HealthEducationMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms)
 		aux_names = c(
 			'FemaleHealthAccess',
 			'GeneralHealthAccess_Rich',
+<<<<<<< HEAD
 			'GeneralHealthAccess_Poor',
 			'FemaleEduAttain'
+=======
+			'GeneralHealthAccess_Poor'
+>>>>>>> 74485fecf3de84298cf013a3138ec8a402482393
 			)
 		AuxData = matrix(NA,
 			nrow = (length(tspan)),
@@ -245,8 +249,12 @@ HealthEducationActual_Low = na.omit(melt(
 		GeneralHealthAccess_Rich = CalibData$GeneralHealthAccess_RichLow,
 		GeneralHealthAccess_Poor = CalibData$GeneralHealthAccess_PoorLow,
 		EducationServices = CalibData$EducationServices_Low, 
+<<<<<<< HEAD
 		HealthServices = CalibData$HealthServices_Low,
 		FemaleEduAttain = CalibData$FemaleEduAttain_Low
+=======
+		HealthServices = CalibData$HealthServices_Low
+>>>>>>> 74485fecf3de84298cf013a3138ec8a402482393
 	)),
 	id ='time'))
 
@@ -257,8 +265,12 @@ HealthEducationActual_Mid = na.omit(melt(
 		GeneralHealthAccess_Rich = CalibData$GeneralHealthAccess_RichMid,
 		GeneralHealthAccess_Poor = CalibData$GeneralHealthAccess_PoorMid,
 		EducationServices = CalibData$EducationServices_Mid, 
+<<<<<<< HEAD
 		HealthServices = CalibData$HealthServices_Mid,
 		FemaleEduAttain = CalibData$FemaleEduAttain_Mid
+=======
+		HealthServices = CalibData$HealthServices_Mid
+>>>>>>> 74485fecf3de84298cf013a3138ec8a402482393
 	)),
 	id ='time'))
 
@@ -269,8 +281,12 @@ HealthEducationActual_High = na.omit(melt(
 		GeneralHealthAccess_Rich = CalibData$GeneralHealthAccess_RichHigh,
 		GeneralHealthAccess_Poor = CalibData$GeneralHealthAccess_PoorHigh,
 		EducationServices = CalibData$EducationServices_High, 
+<<<<<<< HEAD
 		HealthServices = CalibData$HealthServices_High,
 		FemaleEduAttain = CalibData$FemaleEduAttain_High
+=======
+		HealthServices = CalibData$HealthServices_High
+>>>>>>> 74485fecf3de84298cf013a3138ec8a402482393
 	)),
 	id ='time'))
 
@@ -326,6 +342,7 @@ HealthEducationActual_Mid$error[HealthEducationActual_Mid$variable == 'HealthSer
 	# (1 - (HealthEducationActual_Mid$time[HealthEducationActual_Mid$variable == 'HealthServices'] - 1979) ^ 2 / 1297)
 HealthEducationActual_High$error[HealthEducationActual_High$variable == 'HealthServices'] =
 	mean(HealthEducationActual_High$value[HealthEducationActual_High$variable == 'HealthServices']) #* 
+<<<<<<< HEAD
 	# (1 - (HealthEducationActual_High$time[HealthEducationActual_High$variable == 'HealthServices'] - 1979) ^ 2 / 1297)
 HealthEducationActual_Low$error[HealthEducationActual_Low$variable == 'FemaleEduAttain'] =
 	mean(HealthEducationActual_Low$value[HealthEducationActual_Low$variable == 'FemaleEduAttain']) #* 
@@ -336,6 +353,10 @@ HealthEducationActual_Mid$error[HealthEducationActual_Mid$variable == 'FemaleEdu
 HealthEducationActual_High$error[HealthEducationActual_High$variable == 'FemaleEduAttain'] =
 	mean(HealthEducationActual_High$value[HealthEducationActual_High$variable == 'FemaleEduAttain']) #* 
 	# (1 - (HealthEducationActual_High$time[HealthEducationActual_High$variable == 'FemaleEduAttain'] - 1979) ^ 2 / 1297)
+=======
+	# (1 - (HealthEducationActual_High$time[HealthEducationActual_High$variable == 'FemaleHealthAccess'] - 1979) ^ 2 / 1297)
+
+>>>>>>> 74485fecf3de84298cf013a3138ec8a402482393
 ################# DEFINE CALIBRATION PARAMETERS
 
 HealthEducationCalibPars_Low =  rbind(

@@ -499,7 +499,6 @@ PopActual_Low$error[PopActual_Low$variable == 'Deaths_F4'] =
 	mean(PopActual_Low$value[PopActual_Low$variable == 'Deaths_F4']) #* 
 	# (1 - (PopActual_Low$time[PopActual_Low$variable == 'Deaths_F4'] - 1979) ^ 2 / 1297)
 
-
 # PopActual_Mid$error[PopActual_Mid$variable == 'M1'] =
 # 	mean(PopActual_Mid$value[PopActual_Mid$variable == 'M1']) #* 
 # 	# (1 - (PopActual_Mid$time[PopActual_Mid$variable == 'M1'] - 1979) ^ 2 / 1297)
