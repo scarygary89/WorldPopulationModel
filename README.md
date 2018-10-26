@@ -20,4 +20,4 @@ The model that is introduced here is meant to capture feedbacks between each sub
 
 The model is laid out in the following. 
 
-![Main Framework](https://github.com/scarygary89/WorldPopulationModel/blob/master/READMEImages/Framework.pdf)
+![Main Framework](https://github.com/scarygary89/WorldPopulationModel/blob/master/READMEImages/Framework.png)
