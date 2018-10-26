@@ -20,4 +20,4 @@ The model that is introduced here is meant to capture feedbacks between each sub
 
 The model is laid out in the following. 
 
-The main frame
+![picture alt](http://www.brightlightpictures.com/assets/images/portfolio/thethaw_header.jpg)
