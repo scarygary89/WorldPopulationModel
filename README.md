@@ -6,7 +6,7 @@ In this document, we present a multi-component model and the approach to the int
 
 The intended purpose of this integrated model was four important questions: (i) how does human population growth impact climate change; (ii) what are the feedback loop effects between climate change and economic and social systems; (iii) what is the carrying capacity in terms of food, land, and natural resources and how does the population dynamics in different income regions behave due to an ecological overshoot; and (iv) how will inequality be exacerbated due to these changing factors and what kind of implications does that have on public health (e.g. disparity of food access during to famines).
 
-## Structural Framework
+## Model Structure
 
 The model that is introduced here is meant to capture feedbacks between each submodel.  We have created seven distinct submodels: 
 
@@ -18,6 +18,16 @@ The model that is introduced here is meant to capture feedbacks between each sub
 * Water (Global)
 * Resources (Global)
 
-The model is laid out in the following. 
+The primary interactions are listed in the following
 
 ![Main Framework](https://github.com/scarygary89/WorldPopulationModel/blob/master/READMEImages/Framework.png)
+
+
+## Calibration
+This repository contains the files needed to run calibration for each submodel.  The files *ClimateParmEstimation.R*, *EconomyParmEstimation.R*, *FoodParmEstimation.R*, *HealthEducationParmEstimation.R*, *PopulationParmEstimation.R*, *ResourceParmEstimation.R*, and *WaterParmEstimation.R*. 
+
+
+The calibration routines are located in the *Calibration* folder.  The *Calibration* folder has eight files: Seven files for each submodel and one file pertains to a global calibration.
+
+## Data
+In the 

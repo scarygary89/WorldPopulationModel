@@ -17,12 +17,8 @@ HealthEducationMod = function(t0,tf,delta_t,delayyearlength,exog,init,parms)
 		aux_names = c(
 			'FemaleHealthAccess',
 			'GeneralHealthAccess_Rich',
-<<<<<<< HEAD
 			'GeneralHealthAccess_Poor',
 			'FemaleEduAttain'
-=======
-			'GeneralHealthAccess_Poor'
->>>>>>> 74485fecf3de84298cf013a3138ec8a402482393
 			)
 		AuxData = matrix(NA,
 			nrow = (length(tspan)),
