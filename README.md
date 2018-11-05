@@ -1,4 +1,4 @@
-# Technical Documentation of Integrated Global Population System Model (IGPSMod)
+# Integrated Global Population System Model (IGPSMod)
 
 In this document, we present an intergrated multi-component model of global population growth.  We will outline functions and purposes of the Github repository (files and folders).
 
